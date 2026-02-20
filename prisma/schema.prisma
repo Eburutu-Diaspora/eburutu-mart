@@ -1,0 +1,294 @@
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/diaspora_marketplace/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// User model with role-based access
+model User {
+  id                String       @id @default(cuid())
+  email             String       @unique
+  name              String?
+  password          String?
+  role              UserRole     @default(BUYER)
+  phone             String?
+  location          String?
+  avatar            String?
+  emailVerified     DateTime?
+  phoneVerified     Boolean      @default(false)
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  
+  // Relations
+  accounts          Account[]
+  sessions          Session[]
+  sellerProfile     SellerProfile?
+  products          Product[]
+  sentMessages      Message[]    @relation("SentMessages")
+  receivedMessages  Message[]    @relation("ReceivedMessages")
+  conversations     ConversationParticipant[]
+  contactForms      ContactForm[]
+  
+  @@map("users")
+}
+
+// NextAuth Account model
+model Account {
+  id                String  @id @default(cuid())
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+// NextAuth Session model
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
+}
+
+// NextAuth VerificationToken model
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+  
+  @@unique([identifier, token])
+  @@map("verificationtokens")
+}
+
+// Seller profile with verification system
+model SellerProfile {
+  id                    String              @id @default(cuid())
+  userId                String              @unique
+  businessName          String?
+  businessDescription   String?
+  businessType          String?
+  verificationStatus    VerificationStatus  @default(PENDING)
+  verificationNotes     String?
+  
+  // Verification steps
+  emailVerified         Boolean             @default(false)
+  phoneVerified         Boolean             @default(false)
+  documentsUploaded     Boolean             @default(false)
+  adminApproved         Boolean             @default(false)
+  
+  // Document uploads
+  idDocumentUrl         String?
+  businessLicenseUrl    String?
+  proofOfAddressUrl     String?
+  
+  // Verification dates
+  emailVerifiedAt       DateTime?
+  phoneVerifiedAt       DateTime?
+  documentsUploadedAt   DateTime?
+  adminApprovedAt       DateTime?
+  
+  // Admin review
+  reviewedBy            String?
+  reviewedAt            DateTime?
+  
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  
+  // Relations
+  user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("seller_profiles")
+}
+
+// Product categories
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  imageUrl    String?
+  parentId    String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  products    Product[]
+  
+  @@map("categories")
+}
+
+// Product listings
+model Product {
+  id              String        @id @default(cuid())
+  title           String
+  description     String
+  price           Decimal       @db.Decimal(10, 2)
+  currency        String        @default("GBP")
+  condition       String?
+  location        String
+  isActive        Boolean       @default(true)
+  isPromoted      Boolean       @default(false)
+  viewCount       Int           @default(0)
+  
+  // Product details
+  brand           String?
+  model           String?
+  color           String?
+  size            String?
+  weight          String?
+  dimensions      String?
+  
+  // Seller and category
+  sellerId        String
+  categoryId      String
+  
+  // Timestamps
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relations
+  seller          User          @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category        Category      @relation(fields: [categoryId], references: [id])
+  images          ProductImage[]
+  conversations   Conversation[]
+  
+  @@map("products")
+}
+
+// Product images
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String
+  imageUrl  String
+  alt       String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  
+  // Relations
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@map("product_images")
+}
+
+// Conversation system
+model Conversation {
+  id          String    @id @default(cuid())
+  productId   String?
+  subject     String?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  product     Product?  @relation(fields: [productId], references: [id])
+  participants ConversationParticipant[]
+  messages    Message[]
+  
+  @@map("conversations")
+}
+
+// Conversation participants
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  joinedAt       DateTime     @default(now())
+  lastReadAt     DateTime?
+  
+  // Relations
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+// Messages
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  receiverId     String
+  content        String
+  attachmentUrl  String?
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  
+  // Relations
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  receiver       User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  
+  @@map("messages")
+}
+
+// Contact forms
+model ContactForm {
+  id        String            @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  type      ContactFormType   @default(GENERAL)
+  status    ContactFormStatus @default(NEW)
+  userId    String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  
+  // Relations
+  user      User?             @relation(fields: [userId], references: [id])
+  
+  @@map("contact_forms")
+}
+
+// Enums
+enum UserRole {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum VerificationStatus {
+  PENDING
+  IN_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum ContactFormType {
+  GENERAL
+  SELLER_INQUIRY
+  TECHNICAL_SUPPORT
+  REPORT_ISSUE
+}
+
+enum ContactFormStatus {
+  NEW
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
