@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "npx prisma@5.22.0 generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -57,12 +57,12 @@
     "next": "14.2.28",
     "next-auth": "4.24.11",
     "next-themes": "0.3.0",
+    "prisma": "5.22.0",
     "react": "18.2.0",
     "react-day-picker": "8.10.1",
     "react-dom": "18.2.0",
     "react-hook-form": "7.53.0",
     "react-hot-toast": "2.4.1",
-    "react-resizable-panels": "^4.6.5",
     "sonner": "1.5.0",
     "tailwind-merge": "2.5.2",
     "tailwindcss-animate": "1.0.7",
@@ -74,7 +74,6 @@
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "postcss": "8.4.30",
-    "prisma": "5.22.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2"
   },
