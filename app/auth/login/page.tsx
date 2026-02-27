@@ -209,15 +209,11 @@ export default function LoginPage() {
 
             {/* Test Account Info */}
             <div className="bg-muted/50 p-4 rounded-lg">
-              <h4 className="font-medium text-sm mb-2">Test Accounts</h4>
+              <h4 className="font-medium text-sm mb-2">Admin Login</h4>
               <div className="text-xs text-muted-foreground space-y-2">
                 <div className="p-2 bg-blue-50 rounded">
                   <div className="font-medium text-blue-700">Admin:</div>
-                  <div>john@doe.com / johndoe123</div>
-                </div>
-                <div className="p-2 bg-green-50 rounded">
-                  <div className="font-medium text-green-700">Seller:</div>
-                  <div>amara@example.com / password123</div>
+                  <div>watawotomart@gmail.com / password123</div>
                 </div>
               </div>
             </div>
