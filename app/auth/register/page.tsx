@@ -278,8 +278,9 @@ export default function RegisterPage() {
       if (!response.ok) {
         setError(result.error || 'Registration failed')
       } else {
-        toast.success('Account created successfully! Please sign in.')
-        router.push('/auth/login')
+        toast.success('Account created successfully!')
+        // Redirect to success page with email and role
+        router.push(`/auth/register-success?email=${encodeURIComponent(email)}&role=${selectedRole}`)
       }
     } catch (error) {
       setError('An error occurred. Please try again.')

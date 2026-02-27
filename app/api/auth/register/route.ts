@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create user with avatar
+    // Create user with avatar and auto-verify email
     const user = await prisma.user.create({
       data: {
         email,
@@ -50,7 +50,9 @@ export async function POST(request: NextRequest) {
         role: role || UserRole.BUYER,
         phone,
         location,
-        avatar: avatar || null
+        avatar: avatar || null,
+        emailVerified: new Date(), // Auto-verify for immediate login
+        isActive: true
       }
     })
 
