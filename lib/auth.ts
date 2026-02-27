@@ -1,14 +1,19 @@
-
 import { getServerSession } from 'next-auth'
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
 import { prisma } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      allowDangerousEmailAccountLinking: true,
+    }),
     CredentialsProvider({
       name: 'credentials',
       credentials: {
@@ -53,11 +58,41 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  cookies: {
+    state: {
+      name: 'next-auth.state',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+    pkceCodeVerifier: {
+      name: 'next-auth.pkce.code_verifier',
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+  },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
-        token.role = user.role
+        token.role = user.role || 'BUYER'
         token.id = user.id
+      }
+      // For Google sign-in, fetch the user role from database
+      if (account?.provider === 'google' && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email as string }
+        })
+        if (dbUser) {
+          token.role = dbUser.role
+          token.id = dbUser.id
+        }
       }
       return token
     },
@@ -67,17 +102,19 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Handle relative URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+      // Handle same-origin URLs
+      if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     }
   },
   pages: {
     signIn: '/auth/login'
   },
-  debug: false, // Disable debug logs in production
-  logger: {
-    error: () => {}, // Suppress NextAuth error logs
-    warn: () => {},
-    debug: () => {}
-  }
+  debug: process.env.NODE_ENV === 'development',
 }
 
 export const getAuthSession = () => getServerSession(authOptions)
