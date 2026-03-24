@@ -207,16 +207,7 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Test Account Info */}
-            <div className="bg-muted/50 p-4 rounded-lg">
-              <h4 className="font-medium text-sm mb-2">Admin Login</h4>
-              <div className="text-xs text-muted-foreground space-y-2">
-                <div className="p-2 bg-blue-50 rounded">
-                  <div className="font-medium text-blue-700">Admin:</div>
-                  <div>watawotomart@gmail.com / password123</div>
-                </div>
-              </div>
-            </div>
+         
           </CardContent>
         </Card>
       </div>
