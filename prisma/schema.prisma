@@ -5,9 +5,7 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
-    schemas  = ["public", "auth"]
 }
-
 // User model with role-based access
 model User {
   id                String       @id @default(cuid())
