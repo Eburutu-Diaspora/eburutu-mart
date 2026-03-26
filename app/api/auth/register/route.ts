@@ -106,21 +106,15 @@ export async function POST(request: NextRequest) {
         </div>
       `
 
-      await fetch('https://apps.abacus.ai/api/sendNotificationEmail', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deployment_token: process.env.ABACUSAI_API_KEY,
-          app_id: process.env.WEB_APP_ID,
-          notification_id: process.env.NOTIF_ID_REGISTRATION_CONFIRMATION,
-          subject: `Welcome to Eburutu Mart, ${name}! 🎉`,
-          body: htmlBody,
-          is_html: true,
-          recipient_email: email,
-          sender_email: 'noreply@eburutumart.com',
-          sender_alias: appName,
-        }),
-      })
+     // NEW - Resend
+const { Resend } = await import('resend')
+const resend = new Resend(process.env.RESEND_API_KEY)
+await resend.emails.send({
+  from: process.env.EMAIL_FROM || 'onboarding@resend.dev',
+  to: email,
+  subject: `Welcome to Eburutu Mart, ${name}! 🎉`,
+  html: htmlBody,
+})
     } catch (emailError) {
       // Log error but don't fail registration if email fails
       console.error('Failed to send registration email:', emailError)
