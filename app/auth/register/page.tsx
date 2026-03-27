@@ -277,7 +277,7 @@ export default function RegisterPage() {
       role: selectedRole,
       avatar: avatarUrl
     }
-```
+
 
 
     try {
@@ -296,7 +296,7 @@ export default function RegisterPage() {
         // Redirect to success page with email and role
         router.push(`/auth/register-success?email=${encodeURIComponent(email)}&role=${selectedRole}`)
       }
-    } catch (error) {
+    } catch (error: any) {
       setError(error?.message || 'An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
