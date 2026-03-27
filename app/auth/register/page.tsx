@@ -263,7 +263,7 @@ export default function RegisterPage() {
       phone: `${phonePrefix}${phoneNumber}`,
       location: selectedLocation,
       role: selectedRole,
-      avatar: avatarBase64
+      avatar: null
     }
 
     try {
@@ -283,7 +283,7 @@ export default function RegisterPage() {
         router.push(`/auth/register-success?email=${encodeURIComponent(email)}&role=${selectedRole}`)
       }
     } catch (error) {
-      setError('An error occurred. Please try again.')
+      setError(error?.message || 'An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
     }
