@@ -245,26 +245,40 @@ export default function RegisterPage() {
       return
     }
 
-    // Convert avatar to base64 if present
-    let avatarBase64 = null
-    if (avatarFile) {
-      const reader = new FileReader()
-      avatarBase64 = await new Promise<string>((resolve) => {
-        reader.onloadend = () => resolve(reader.result as string)
-        reader.readAsDataURL(avatarFile)
+   // Upload avatar to Supabase Storage if seller
+    let avatarUrl = null
+    if (selectedRole === 'SELLER' && avatarFile) {
+      const uploadFormData = new FormData()
+      uploadFormData.append('avatar', avatarFile)
+      
+      const uploadResponse = await fetch('/api/upload/avatar', {
+        method: 'POST',
+        body: uploadFormData
       })
+      
+      const uploadResult = await uploadResponse.json()
+      
+      if (!uploadResponse.ok) {
+        setError(uploadResult.error || 'Failed to upload profile picture')
+        setIsLoading(false)
+        return
+      }
+      
+      avatarUrl = uploadResult.url
     }
 
     const data = {
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      name: name,
+      email,
+      password,
+      confirmPassword,
+      name,
       phone: `${phonePrefix}${phoneNumber}`,
       location: selectedLocation,
       role: selectedRole,
-      avatar: null
+      avatar: avatarUrl
     }
+```
+
 
     try {
       const response = await fetch('/api/auth/register', {
