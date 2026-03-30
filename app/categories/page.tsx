@@ -5,12 +5,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
-import { 
-  Palette, 
-  Utensils, 
-  Shirt, 
-  Users, 
-  Music, 
+import {
+  Palette,
+  Utensils,
+  Shirt,
+  Users,
+  Music,
   Sparkles,
   Package,
   ArrowLeft,
@@ -29,111 +29,26 @@ const categoryConfig: Record<string, {
   gradientFrom: string,
   gradientTo: string
 }> = {
-  'fashion-clothing': {
-    icon: Shirt,
-    bgColor: 'bg-pink-100',
-    iconColor: 'text-pink-600',
-    hoverBg: 'hover:bg-pink-200',
-    borderColor: 'border-pink-200',
-    gradientFrom: 'from-pink-500',
-    gradientTo: 'to-rose-500',
-  },
-  'food-groceries': {
-    icon: Utensils,
-    bgColor: 'bg-orange-100',
-    iconColor: 'text-orange-600',
-    hoverBg: 'hover:bg-orange-200',
-    borderColor: 'border-orange-200',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-amber-500',
-  },
-  'beauty-haircare': {
-    icon: Sparkles,
-    bgColor: 'bg-rose-100',
-    iconColor: 'text-rose-600',
-    hoverBg: 'hover:bg-rose-200',
-    borderColor: 'border-rose-200',
-    gradientFrom: 'from-rose-500',
-    gradientTo: 'to-pink-500',
-  },
-  'art-crafts': {
-    icon: Palette,
-    bgColor: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-    hoverBg: 'hover:bg-purple-200',
-    borderColor: 'border-purple-200',
-    gradientFrom: 'from-purple-500',
-    gradientTo: 'to-indigo-500',
-  },
-  'electronics': {
-    icon: Package,
-    bgColor: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    hoverBg: 'hover:bg-blue-200',
-    borderColor: 'border-blue-200',
-    gradientFrom: 'from-blue-500',
-    gradientTo: 'to-cyan-500',
-  },
-  'home-living': {
-    icon: Users,
-    bgColor: 'bg-cyan-100',
-    iconColor: 'text-cyan-600',
-    hoverBg: 'hover:bg-cyan-200',
-    borderColor: 'border-cyan-200',
-    gradientFrom: 'from-cyan-500',
-    gradientTo: 'to-teal-500',
-  },
-  'health-wellness': {
-    icon: Wrench,
-    bgColor: 'bg-emerald-100',
-    iconColor: 'text-emerald-600',
-    hoverBg: 'hover:bg-emerald-200',
-    borderColor: 'border-emerald-200',
-    gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-green-500',
-  },
-  'books-media': {
-    icon: Music,
-    bgColor: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-    hoverBg: 'hover:bg-blue-200',
-    borderColor: 'border-blue-200',
-    gradientFrom: 'from-blue-500',
-    gradientTo: 'to-indigo-500',
-  },
-  'services': {
-    icon: Briefcase,
-    bgColor: 'bg-green-100',
-    iconColor: 'text-green-600',
-    hoverBg: 'hover:bg-green-200',
-    borderColor: 'border-green-200',
-    gradientFrom: 'from-green-500',
-    gradientTo: 'to-emerald-500',
-  },
-  'default': {
-    icon: Package,
-    bgColor: 'bg-gray-100',
-    iconColor: 'text-gray-600',
-    hoverBg: 'hover:bg-gray-200',
-    borderColor: 'border-gray-200',
-    gradientFrom: 'from-gray-500',
-    gradientTo: 'to-slate-500',
-  },
-}
+  'fashion-clothing': { icon: Shirt, bgColor: 'bg-pink-100', iconColor: 'text-pink-600', hoverBg: 'hover:bg-pink-200', borderColor: 'border-pink-200', gradientFrom: 'from-pink-500', gradientTo: 'to-rose-500' },
+  'food-groceries': { icon: Utensils, bgColor: 'bg-orange-100', iconColor: 'text-orange-600', hoverBg: 'hover:bg-orange-200', borderColor: 'border-orange-200', gradientFrom: 'from-orange-500', gradientTo: 'to-amber-500' },
+  'beauty-haircare': { icon: Sparkles, bgColor: 'bg-rose-100', iconColor: 'text-rose-600', hoverBg: 'hover:bg-rose-200', borderColor: 'border-rose-200', gradientFrom: 'from-rose-500', gradientTo: 'to-pink-500' },
+  'art-crafts': { icon: Palette, bgColor: 'bg-purple-100', iconColor: 'text-purple-600', hoverBg: 'hover:bg-purple-200', borderColor: 'border-purple-200', gradientFrom: 'from-purple-500', gradientTo: 'to-indigo-500' },
+  'electronics': { icon: Package, bgColor: 'bg-blue-100', iconColor: 'text-blue-600', hoverBg: 'hover:bg-blue-200', borderColor: 'border-blue-200', gradientFrom: 'from-blue-500', gradientTo: 'to-cyan-500' },
+  'home-living': { icon: Users, bgColor: 'bg-cyan-100', iconColor: 'text-cyan-600', hoverBg: 'hover:bg-cyan-200', borderColor: 'border-cyan-200', gradientFrom: 'from-cyan-500', gradientTo: 'to-teal-500' },
+  'health-wellness': { icon: Wrench, bgColor: 'bg-emerald-100', iconColor: 'text-emerald-600', hoverBg: 'hover:bg-emerald-200', borderColor: 'border-emerald-200', gradientFrom: 'from-emerald-500', gradientTo: 'to-green-500' },
+  'books-media': { icon: Music, bgColor: 'bg-blue-100', iconColor: 'text-blue-600', hoverBg: 'hover:bg-blue-200', borderColor: 'border-blue-200', gradientFrom: 'from-blue-500', gradientTo: 'to-indigo-500' },
+  'services': { icon: Briefcase, bgColor: 'bg-green-100', iconColor: 'text-green-600', hoverBg: 'hover:bg-green-200', borderColor: 'border-green-200', gradientFrom: 'from-green-500', gradientTo: 'to-emerald-500' },
+  'default': { icon: Package, bgColor: 'bg-gray-100', iconColor: 'text-gray-600', hoverBg: 'hover:bg-gray-200', borderColor: 'border-gray-200', gradientFrom: 'from-gray-500', gradientTo: 'to-slate-500' },
 }
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
     include: {
       products: {
-        select: {
-          id: true
-        }
+        select: { id: true }
       }
     },
-    orderBy: {
-      sortOrder: 'asc'
-    }
+    orderBy: { sortOrder: 'asc' }
   })
 
   return (
@@ -141,17 +56,15 @@ export default async function CategoriesPage() {
       <Header />
       <main className="flex-1">
         <div className="container max-w-6xl mx-auto px-4 py-12">
-          {/* Back Button & Header */}
           <div className="mb-12">
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Home
             </Link>
-            
-            {/* Colorful Header Section */}
+
             <div className="text-center py-8 px-4 rounded-3xl bg-gradient-to-r from-purple-50 via-pink-50 to-orange-50 border border-purple-100/50">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 bg-clip-text text-transparent">
@@ -159,11 +72,9 @@ export default async function CategoriesPage() {
                 </span>
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Discover authentic African products and services across our diverse categories. 
+                Discover authentic African products and services across our diverse categories.
                 Each category represents a piece of our rich cultural heritage.
               </p>
-              
-              {/* Decorative dots */}
               <div className="flex justify-center gap-2 mt-6">
                 <span className="w-3 h-3 rounded-full bg-purple-400"></span>
                 <span className="w-3 h-3 rounded-full bg-pink-400"></span>
@@ -174,52 +85,46 @@ export default async function CategoriesPage() {
             </div>
           </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {categories.map((category) => {
-            const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
-            const IconComponent = config.icon
-            const productCount = category.products.length
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {categories.map((category) => {
+              const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
+              const IconComponent = config.icon
+              const productCount = category.products.length
 
-            return (
-              <Link key={category.id} href={`/categories/${category.slug}`}>
-                <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-transparent overflow-hidden relative`}>
-                  {/* Gradient overlay on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                  
-                  <CardHeader className="text-center relative z-10">
-                    <div className={`mx-auto mb-4 p-4 ${config.bgColor} rounded-2xl w-20 h-20 flex items-center justify-center ${config.hoverBg} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
-                      <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
-                    </div>
-                    <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text transition-colors`}>
-                      {category.name}
-                    </CardTitle>
-                    <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                      {category.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0 relative z-10">
-                    <div className="flex items-center justify-center">
-                      <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
-                        {productCount} {productCount === 1 ? 'Product' : 'Products'}
-                      </Badge>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            )
-          })}
-        </div>
+              return (
+                <Link key={category.id} href={`/categories/${category.slug}`}>
+                  <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-50`}>
+                    <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity`} />
+                    <CardHeader className="text-center relative z-10">
+                      <div className={`mx-auto mb-4 p-4 ${config.bgColor} rounded-2xl w-20 h-20 flex items-center justify-center ${config.hoverBg} transition-all duration-300`}>
+                        <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
+                      </div>
+                      <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
+                        {category.name}
+                      </CardTitle>
+                      <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                        {category.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-0 relative z-10">
+                      <div className="flex items-center justify-center">
+                        <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
+                          {productCount} {productCount === 1 ? 'Product' : 'Products'}
+                        </Badge>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              )
+            })}
+          </div>
 
-          {/* Call to Action */}
           <div className="mt-16 text-center">
             <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-              {/* Background pattern */}
               <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 left-0 w-40 h-40 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
                 <div className="absolute bottom-0 right-0 w-60 h-60 bg-white rounded-full translate-x-1/4 translate-y-1/4"></div>
               </div>
-              
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4 text-white">Can&apos;t find what you&apos;re looking for?</h2>
                 <p className="text-white/90 mb-8 max-w-xl mx-auto">
