@@ -20,14 +20,6 @@ import {
 
 export const dynamic = 'force-dynamic'
 
-const categoryConfig: Record<string, { 
-  icon: React.ComponentType<{ className?: string }>,
-  bgColor: string,
-  iconColor: string,
-  hoverBg: string,
-  borderColor: string,
-  gradientFrom: string,
-  gradientTo: string
 const categoryConfig: Record<string, {
   icon: React.ComponentType<{ className?: string }>,
   bgColor: string,
