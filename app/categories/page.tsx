@@ -28,88 +28,106 @@ const categoryConfig: Record<string, {
   borderColor: string,
   gradientFrom: string,
   gradientTo: string
+const categoryConfig: Record<string, {
+  icon: React.ComponentType<{ className?: string }>,
+  bgColor: string,
+  iconColor: string,
+  hoverBg: string,
+  borderColor: string,
+  gradientFrom: string,
+  gradientTo: string
 }> = {
-  'food-groceries': { 
-    icon: Utensils, 
-    bgColor: 'bg-orange-100', 
-    iconColor: 'text-orange-600',
-    hoverBg: 'hover:bg-orange-200',
-    borderColor: 'border-orange-200',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-amber-500'
-  },
-  'fashion-textiles': { 
-    icon: Shirt, 
-    bgColor: 'bg-pink-100', 
+  'fashion-clothing': {
+    icon: Shirt,
+    bgColor: 'bg-pink-100',
     iconColor: 'text-pink-600',
     hoverBg: 'hover:bg-pink-200',
     borderColor: 'border-pink-200',
     gradientFrom: 'from-pink-500',
-    gradientTo: 'to-rose-500'
+    gradientTo: 'to-rose-500',
   },
-  'artisan-crafts': { 
-    icon: Palette, 
-    bgColor: 'bg-purple-100', 
-    iconColor: 'text-purple-600',
-    hoverBg: 'hover:bg-purple-200',
-    borderColor: 'border-purple-200',
-    gradientFrom: 'from-purple-500',
-    gradientTo: 'to-indigo-500'
+  'food-groceries': {
+    icon: Utensils,
+    bgColor: 'bg-orange-100',
+    iconColor: 'text-orange-600',
+    hoverBg: 'hover:bg-orange-200',
+    borderColor: 'border-orange-200',
+    gradientFrom: 'from-orange-500',
+    gradientTo: 'to-amber-500',
   },
-  'beauty-wellness': { 
-    icon: Sparkles, 
-    bgColor: 'bg-rose-100', 
+  'beauty-haircare': {
+    icon: Sparkles,
+    bgColor: 'bg-rose-100',
     iconColor: 'text-rose-600',
     hoverBg: 'hover:bg-rose-200',
     borderColor: 'border-rose-200',
     gradientFrom: 'from-rose-500',
-    gradientTo: 'to-pink-500'
+    gradientTo: 'to-pink-500',
   },
-  'services': { 
-    icon: Users, 
-    bgColor: 'bg-cyan-100', 
-    iconColor: 'text-cyan-600',
-    hoverBg: 'hover:bg-cyan-200',
-    borderColor: 'border-cyan-200',
-    gradientFrom: 'from-cyan-500',
-    gradientTo: 'to-teal-500'
+  'art-crafts': {
+    icon: Palette,
+    bgColor: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+    hoverBg: 'hover:bg-purple-200',
+    borderColor: 'border-purple-200',
+    gradientFrom: 'from-purple-500',
+    gradientTo: 'to-indigo-500',
   },
-  'media-culture': { 
-    icon: Music, 
-    bgColor: 'bg-blue-100', 
+  'electronics': {
+    icon: Package,
+    bgColor: 'bg-blue-100',
     iconColor: 'text-blue-600',
     hoverBg: 'hover:bg-blue-200',
     borderColor: 'border-blue-200',
     gradientFrom: 'from-blue-500',
-    gradientTo: 'to-indigo-500'
+    gradientTo: 'to-cyan-500',
   },
-  'hardware-machinery': { 
-    icon: Wrench, 
-    bgColor: 'bg-slate-100', 
-    iconColor: 'text-slate-600',
-    hoverBg: 'hover:bg-slate-200',
-    borderColor: 'border-slate-200',
-    gradientFrom: 'from-slate-500',
-    gradientTo: 'to-gray-500'
+  'home-living': {
+    icon: Users,
+    bgColor: 'bg-cyan-100',
+    iconColor: 'text-cyan-600',
+    hoverBg: 'hover:bg-cyan-200',
+    borderColor: 'border-cyan-200',
+    gradientFrom: 'from-cyan-500',
+    gradientTo: 'to-teal-500',
   },
-  'business-opportunities': { 
-    icon: Briefcase, 
-    bgColor: 'bg-emerald-100', 
+  'health-wellness': {
+    icon: Wrench,
+    bgColor: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
     hoverBg: 'hover:bg-emerald-200',
     borderColor: 'border-emerald-200',
     gradientFrom: 'from-emerald-500',
-    gradientTo: 'to-green-500'
+    gradientTo: 'to-green-500',
   },
-  'default': { 
-    icon: Package, 
-    bgColor: 'bg-gray-100', 
+  'books-media': {
+    icon: Music,
+    bgColor: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+    hoverBg: 'hover:bg-blue-200',
+    borderColor: 'border-blue-200',
+    gradientFrom: 'from-blue-500',
+    gradientTo: 'to-indigo-500',
+  },
+  'services': {
+    icon: Briefcase,
+    bgColor: 'bg-green-100',
+    iconColor: 'text-green-600',
+    hoverBg: 'hover:bg-green-200',
+    borderColor: 'border-green-200',
+    gradientFrom: 'from-green-500',
+    gradientTo: 'to-emerald-500',
+  },
+  'default': {
+    icon: Package,
+    bgColor: 'bg-gray-100',
     iconColor: 'text-gray-600',
     hoverBg: 'hover:bg-gray-200',
     borderColor: 'border-gray-200',
     gradientFrom: 'from-gray-500',
-    gradientTo: 'to-slate-500'
-  }
+    gradientTo: 'to-slate-500',
+  },
+}
 }
 
 export default async function CategoriesPage() {
