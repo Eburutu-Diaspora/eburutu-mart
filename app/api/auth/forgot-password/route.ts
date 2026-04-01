@@ -19,21 +19,18 @@ export async function POST(request: NextRequest) {
       where: { email: email.toLowerCase().trim() }
     })
 
-    // Always return success to prevent email enumeration
     if (!user) {
       return NextResponse.json({ message: 'If account exists, reset link sent' })
     }
 
     const token = crypto.randomBytes(32).toString('hex')
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000) // 1 hour
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        recovery_token: token,
-        recovery_sent_at: new Date(),
-      }
-    })
+    // Use raw SQL to bypass Prisma type restrictions
+    await prisma.$executeRaw`
+      UPDATE users 
+      SET recovery_token = ${token}, recovery_sent_at = NOW()
+      WHERE id = ${user.id}
+    `
 
     const resetUrl = `${process.env.NEXTAUTH_URL}/auth/reset-password?token=${token}&email=${encodeURIComponent(email)}`
 
