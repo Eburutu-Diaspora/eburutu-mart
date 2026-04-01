@@ -12,18 +12,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const user = await prisma.user.findFirst({
-      where: {
-        email: email.toLowerCase().trim(),
-        recovery_token: token,
-      }
-    })
+    // Use raw SQL to read recovery fields not in Prisma schema
+    const users = await prisma.$queryRaw<Array<{
+      id: string;
+      recovery_token: string | null;
+      recovery_sent_at: Date | null;
+    }>>`
+      SELECT id, recovery_token, recovery_sent_at 
+      FROM users 
+      WHERE email = ${email.toLowerCase().trim()}
+      LIMIT 1
+    `
 
-    if (!user) {
+    if (!users.length || users[0].recovery_token !== token) {
       return NextResponse.json({ error: 'Invalid or expired reset link' }, { status: 400 })
     }
 
-    // Check token is not older than 1 hour
+    const user = users[0]
+
     if (user.recovery_sent_at) {
       const tokenAge = Date.now() - new Date(user.recovery_sent_at).getTime()
       if (tokenAge > 60 * 60 * 1000) {
@@ -33,14 +39,11 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 12)
 
-    await prisma.user.update({
-      where: { id: user.id },
-      data: {
-        password: hashedPassword,
-        recovery_token: null,
-        recovery_sent_at: null,
-      }
-    })
+    await prisma.$executeRaw`
+      UPDATE users 
+      SET password = ${hashedPassword}, recovery_token = NULL, recovery_sent_at = NULL
+      WHERE id = ${user.id}
+    `
 
     return NextResponse.json({ message: 'Password reset successfully' })
   } catch (error) {
