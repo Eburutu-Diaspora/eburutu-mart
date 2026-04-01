@@ -164,7 +164,11 @@ export default function LoginPage() {
                   />
                 </div>
               </div>
-
+             <div className="flex justify-end">
+  <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
+    Forgot your password?
+  </Link>
+</div>
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
