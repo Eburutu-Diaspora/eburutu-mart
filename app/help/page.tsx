@@ -1,5 +1,5 @@
 
-
+import UserGuideContent from "@/components/UserGuideContent";
 import Link from 'next/link'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
@@ -62,13 +62,10 @@ export default function HelpPage() {
               <CardTitle className="text-lg">User Guide</CardTitle>
               <CardDescription>Learn how to use the platform</CardDescription>
             </CardHeader>
-            <CardContent>
-              <button className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors">
-                Coming Soon
-              </button>
-            </CardContent>
-          </Card>
-
+          <CardContent>
+  <UserGuideContent />
+</CardContent>
+</Card>
           <Card className="text-center hover:shadow-lg transition-shadow">
             <CardHeader>
               <Search className="h-8 w-8 mx-auto text-primary mb-2" />
