@@ -63,6 +63,7 @@ export default function HelpPage() {
               <CardDescription>Learn how to use the platform</CardDescription>
             </CardHeader>
           <CardContent>
+            <a
       href="/help/guide"
     className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors inline-block"
   >
