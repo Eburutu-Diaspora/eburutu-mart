@@ -1,5 +1,5 @@
 
-import UserGuideContent from "@/components/UserGuideContent";
+
 import Link from 'next/link'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
