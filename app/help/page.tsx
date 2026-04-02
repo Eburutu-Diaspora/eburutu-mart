@@ -62,11 +62,10 @@ export default function HelpPage() {
               <CardDescription>Learn how to use the platform</CardDescription>
             </CardHeader>
             <CardContent>
-           <CardContent>
-  <button className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors">
-    Coming Soon
-  </button>
-</CardContent>
+              <button className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors">
+                Coming Soon
+              </button>
+            </CardContent>
           </Card>
 
           <Card className="text-center hover:shadow-lg transition-shadow">
