@@ -1,14 +1,13 @@
-
 "use client";
 import Link from 'next/link'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { 
-  HelpCircle, 
-  MessageSquare, 
-  Book, 
-  Shield, 
+import {
+  HelpCircle,
+  MessageSquare,
+  Book,
+  Shield,
   CreditCard,
   Package,
   Users,
@@ -49,7 +48,7 @@ export default function HelpPage() {
             <CardContent>
               <a
                 href="/contact"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors inline-block"
               >
                 Contact Us
               </a>
@@ -62,15 +61,16 @@ export default function HelpPage() {
               <CardTitle className="text-lg">User Guide</CardTitle>
               <CardDescription>Learn how to use the platform</CardDescription>
             </CardHeader>
-          <CardContent>
-         
-      href="/help/guide"
-    className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors inline-block"
-  >
-    View User Guide
-  </a>
-</CardContent>
-</Card>
+            <CardContent>
+              <a
+                href="/help/guide"
+                className="border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors inline-block"
+              >
+                View User Guide
+              </a>
+            </CardContent>
+          </Card>
+
           <Card className="text-center hover:shadow-lg transition-shadow">
             <CardHeader>
               <Search className="h-8 w-8 mx-auto text-primary mb-2" />
@@ -105,14 +105,14 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold mb-2">How do I create an account?</h3>
                 <p className="text-muted-foreground">
-                  Click "Join Now" in the top right corner, choose whether you want to be a buyer or seller, 
+                  Click &quot;Join Now&quot; in the top right corner, choose whether you want to be a buyer or seller,
                   and fill out the registration form with your details.
                 </p>
               </div>
               <div>
-                <h3 className="font-semibold mb-2">What's the difference between buyer and seller accounts?</h3>
+                <h3 className="font-semibold mb-2">What&apos;s the difference between buyer and seller accounts?</h3>
                 <p className="text-muted-foreground">
-                  Buyer accounts can browse and purchase products. Seller accounts can list products for sale 
+                  Buyer accounts can browse and purchase products. Seller accounts can list products for sale
                   but require verification before products go live.
                 </p>
               </div>
@@ -137,21 +137,20 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold mb-2">How do I search for products?</h3>
                 <p className="text-muted-foreground">
-                  Use the search bar at the top of the page or browse by categories. You can filter results 
+                  Use the search bar at the top of the page or browse by categories. You can filter results
                   by price, location, and other criteria.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">How do I contact sellers?</h3>
                 <p className="text-muted-foreground">
-                  Currently, you can contact sellers through our contact form. We're working on a direct 
-                  messaging system for better communication.
+                  Open a listing and click &quot;Contact Seller&quot; — this reveals the seller&apos;s email address so you can reach out directly.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">How do payments work?</h3>
                 <p className="text-muted-foreground">
-                  Eburutu Mart is a free listing platform. We do not process payments. Buyers and sellers arrange 
+                  Eburutu Mart is a free listing platform. We do not process payments. Buyers and sellers arrange
                   payment methods directly between themselves through their preferred channels.
                 </p>
               </div>
@@ -170,7 +169,7 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold mb-2">How do I become a verified seller?</h3>
                 <p className="text-muted-foreground">
-                  Complete our verification process which includes email verification, phone verification, 
+                  Complete our verification process which includes email verification, phone verification,
                   and identity verification. Visit our verification page for detailed steps.
                 </p>
               </div>
@@ -183,40 +182,40 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold mb-2">How do I list my first product?</h3>
                 <p className="text-muted-foreground">
-                  After completing verification, go to your dashboard and click "Add Product." Fill out the 
+                  After completing verification, go to your dashboard and click &quot;Add Product.&quot; Fill out the
                   product details, upload photos, and set your price.
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Payments */}
+          {/* Payments & Security */}
           <Card>
             <CardHeader>
               <div className="flex items-center gap-3">
                 <CreditCard className="h-6 w-6 text-primary" />
-                <CardTitle>Payments & Security</CardTitle>
+                <CardTitle>Payments &amp; Security</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
                 <h3 className="font-semibold mb-2">Is my information secure?</h3>
                 <p className="text-muted-foreground">
-                  Yes, we take security seriously. Your account information is protected with industry-standard 
-                  encryption. Since we don't process payments, no financial data is stored on our platform.
+                  Yes, we take security seriously. Your account information is protected with industry-standard
+                  encryption. Since we don&apos;t process payments, no financial data is stored on our platform.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">How do I arrange payment with sellers?</h3>
                 <p className="text-muted-foreground">
-                  Eburutu Mart connects buyers and sellers. All payment arrangements are made directly between 
+                  Eburutu Mart connects buyers and sellers. All payment arrangements are made directly between
                   buyers and sellers outside of our platform through their preferred methods.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">What if I have a dispute?</h3>
                 <p className="text-muted-foreground">
-                  Contact our support team immediately if you have any issues. We have a dispute resolution 
+                  Contact our support team immediately if you have any issues. We have a dispute resolution
                   process to help resolve problems fairly.
                 </p>
               </div>
@@ -233,23 +232,23 @@ export default function HelpPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <h3 className="font-semibold mb-2">I can't log into my account</h3>
+                <h3 className="font-semibold mb-2">I can&apos;t log into my account</h3>
                 <p className="text-muted-foreground">
-                  Try resetting your password using the "Forgot Password" link on the login page. If that 
-                  doesn't work, contact our support team.
+                  Try resetting your password using the &quot;Forgot Password&quot; link on the login page. If that
+                  doesn&apos;t work, contact our support team.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">The website is running slowly</h3>
                 <p className="text-muted-foreground">
-                  Try clearing your browser cache or using a different browser. If problems persist, 
+                  Try clearing your browser cache or using a different browser. If problems persist,
                   the issue might be on our end - please let us know.
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">I found a bug or error</h3>
                 <p className="text-muted-foreground">
-                  Please report any bugs or errors through our contact form. Include as much detail as 
+                  Please report any bugs or errors through our contact form. Include as much detail as
                   possible about what you were doing when the error occurred.
                 </p>
               </div>
