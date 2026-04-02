@@ -81,7 +81,7 @@ export function CommoditiesTicker() {
         <div className="flex-shrink-0 bg-[#00c853] px-4 py-1 text-sm font-semibold z-10">
           LIVE COMMODITIES
         </div>
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden min-w-0">
           <div 
             ref={tickerRef}
             className="flex animate-ticker whitespace-nowrap"
