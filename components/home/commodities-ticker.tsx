@@ -77,7 +77,7 @@ export function CommoditiesTicker() {
 
   return (
     <div className="bg-[#1a237e] text-white py-2 overflow-hidden">
-      <div className="flex items-center">
+      <div className="flex items-center w-full overflow-hidden">
         <div className="flex-shrink-0 bg-[#00c853] px-4 py-1 text-sm font-semibold z-10">
           LIVE COMMODITIES
         </div>
