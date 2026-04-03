@@ -39,11 +39,9 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
 
 // Social media links configuration
 const socialLinks = [
-  { name: 'Facebook', icon: FacebookIcon, href: '#', color: 'hover:text-blue-500' },
-  { name: 'Instagram', icon: InstagramIcon, href: '#', color: 'hover:text-pink-500' },
-  { name: 'Twitter', icon: TwitterIcon, href: '#', color: 'hover:text-slate-300' },
-  { name: 'TikTok', icon: TikTokIcon, href: '#', color: 'hover:text-white' },
-  { name: 'YouTube', icon: YouTubeIcon, href: '#', color: 'hover:text-red-500' },
+  { name: 'X', icon: TwitterIcon, href: 'https://x.com/eburutumart', color: 'hover:text-slate-300' },
+  { name: 'TikTok', icon: TikTokIcon, href: 'https://www.tiktok.com/@eburutu_diaspora', color: 'hover:text-white' },
+  { name: 'YouTube', icon: YoutubeIcon, href: 'https://www.youtube.com/@eburutumart', color: 'hover:text-red-500' },
 ]
 
 export function Footer() {
@@ -62,15 +60,28 @@ export function Footer() {
 
     setIsSubscribing(true)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
+   setIsSubscribing(true)
+
+    try {
+      await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+    } catch {
+      // fallback — open mailto
+    }
+
+    window.open(
+      `mailto:info@eburutumart.com?subject=Newsletter Subscription&body=Please add me to the Eburutu Mart newsletter. Email: ${email}`,
+      '_blank'
+    )
+
     setIsSubscribing(false)
     setIsSubscribed(true)
     setEmail('')
     toast.success('Welcome to the Eburutu Mart community!')
-    
-    // Reset subscribed state after 5 seconds
+
     setTimeout(() => setIsSubscribed(false), 5000)
   }
   
