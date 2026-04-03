@@ -41,7 +41,7 @@ const YouTubeIcon = ({ className }: { className?: string }) => (
 const socialLinks = [
   { name: 'X', icon: TwitterIcon, href: 'https://x.com/eburutumart', color: 'hover:text-slate-300' },
   { name: 'TikTok', icon: TikTokIcon, href: 'https://www.tiktok.com/@eburutu_diaspora', color: 'hover:text-white' },
-  { name: 'YouTube', icon: YoutubeIcon, href: 'https://www.youtube.com/@eburutumart', color: 'hover:text-red-500' },
+  { name: 'YouTube', icon: YouTubeIcon, href: 'https://www.youtube.com/@eburutumart', color: 'hover:text-red-500' },
 ]
 
 export function Footer() {
@@ -60,7 +60,6 @@ export function Footer() {
 
     setIsSubscribing(true)
     
-   setIsSubscribing(true)
 
     try {
       await fetch('/api/newsletter', {
