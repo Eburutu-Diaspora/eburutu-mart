@@ -104,12 +104,7 @@ export function CommoditiesTicker() {
           </div>
         </div>
       </div>
-      <style>{`
-        @keyframes eburutu-ticker {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+    
     </div>
   )
 }
