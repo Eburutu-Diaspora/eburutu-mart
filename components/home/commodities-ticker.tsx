@@ -59,9 +59,9 @@ export function CommoditiesTicker() {
   }
 
   const getChangeIcon = (change: number) => {
-    if (change > 0) return <TrendingUp style={{ width: 12, height: 12 }} />
-    if (change < 0) return <TrendingDown style={{ width: 12, height: 12 }} />
-    return <Minus style={{ width: 12, height: 12 }} />
+    if (change > 0) return <TrendingUp style={{ width: 12, height: 12, display: 'inline' }} />
+    if (change < 0) return <TrendingDown style={{ width: 12, height: 12, display: 'inline' }} />
+    return <Minus style={{ width: 12, height: 12, display: 'inline' }} />
   }
 
   const formatPrice = (price: number, currency: string) => {
@@ -70,41 +70,67 @@ export function CommoditiesTicker() {
     return price.toLocaleString()
   }
 
-  if (!mounted) return (
-    <div style={{ backgroundColor: '#1a237e', color: 'white', padding: '8px 16px', fontSize: '12px', fontWeight: 700 }}>
-      LIVE COMMODITIES
-    </div>
-  )
-
   const tickerItems = [...commodities, ...commodities]
 
   return (
-    <div style={{ backgroundColor: '#1a237e', color: 'white', paddingTop: '8px', paddingBottom: '8px', width: '100%', overflow: 'hidden' }}>
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-        <div style={{ flexShrink: 0, backgroundColor: '#00c853', padding: '4px 16px', fontSize: '12px', fontWeight: 700, whiteSpace: 'nowrap' }}>
-          LIVE COMMODITIES
-        </div>
-        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
-          <div style={{ display: 'flex', whiteSpace: 'nowrap', animation: 'eburutu-ticker 60s linear infinite' }}>
+    <div style={{
+      backgroundColor: '#1a237e',
+      color: 'white',
+      height: '36px',
+      maxHeight: '36px',
+      overflow: 'hidden',
+      display: 'flex',
+      alignItems: 'center',
+      width: '100%',
+    }}>
+      <div style={{
+        flexShrink: 0,
+        backgroundColor: '#00c853',
+        padding: '0 16px',
+        fontSize: '12px',
+        fontWeight: 700,
+        whiteSpace: 'nowrap',
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        LIVE COMMODITIES
+      </div>
+
+      {mounted && (
+        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', height: '100%', display: 'flex', alignItems: 'center' }}>
+          <div style={{
+            display: 'flex',
+            whiteSpace: 'nowrap',
+            animation: 'eburutu-ticker 60s linear infinite',
+          }}>
             {tickerItems.map((commodity, index) => (
               <div
                 key={`${commodity.symbol}-${index}`}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0 24px', borderRight: '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  padding: '0 20px',
+                  borderRight: '1px solid rgba(255,255,255,0.2)',
+                  flexShrink: 0,
+                  fontSize: '12px',
+                }}
               >
-                <span style={{ fontWeight: 700, color: '#facc15', fontSize: '12px' }}>{commodity.symbol}</span>
-                <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '12px' }}>{commodity.name}</span>
-                <span style={{ fontSize: '12px' }}>{formatPrice(commodity.price, commodity.currency)}</span>
-                <span style={{ fontSize: '12px', color: getChangeColor(commodity.change), display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                <span style={{ fontWeight: 700, color: '#facc15' }}>{commodity.symbol}</span>
+                <span style={{ color: 'rgba(255,255,255,0.85)' }}>{commodity.name}</span>
+                <span>{formatPrice(commodity.price, commodity.currency)}</span>
+                <span style={{ color: getChangeColor(commodity.change), display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                   {getChangeIcon(commodity.change)}
-                  {commodity.change >= 0 ? '+' : ''}{commodity.change.toFixed(2)}
-                  ({commodity.changePercent >= 0 ? '+' : ''}{commodity.changePercent.toFixed(2)}%)
+                  {commodity.change >= 0 ? '+' : ''}{commodity.change.toFixed(2)}({commodity.changePercent >= 0 ? '+' : ''}{commodity.changePercent.toFixed(2)}%)
                 </span>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    
+      )}
+
+      <style>{`@keyframes eburutu-ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }`}</style>
     </div>
   )
 }
