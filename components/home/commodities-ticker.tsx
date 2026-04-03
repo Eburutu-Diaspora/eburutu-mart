@@ -30,9 +30,11 @@ const initialCommodities: Commodity[] = [
 ]
 
 export function CommoditiesTicker() {
+  const [mounted, setMounted] = useState(false)
   const [commodities, setCommodities] = useState<Commodity[]>(initialCommodities)
 
   useEffect(() => {
+    setMounted(true)
     const interval = setInterval(() => {
       setCommodities(prev => prev.map(commodity => {
         const randomChange = (Math.random() - 0.5) * commodity.price * 0.002
@@ -51,15 +53,15 @@ export function CommoditiesTicker() {
   }, [])
 
   const getChangeColor = (change: number) => {
-    if (change > 0) return 'text-green-500'
-    if (change < 0) return 'text-red-500'
-    return 'text-gray-400'
+    if (change > 0) return '#22c55e'
+    if (change < 0) return '#ef4444'
+    return '#9ca3af'
   }
 
   const getChangeIcon = (change: number) => {
-    if (change > 0) return <TrendingUp className="h-3 w-3" />
-    if (change < 0) return <TrendingDown className="h-3 w-3" />
-    return <Minus className="h-3 w-3" />
+    if (change > 0) return <TrendingUp style={{ width: 12, height: 12 }} />
+    if (change < 0) return <TrendingDown style={{ width: 12, height: 12 }} />
+    return <Minus style={{ width: 12, height: 12 }} />
   }
 
   const formatPrice = (price: number, currency: string) => {
@@ -68,12 +70,18 @@ export function CommoditiesTicker() {
     return price.toLocaleString()
   }
 
+  if (!mounted) return (
+    <div style={{ backgroundColor: '#1a237e', color: 'white', padding: '8px 16px', fontSize: '12px', fontWeight: 700 }}>
+      LIVE COMMODITIES
+    </div>
+  )
+
   const tickerItems = [...commodities, ...commodities]
 
   return (
     <div style={{ backgroundColor: '#1a237e', color: 'white', paddingTop: '8px', paddingBottom: '8px', width: '100%', overflow: 'hidden' }}>
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-        <div style={{ flexShrink: 0, backgroundColor: '#00c853', padding: '4px 16px', fontSize: '12px', fontWeight: 700, zIndex: 10, whiteSpace: 'nowrap' }}>
+        <div style={{ flexShrink: 0, backgroundColor: '#00c853', padding: '4px 16px', fontSize: '12px', fontWeight: 700, whiteSpace: 'nowrap' }}>
           LIVE COMMODITIES
         </div>
         <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
@@ -86,7 +94,7 @@ export function CommoditiesTicker() {
                 <span style={{ fontWeight: 700, color: '#facc15', fontSize: '12px' }}>{commodity.symbol}</span>
                 <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '12px' }}>{commodity.name}</span>
                 <span style={{ fontSize: '12px' }}>{formatPrice(commodity.price, commodity.currency)}</span>
-                <span className={`flex items-center gap-1 text-xs ${getChangeColor(commodity.change)}`}>
+                <span style={{ fontSize: '12px', color: getChangeColor(commodity.change), display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
                   {getChangeIcon(commodity.change)}
                   {commodity.change >= 0 ? '+' : ''}{commodity.change.toFixed(2)}
                   ({commodity.changePercent >= 0 ? '+' : ''}{commodity.changePercent.toFixed(2)}%)
