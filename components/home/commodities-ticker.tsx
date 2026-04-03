@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 
 interface Commodity {
@@ -31,9 +31,7 @@ const initialCommodities: Commodity[] = [
 
 export function CommoditiesTicker() {
   const [commodities, setCommodities] = useState<Commodity[]>(initialCommodities)
-  const tickerRef = useRef<HTMLDivElement>(null)
 
-  // Simulate live price updates
   useEffect(() => {
     const interval = setInterval(() => {
       setCommodities(prev => prev.map(commodity => {
@@ -41,7 +39,6 @@ export function CommoditiesTicker() {
         const newPrice = commodity.price + randomChange
         const newChange = commodity.change + randomChange
         const newChangePercent = (newChange / (commodity.price - commodity.change)) * 100
-        
         return {
           ...commodity,
           price: Math.round(newPrice * 100) / 100,
@@ -50,7 +47,6 @@ export function CommoditiesTicker() {
         }
       }))
     }, 3000)
-
     return () => clearInterval(interval)
   }, [])
 
@@ -72,55 +68,38 @@ export function CommoditiesTicker() {
     return price.toLocaleString()
   }
 
-  // Duplicate commodities for seamless loop
   const tickerItems = [...commodities, ...commodities]
 
   return (
-    <div className="bg-[#1a237e] text-white py-2 overflow-hidden">
-      <div className="flex items-center w-full overflow-hidden">
-        <div className="flex-shrink-0 bg-[#00c853] px-4 py-1 text-sm font-semibold z-10">
+    <div style={{ backgroundColor: '#1a237e', color: 'white', paddingTop: '8px', paddingBottom: '8px', width: '100%', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        <div style={{ flexShrink: 0, backgroundColor: '#00c853', padding: '4px 16px', fontSize: '12px', fontWeight: 700, zIndex: 10, whiteSpace: 'nowrap' }}>
           LIVE COMMODITIES
         </div>
-        <div className="flex-1 overflow-hidden min-w-0">
-          <div 
-            ref={tickerRef}
-            className="flex animate-ticker whitespace-nowrap"
-            style={{
-              animation: 'ticker 60s linear infinite',
-            }}
-          >
+        <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+          <div style={{ display: 'flex', whiteSpace: 'nowrap', animation: 'eburutu-ticker 60s linear infinite' }}>
             {tickerItems.map((commodity, index) => (
-              <div 
+              <div
                 key={`${commodity.symbol}-${index}`}
-                className="inline-flex items-center space-x-2 px-6 border-r border-white/20"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '0 24px', borderRight: '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }}
               >
-                <span className="font-semibold text-yellow-400">{commodity.symbol}</span>
-                <span className="text-white/90">{commodity.name}</span>
-                <span className="font-medium">{formatPrice(commodity.price, commodity.currency)}</span>
-                <span className={`flex items-center space-x-1 ${getChangeColor(commodity.change)}`}>
+                <span style={{ fontWeight: 700, color: '#facc15', fontSize: '12px' }}>{commodity.symbol}</span>
+                <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '12px' }}>{commodity.name}</span>
+                <span style={{ fontSize: '12px' }}>{formatPrice(commodity.price, commodity.currency)}</span>
+                <span className={`flex items-center gap-1 text-xs ${getChangeColor(commodity.change)}`}>
                   {getChangeIcon(commodity.change)}
-                  <span>{commodity.change >= 0 ? '+' : ''}{commodity.change.toFixed(2)}</span>
-                  <span>({commodity.changePercent >= 0 ? '+' : ''}{commodity.changePercent.toFixed(2)}%)</span>
+                  {commodity.change >= 0 ? '+' : ''}{commodity.change.toFixed(2)}
+                  ({commodity.changePercent >= 0 ? '+' : ''}{commodity.changePercent.toFixed(2)}%)
                 </span>
               </div>
             ))}
           </div>
         </div>
       </div>
-      <style jsx>{`
-        @keyframes ticker {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        .animate-ticker {
-          animation: ticker 60s linear infinite;
-        }
-        .animate-ticker:hover {
-          animation-play-state: paused;
+      <style>{`
+        @keyframes eburutu-ticker {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
         }
       `}</style>
     </div>
