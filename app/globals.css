@@ -110,3 +110,7 @@
 .hero-gradient {
   background: linear-gradient(135deg, #2d5a27 0%, #daa520 100%);
 }
+@keyframes eburutu-ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
