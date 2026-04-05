@@ -1,13 +1,11 @@
 import { getServerSession } from 'next-auth'
 import { NextAuthOptions } from 'next-auth'
-
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import { prisma } from '@/lib/db'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
-  
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -40,6 +38,11 @@ export const authOptions: NextAuthOptions = {
             return null
           }
 
+          // Block login if email not yet verified
+          if (!user.emailVerified) {
+            throw new Error('EmailNotVerified')
+          }
+
           return {
             id: user.id,
             email: user.email,
@@ -48,6 +51,10 @@ export const authOptions: NextAuthOptions = {
             image: user.avatar
           }
         } catch (error) {
+          // Re-throw EmailNotVerified so NextAuth encodes it in the redirect URL
+          if (error instanceof Error && error.message === 'EmailNotVerified') {
+            throw error
+          }
           console.error('Auth error:', error)
           return null
         }
@@ -56,7 +63,7 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60,
   },
   cookies: {
     state: {
@@ -84,7 +91,6 @@ export const authOptions: NextAuthOptions = {
         token.role = user.role || 'BUYER'
         token.id = user.id
       }
-      // For Google sign-in, fetch the user role from database
       if (account?.provider === 'google' && token.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email as string }
@@ -104,15 +110,13 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async redirect({ url, baseUrl }) {
-      // Handle relative URLs
       if (url.startsWith('/')) return `${baseUrl}${url}`
-      // Handle same-origin URLs
       if (new URL(url).origin === baseUrl) return url
       return baseUrl
     }
   },
   pages: {
-    signIn: '/auth/login'
+    signIn: '/auth/login',
   },
   debug: process.env.NODE_ENV === 'development',
 }
