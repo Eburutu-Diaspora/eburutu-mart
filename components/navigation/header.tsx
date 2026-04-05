@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState } from 'react'
@@ -13,17 +12,17 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { 
-  Menu, 
-  X, 
-  ShoppingBag, 
-  Search, 
-  User, 
-  Settings, 
+import {
+  Menu,
+  X,
+  ShoppingBag,
+  Search,
+  User,
+  Settings,
   LogOut,
   MessageCircle,
   Home,
-  Store
+  Store,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
@@ -60,7 +59,7 @@ export function Header() {
               Home
             </Link>
             <Link href="/products" className="text-sm font-medium hover:text-primary transition-colors">
-              Products
+              Shop
             </Link>
             <Link href="/categories" className="text-sm font-medium hover:text-primary transition-colors">
               Categories
@@ -94,7 +93,7 @@ export function Header() {
                     <MessageCircle className="h-5 w-5" />
                   </Button>
                 </Link>
-                
+
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -189,7 +188,7 @@ export function Header() {
                 className="block px-3 py-2 text-base font-medium hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Products
+                Shop
               </Link>
               <Link
                 href="/categories"
