@@ -10,7 +10,7 @@ import { motion } from 'framer-motion'
 
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  
+
   const slides = [
     {
       title: "Authentic African Products",
@@ -45,7 +45,7 @@ export function HeroSection() {
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center justify-between py-20 lg:py-28">
           {/* Content */}
-          <motion.div 
+          <motion.div
             className="flex-1 text-center lg:text-left mb-12 lg:mb-0"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -58,14 +58,15 @@ export function HeroSection() {
               </span>
             </h1>
             <p className="text-xl text-white/90 mb-8 max-w-2xl">
-              Connect with your heritage, shop authentic African products, and celebrate African culture. 
-              Join thousands of diaspora community members worldwide.
+              Connect with your heritage, shop authentic African products,
+              and celebrate African culture. Join thousands of diaspora
+              community members worldwide.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
               <Link href="/products">
                 <Button variant="secondary" size="lg" className="group">
-                  Explore Products
+                  Explore Shop
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -76,25 +77,25 @@ export function HeroSection() {
               </Link>
             </div>
 
-            {/* Stats */}
+            {/* Stats — honest pre-launch values */}
             <div className="grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">5000+</div>
-                <div className="text-sm text-white/80">Products</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-1">Free</div>
+                <div className="text-sm text-white/80">No Fees</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">1200+</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-1">Verified</div>
                 <div className="text-sm text-white/80">Sellers</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">10K+</div>
-                <div className="text-sm text-white/80">Members</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-1">Global</div>
+                <div className="text-sm text-white/80">Community</div>
               </div>
             </div>
           </motion.div>
 
           {/* Hero Image */}
-          <motion.div 
+          <motion.div
             className="flex-1 max-w-2xl"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -118,7 +119,7 @@ export function HeroSection() {
                 </p>
               </div>
             </div>
-            
+
             {/* Slide indicators */}
             <div className="flex justify-center mt-6 space-x-2">
               {slides.map((_, index) => (
