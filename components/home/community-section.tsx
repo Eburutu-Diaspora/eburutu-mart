@@ -1,4 +1,3 @@
-
 'use client'
 
 import { motion } from 'framer-motion'
@@ -6,10 +5,10 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Users, 
-  Globe, 
-  Shield, 
+import {
+  Users,
+  Globe,
+  Shield,
   Heart,
   MessageCircle,
   Star,
@@ -25,8 +24,8 @@ const communityStats = [
   {
     icon: Users,
     label: 'Active Members',
-    value: '12,000+',
-    growth: '+15% this month',
+    value: 'Growing',
+    growth: 'Join today',
     color: 'from-blue-500 to-purple-500'
   },
   {
@@ -39,15 +38,15 @@ const communityStats = [
   {
     icon: Shield,
     label: 'Verified Sellers',
-    value: '1,200+',
-    growth: '99.8% satisfaction',
+    value: 'Free',
+    growth: 'No listing fees',
     color: 'from-orange-500 to-red-500'
   },
   {
     icon: Heart,
     label: 'Community Reviews',
-    value: '50K+',
-    growth: '4.9 avg rating',
+    value: '5★',
+    growth: 'Quality guaranteed',
     color: 'from-pink-500 to-rose-500'
   }
 ]
@@ -121,7 +120,7 @@ const communityActivities = [
     type: 'milestone',
     icon: Sparkles,
     title: 'Milestone Reached',
-    description: 'Over 5,000 products now listed!',
+    description: 'EburutuMart is now open for listings!',
     time: '1 day ago',
     color: 'bg-pink-500',
     link: '/categories'
@@ -142,7 +141,7 @@ export function CommunitySection() {
     <section className="py-20 bg-gradient-to-b from-background to-muted/20">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <motion.h2 
+          <motion.h2
             className="text-3xl md:text-4xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -150,7 +149,7 @@ export function CommunitySection() {
           >
             Join Our <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Thriving Community</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-xl text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -203,32 +202,32 @@ export function CommunitySection() {
                   </Link>
                 ))}
               </div>
-              <div className="border-t border-border p-3 bg-muted/20">
-                <div className="flex items-center justify-center gap-8 text-center">
-                  <Link href="/products" className="group">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-                      <Package className="w-4 h-4" />
-                      <span>Browse Products</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                  <Link href="/categories" className="group">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-                      <Globe className="w-4 h-4" />
-                      <span>Explore Categories</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                  <Link href="/auth/register" className="group">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-                      <UserPlus className="w-4 h-4" />
-                      <span>Join Community</span>
-                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
-                </div>
-              </div>
             </CardContent>
+            <div className="border-t border-border p-3 bg-muted/20">
+              <div className="flex items-center justify-center gap-8 text-center">
+                <Link href="/products" className="group">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Package className="w-4 h-4" />
+                    <span>Browse Shop</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+                <Link href="/categories" className="group">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <Globe className="w-4 h-4" />
+                    <span>Explore Categories</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+                <Link href="/auth/register" className="group">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+                    <UserPlus className="w-4 h-4" />
+                    <span>Join Community</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              </div>
+            </div>
           </Card>
         </motion.div>
 
@@ -257,7 +256,7 @@ export function CommunitySection() {
 
         {/* Testimonials */}
         <div className="mb-16">
-          <motion.h3 
+          <motion.h3
             className="text-2xl font-bold text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -265,7 +264,7 @@ export function CommunitySection() {
           >
             What Our Community Says
           </motion.h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <motion.div
@@ -286,15 +285,15 @@ export function CommunitySection() {
                         <div className="text-xs text-muted-foreground">{testimonial.location}</div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-1 mb-3">
                       {[...Array(testimonial.rating)].map((_, i) => (
                         <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                       ))}
                     </div>
-                    
+
                     <p className="text-muted-foreground italic">
-                      "{testimonial.content}"
+                      &ldquo;{testimonial.content}&rdquo;
                     </p>
                   </CardContent>
                 </Card>
@@ -320,15 +319,13 @@ export function CommunitySection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth/register">
-                <Button variant="secondary" size="lg" className="group">
+                <Button variant="secondary" size="lg">
                   Join as Buyer
-                  <Users className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                 </Button>
               </Link>
               <Link href="/auth/register">
-                <Button variant="outline" size="lg" className="border-2 border-yellow-400 bg-yellow-400 text-gray-900 font-semibold hover:bg-yellow-300 hover:border-yellow-300">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
                   Start Selling
-                  <TrendingUp className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
             </div>
