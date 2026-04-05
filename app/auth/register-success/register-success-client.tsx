@@ -1,96 +1,132 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Mail, Loader2, CheckCircle, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Mail, ArrowRight, ShoppingBag, Loader2 } from 'lucide-react'
 
 export default function RegisterSuccessClient() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const email = searchParams.get('email') || ''
   const role = searchParams.get('role') || 'BUYER'
-  const [countdown, setCountdown] = useState(10)
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          router.push('/auth/login')
-          return 0
-        }
-        return prev - 1
+  const [isSending, setIsSending] = useState(false)
+  const [resendDone, setResendDone] = useState(false)
+  const [resendError, setResendError] = useState('')
+
+  const handleResend = async () => {
+    setIsSending(true)
+    setResendError('')
+    try {
+      const res = await fetch('/api/auth/resend-verification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
       })
-    }, 1000)
-
-    return () => clearInterval(timer)
-  }, [router])
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error)
+      setResendDone(true)
+    } catch (e: any) {
+      setResendError(e.message || 'Failed to resend. Please try again.')
+    } finally {
+      setIsSending(false)
+    }
+  }
 
   return (
-    <div className="w-full max-w-md">
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-2 mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-600 via-green-500 to-emerald-600 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="flex items-center justify-center gap-2 mb-6">
           <div className="bg-white p-2 rounded-lg">
-            <ShoppingBag className="h-8 w-8 text-green-600" />
+            <ShoppingBag className="h-8 w-8 text-green-700" />
           </div>
           <span className="text-2xl font-bold text-white">Eburutu Mart</span>
         </div>
-      </div>
 
-      <Card className="shadow-2xl border-0">
-        <CardHeader className="text-center pb-2">
-          <div className="mx-auto mb-4 bg-green-100 p-4 rounded-full w-fit">
-            <CheckCircle className="h-12 w-12 text-green-600" />
+        <div className="bg-white rounded-lg shadow-2xl p-8">
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+              <Mail className="w-10 h-10 text-green-600" />
+            </div>
           </div>
-          <CardTitle className="text-2xl font-bold text-green-700">
-            Registration Successful!
-          </CardTitle>
-          <CardDescription className="text-base">
-            Welcome to the Eburutu Mart community
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-            <Mail className="h-6 w-6 mx-auto mb-2 text-green-600" />
-            <p className="text-sm text-green-800">
-              Your account has been created with:
-            </p>
-            <p className="font-semibold text-green-900 mt-1">{email}</p>
+
+          <h1 className="text-2xl font-bold text-center text-gray-900 mb-2">
+            Check Your Email
+          </h1>
+          <p className="text-center text-gray-600 mb-4">
+            We sent a verification link to
+          </p>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-center gap-3 mb-6">
+            <Mail className="h-5 w-5 text-green-600 flex-shrink-0" />
+            <span className="font-semibold text-gray-900 break-all">{email}</span>
+          </div>
+
+          <div className="space-y-3 mb-6 text-sm text-gray-600">
+            <div className="flex items-start gap-2">
+              <span className="font-bold text-green-600 mt-0.5">1.</span>
+              <span>Open your inbox and find the email from Eburutu Mart</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="font-bold text-green-600 mt-0.5">2.</span>
+              <span>Click <strong>&ldquo;Verify My Email Address&rdquo;</strong> in the email</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="font-bold text-green-600 mt-0.5">3.</span>
+              <span>Sign in to access your {role === 'SELLER' ? 'seller ' : ''}account</span>
+            </div>
           </div>
 
           {role === 'SELLER' && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-              <p className="text-sm text-amber-800">
-                <strong>Seller Account:</strong> After logging in, you can start listing products immediately. 
-                Business verification may be required for enhanced seller features.
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+              <p className="text-amber-800 text-sm">
+                <strong>Seller Account:</strong> After verifying your email, you can start listing products. Complete business verification for enhanced seller features.
               </p>
             </div>
           )}
 
-          <div className="space-y-4">
-            <Link href="/auth/login" className="block">
-              <Button className="w-full bg-green-600 hover:bg-green-700">
-                <span>Continue to Login</span>
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+          <Link href="/auth/login">
+            <Button className="w-full mb-4" size="lg">
+              Go to Sign In →
+            </Button>
+          </Link>
 
-            <div className="text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Redirecting to login in {countdown} seconds...
-            </div>
-          </div>
-
-          <div className="text-center text-xs text-muted-foreground">
-            <p>
-              Need help? <Link href="/contact" className="text-green-600 hover:underline">Contact Support</Link>
+          <div className="border-t pt-4">
+            <p className="text-sm text-center text-gray-500 mb-3">
+              Didn&apos;t receive it? Check your spam folder or
             </p>
+            {resendDone ? (
+              <div className="flex items-center justify-center gap-2 text-green-600 text-sm">
+                <CheckCircle className="w-4 h-4" />
+                <span>New verification email sent!</span>
+              </div>
+            ) : (
+              <>
+                {resendError && <p className="text-red-500 text-xs text-center mb-2">{resendError}</p>}
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  onClick={handleResend}
+                  disabled={isSending || !email}
+                >
+                  {isSending
+                    ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Sending...</>
+                    : 'Resend Verification Email'
+                  }
+                </Button>
+              </>
+            )}
           </div>
-        </CardContent>
-      </Card>
+
+          <p className="text-center text-xs text-gray-400 mt-4">
+            Need help?{' '}
+            <Link href="/contact" className="text-green-600 hover:underline">
+              Contact Support
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
