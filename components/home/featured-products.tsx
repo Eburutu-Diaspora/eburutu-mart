@@ -8,11 +8,11 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { 
-  Star, 
-  MapPin, 
-  Eye, 
-  MessageCircle, 
+import {
+  Star,
+  MapPin,
+  Eye,
+  MessageCircle,
   Heart,
   ShoppingCart
 } from 'lucide-react'
@@ -116,8 +116,8 @@ export function FeaturedProducts() {
   const [favorites, setFavorites] = useState<string[]>([])
 
   const toggleFavorite = (productId: string) => {
-    setFavorites(prev => 
-      prev.includes(productId) 
+    setFavorites(prev =>
+      prev.includes(productId)
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     )
@@ -127,15 +127,15 @@ export function FeaturedProducts() {
     <section className="py-20 bg-muted/20">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <motion.h2 
+          <motion.h2
             className="text-3xl md:text-4xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Products</span>
+            Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Listings</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-xl text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -162,7 +162,7 @@ export function FeaturedProducts() {
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                  
+
                   {/* Badges */}
                   <div className="absolute top-4 left-4 flex flex-col gap-2">
                     {product.isPromoted && (
@@ -204,11 +204,11 @@ export function FeaturedProducts() {
                       {product.category}
                     </Badge>
                   </div>
-                  
+
                   <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                     {product.title}
                   </h3>
-                  
+
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                     {product.description}
                   </p>
@@ -226,13 +226,11 @@ export function FeaturedProducts() {
 
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-medium text-primary">
-                          {product.seller.name.charAt(0)}
-                        </span>
+                      <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {product.seller.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="text-sm font-medium">{product.seller.name}</div>
+                        <p className="text-sm font-medium">{product.seller.name}</p>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
                           {product.seller.location}
@@ -257,7 +255,7 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        <motion.div 
+        <motion.div
           className="text-center mt-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -265,7 +263,7 @@ export function FeaturedProducts() {
         >
           <Link href="/products">
             <Button variant="african" size="lg" className="group">
-              View All Products
+              Browse the Shop
               <ShoppingCart className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </Link>
