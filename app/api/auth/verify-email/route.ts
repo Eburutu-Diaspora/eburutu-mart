@@ -15,7 +15,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    const verificationToken = await prisma.verificationToken.findUnique({
+    // Use findFirst — VerificationToken has a compound key (identifier + token)
+    const verificationToken = await prisma.verificationToken.findFirst({
       where: { token }
     })
 
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (verificationToken.expires < new Date()) {
-      await prisma.verificationToken.delete({ where: { token } })
+      await prisma.verificationToken.deleteMany({ where: { token } })
       return NextResponse.redirect(
         new URL(`/auth/verify-email?error=expired&email=${encodeURIComponent(email)}`, request.url)
       )
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    await prisma.verificationToken.delete({ where: { token } })
+    await prisma.verificationToken.deleteMany({ where: { token } })
 
     return NextResponse.redirect(
       new URL('/auth/verify-email?success=true', request.url)
