@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    // Create user WITHOUT emailVerified — must verify before logging in
     const user = await prisma.user.create({
       data: {
         email,
@@ -61,26 +60,25 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Send verification email via Supabase Admin API (avoids duplicate user conflicts)
+    // Send verification email via Supabase Auth
     const appUrl = process.env.NEXTAUTH_URL || 'https://eburutumart.com'
 
-    const supabaseAdmin = createClient(
+    const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     )
 
-    const { error: linkError } = await supabaseAdmin.auth.admin.generateLink({
-      type: 'signup',
+    const { error: supabaseError } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        redirectTo: `${appUrl}/api/auth/verify-email`,
+        emailRedirectTo: `${appUrl}/api/auth/verify-email`,
         data: { name }
       }
     })
 
-    if (linkError) {
-      console.error('Supabase email error:', linkError.message)
+    if (supabaseError) {
+      console.error('Supabase email error:', supabaseError.message)
     }
 
     return NextResponse.json(
