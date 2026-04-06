@@ -61,26 +61,26 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Send verification email via Supabase Auth (free, works with all email providers)
+    // Send verification email via Supabase Admin API (avoids duplicate user conflicts)
     const appUrl = process.env.NEXTAUTH_URL || 'https://eburutumart.com'
 
-    const supabase = createClient(
+    const supabaseAdmin = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
     )
 
-    const { error: supabaseError } = await supabase.auth.signUp({
+    const { error: linkError } = await supabaseAdmin.auth.admin.generateLink({
+      type: 'signup',
       email,
       password,
       options: {
-        emailRedirectTo: `${appUrl}/api/auth/verify-email`,
+        redirectTo: `${appUrl}/api/auth/verify-email`,
         data: { name }
       }
     })
 
-    if (supabaseError) {
-      console.error('Supabase email error:', supabaseError.message)
-      // Registration still succeeds — user can request resend
+    if (linkError) {
+      console.error('Supabase email error:', linkError.message)
     }
 
     return NextResponse.json(
