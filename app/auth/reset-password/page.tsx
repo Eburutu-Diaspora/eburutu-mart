@@ -18,30 +18,34 @@ function ResetPasswordForm() {
   const [success, setSuccess] = useState(false)
   const [isValidLink, setIsValidLink] = useState(false)
   const [checking, setChecking] = useState(true)
+  const [showInfo, setShowInfo] = useState(true)
+  const [userEmail, setUserEmail] = useState('')
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 
+  // Auto-dismiss info box after 4 seconds
   useEffect(() => {
-    // Supabase sends token in the URL hash: #access_token=...&refresh_token=...&type=recovery
+    const timer = setTimeout(() => setShowInfo(false), 4000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
     const hash = window.location.hash
     const params = new URLSearchParams(hash.replace('#', ''))
-    const accessToken = params.get('access_token')
-    const refreshToken = params.get('refresh_token')
+    const access_token = params.get('access_token')
+    const refresh_token = params.get('refresh_token')
     const type = params.get('type')
 
-    if (accessToken && refreshToken && type === 'recovery') {
-      // Establish the session so updateUser will work
-      supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      }).then(({ error }) => {
+    if (access_token && refresh_token && type === 'recovery') {
+      supabase.auth.setSession({ access_token, refresh_token }).then(({ data, error }) => {
         if (error) {
           setError('Invalid or expired reset link. Please request a new one.')
         } else {
           setIsValidLink(true)
+          setUserEmail(data.user?.email || '')
         }
         setChecking(false)
       })
@@ -73,14 +77,24 @@ function ResetPasswordForm() {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({ password })
-
-      if (error) {
-        setError(error.message || 'Failed to reset password. Please try again.')
-      } else {
-        setSuccess(true)
-        setTimeout(() => router.push('/auth/login'), 3000)
+      // Step 1: Update password in Supabase Auth
+      const { error: supabaseError } = await supabase.auth.updateUser({ password })
+      if (supabaseError) {
+        setError(supabaseError.message || 'Failed to reset password.')
+        setIsLoading(false)
+        return
       }
+
+      // Step 2: Sync new password hash to Prisma/NextAuth users table
+      // so login with email/password still works
+      await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: userEmail, password }),
+      })
+
+      setSuccess(true)
+      setTimeout(() => router.push('/auth/login'), 3000)
     } catch {
       setError('An error occurred. Please try again.')
     } finally {
@@ -91,15 +105,13 @@ function ResetPasswordForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-accent flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Back link */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors mb-6">
+        <div className="text-center mb-4">
+          <Link href="/" className="inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
         </div>
 
-        {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-6">
           <div className="bg-white p-2 rounded-lg">
             <ShoppingBag className="h-8 w-8 text-primary" />
@@ -129,7 +141,7 @@ function ResetPasswordForm() {
                   <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <p className="text-muted-foreground text-sm">
-                  Your password has been reset successfully. You will be redirected to the login page shortly.
+                  Your password has been reset successfully. Redirecting to login shortly.
                 </p>
                 <Link href="/auth/login">
                   <Button className="w-full">Sign In Now</Button>
@@ -167,6 +179,17 @@ function ResetPasswordForm() {
                       disabled={isLoading || !isValidLink}
                     />
                   </div>
+                </div>
+
+                {/* Auto-dismissing info box — fades after 4 seconds */}
+                <div
+                  className={`bg-blue-50 border border-blue-200 rounded-lg p-3 transition-all duration-700 overflow-hidden ${
+                    showInfo ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 border-0 p-0'
+                  }`}
+                >
+                  <p className="text-blue-800 text-xs">
+                    Choose a strong password with uppercase, lowercase, numbers and symbols.
+                  </p>
                 </div>
 
                 {error && (
