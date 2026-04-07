@@ -20,12 +20,12 @@ import {
 } from 'lucide-react'
 
 export default function AboutPage() {
-  const stats = [
-    { label: 'Active Members', value: '12,000+', icon: Users },
-    { label: 'Countries', value: '54', icon: Globe },
-    { label: 'Products Listed', value: '5,000+', icon: Star },
-    { label: 'Verified Sellers', value: '1,200+', icon: ShieldCheck }
-  ]
+ const stats = [
+  { label: 'Active Members', value: 'Growing', icon: Users },
+  { label: 'Countries Represented', value: '54', icon: Globe },
+  { label: 'Always Free', value: '£0', icon: Star },
+  { label: 'Verified Sellers', value: 'Free', icon: ShieldCheck },
+]
 
   const values = [
     {
@@ -135,11 +135,10 @@ export default function AboutPage() {
                 products that connected them to their cultural roots.
               </p>
               <p>
-                Founded in 2024, we started as a small community initiative to help 
-                African entrepreneurs showcase their products to a broader audience. 
-                Today, we've grown into the UK's leading platform for authentic African 
-                commerce, serving thousands of community members.
-              </p>
+  Founded in 2024, we started as a community initiative to help
+  African entrepreneurs showcase their products to a wider audience.
+  We are building the go-to platform for authentic African commerce in the UK.
+</p>
               <p>
                 Our platform goes beyond transactions – we're building a community 
                 that celebrates African heritage, supports emerging businesses, and 
@@ -148,17 +147,6 @@ export default function AboutPage() {
             </div>
           </div>
           
-          <div className="bg-muted/20 rounded-2xl p-8 flex items-center justify-center">
-            <div className="text-center">
-              <Award className="w-16 h-16 text-primary mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Recognition</h3>
-              <p className="text-muted-foreground">
-                Proud recipient of the 2024 UK Diversity in Tech Award for 
-                Cultural Impact and Community Building
-              </p>
-            </div>
-          </div>
-        </div>
 
         </main>
       
