@@ -1,30 +1,55 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Lock, ArrowLeft, ShoppingBag, Loader2 } from 'lucide-react'
+import { Lock, ArrowLeft, ShoppingBag, Loader2, CheckCircle } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js'
 
 function ResetPasswordForm() {
-  const searchParams = useSearchParams()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
+  const [isValidLink, setIsValidLink] = useState(false)
+  const [checking, setChecking] = useState(true)
 
-  const token = searchParams.get('token')
-  const email = searchParams.get('email')
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
-    if (!token || !email) {
+    // Supabase sends token in the URL hash: #access_token=...&refresh_token=...&type=recovery
+    const hash = window.location.hash
+    const params = new URLSearchParams(hash.replace('#', ''))
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token')
+    const type = params.get('type')
+
+    if (accessToken && refreshToken && type === 'recovery') {
+      // Establish the session so updateUser will work
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      }).then(({ error }) => {
+        if (error) {
+          setError('Invalid or expired reset link. Please request a new one.')
+        } else {
+          setIsValidLink(true)
+        }
+        setChecking(false)
+      })
+    } else {
       setError('Invalid reset link. Please request a new one.')
+      setChecking(false)
     }
-  }, [token, email])
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -48,18 +73,13 @@ function ResetPasswordForm() {
     }
 
     try {
-      const response = await fetch('/api/auth/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, email, password }),
-      })
+      const { error } = await supabase.auth.updateUser({ password })
 
-      if (response.ok) {
+      if (error) {
+        setError(error.message || 'Failed to reset password. Please try again.')
+      } else {
         setSuccess(true)
         setTimeout(() => router.push('/auth/login'), 3000)
-      } else {
-        const data = await response.json()
-        setError(data.error || 'Failed to reset password. The link may have expired.')
       }
     } catch {
       setError('An error occurred. Please try again.')
@@ -71,17 +91,20 @@ function ResetPasswordForm() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-primary/90 to-accent flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        {/* Back link */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 text-white hover:text-white/90 transition-colors mb-6">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="bg-white p-2 rounded-lg">
-              <ShoppingBag className="h-8 w-8 text-primary" />
-            </div>
-            <span className="text-2xl font-bold text-white">Eburutu Mart</span>
+        </div>
+
+        {/* Logo */}
+        <div className="flex items-center justify-center gap-2 mb-6">
+          <div className="bg-white p-2 rounded-lg">
+            <ShoppingBag className="h-8 w-8 text-primary" />
           </div>
+          <span className="text-2xl font-bold text-white">Eburutu Mart</span>
         </div>
 
         <Card className="shadow-2xl border-0">
@@ -93,11 +116,17 @@ function ResetPasswordForm() {
               {success ? 'Redirecting to login...' : 'Enter your new password below'}
             </CardDescription>
           </CardHeader>
+
           <CardContent>
-            {success ? (
+            {checking ? (
+              <div className="text-center py-8">
+                <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary" />
+                <p className="text-sm text-muted-foreground mt-2">Verifying reset link...</p>
+              </div>
+            ) : success ? (
               <div className="text-center space-y-4">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                  <Lock className="w-8 h-8 text-green-600" />
+                  <CheckCircle className="w-8 h-8 text-green-600" />
                 </div>
                 <p className="text-muted-foreground text-sm">
                   Your password has been reset successfully. You will be redirected to the login page shortly.
@@ -119,7 +148,7 @@ function ResetPasswordForm() {
                       placeholder="Min. 8 characters"
                       className="pl-10"
                       required
-                      disabled={isLoading}
+                      disabled={isLoading || !isValidLink}
                     />
                   </div>
                 </div>
@@ -135,7 +164,7 @@ function ResetPasswordForm() {
                       placeholder="Repeat your password"
                       className="pl-10"
                       required
-                      disabled={isLoading}
+                      disabled={isLoading || !isValidLink}
                     />
                   </div>
                 </div>
@@ -146,7 +175,11 @@ function ResetPasswordForm() {
                   </Alert>
                 )}
 
-                <Button type="submit" className="w-full" disabled={isLoading || !token || !email}>
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isLoading || !isValidLink}
+                >
                   {isLoading ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Resetting...</>
                   ) : (
