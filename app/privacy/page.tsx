@@ -119,10 +119,7 @@ export default function PrivacyPolicyPage() {
             <strong>Supabase</strong> — cloud database and file storage for user data and uploaded
             images. Supabase is SOC 2 Type II certified.
           </li>
-          <li>
-            <strong>Resend</strong> — transactional email delivery (email verification, password
-            reset). Only your email address is shared for this purpose.
-          </li>
+        
         </ul>
         <p className="mt-2">
           We do not sell, rent, or share your personal data with any other third parties for
