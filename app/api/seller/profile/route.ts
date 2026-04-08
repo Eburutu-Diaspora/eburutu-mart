@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -51,7 +51,7 @@ export async function GET() {
 export async function PUT(request: Request) {
   try {
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       return NextResponse.json(
         { error: 'Unauthorized' },
@@ -67,14 +67,14 @@ export async function PUT(request: Request) {
       update: {
         businessName,
         businessDescription,
-        businessType
+        businessType,
       },
       create: {
         userId: session.user.id,
         businessName,
         businessDescription,
         businessType,
-        verificationStatus: 'PENDING'
+        verificationStatus: 'VERIFIED', // Open marketplace — verified on email confirmation
       }
     })
 
