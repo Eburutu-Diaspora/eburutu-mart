@@ -17,110 +17,83 @@ import {
   ShoppingCart
 } from 'lucide-react'
 
-const featuredProducts = [
-  {
-    id: '1',
-    title: 'Authentic Ankara Fabric Set',
-    description: 'Beautiful hand-woven Ankara fabric perfect for traditional wear',
-    price: 45.99,
-    originalPrice: 59.99,
-    image: 'https://i.pinimg.com/originals/b0/62/d0/b062d0635031924683bf1b729a64eb55.jpg',
-    seller: {
-      name: 'Amara Textiles',
-      rating: 4.8,
-      location: 'London, UK'
-    },
-    category: 'Fashion & Textiles',
-    views: 234,
-    isPromoted: true,
-    discount: 23
-  },
-  {
-    id: '2',
-    title: 'Premium Shea Butter Collection',
-    description: 'Pure, unrefined shea butter imported directly from Ghana',
-    price: 28.50,
-    image: 'https://i.ytimg.com/vi/zhTpGwOfhP8/hqdefault.jpg',
-    seller: {
-      name: 'Natural Roots',
-      rating: 4.9,
-      location: 'Birmingham, UK'
-    },
-    category: 'Beauty & Wellness',
-    views: 189,
-    isPromoted: false
-  },
-  {
-    id: '3',
-    title: 'Hand-Carved Wooden Sculpture',
-    description: 'Intricate wooden sculpture depicting African heritage',
-    price: 125.00,
-    image: 'https://i.pinimg.com/originals/f2/24/46/f22446deb79b0ac8dca99799bdae39e3.jpg',
-    seller: {
-      name: 'Heritage Crafts',
-      rating: 4.7,
-      location: 'Manchester, UK'
-    },
-    category: 'Artisan Crafts',
-    views: 156,
-    isPromoted: true
-  },
-  {
-    id: '4',
-    title: 'Jollof Rice Spice Kit',
-    description: 'Complete spice kit for authentic West African jollof rice',
-    price: 18.99,
-    image: 'https://www.seriouseats.com/thmb/7sKUAr-eiORqD8wNRxPTgZkQmVU=/750x0/filters:no_upscale():max_bytes(150000):strip_icc()/20220908-nigerianjollofricemaureen-celestine-33_1-ac2e8f95cc9d49bea95539997e45c97e.JPG',
-    seller: {
-      name: 'Mama\'s Kitchen',
-      rating: 4.6,
-      location: 'Leeds, UK'
-    },
-    category: 'Food & Groceries',
-    views: 298,
-    isPromoted: false
-  },
-  {
-    id: '5',
-    title: 'African Literature Collection',
-    description: 'Curated selection of contemporary African literature',
-    price: 89.99,
-    image: 'https://blogs.lib.unc.edu/rbc/wp-content/uploads/sites/4/2017/03/africanlit1000.jpg',
-    seller: {
-      name: 'Cultural Pages',
-      rating: 4.8,
-      location: 'Bristol, UK'
-    },
-    category: 'Media & Culture',
-    views: 142,
-    isPromoted: false
-  },
-  {
-    id: '6',
-    title: 'Traditional Kente Cloth',
-    description: 'Handwoven Kente cloth with traditional patterns and colors',
-    price: 199.99,
-    image: 'https://prod.wp.cdn.aws.wfu.edu/sites/417/2023/02/Kente-Strips-web-500.jpg',
-    seller: {
-      name: 'Royal Weavers',
-      rating: 4.9,
-      location: 'London, UK'
-    },
-    category: 'Fashion & Textiles',
-    views: 267,
-    isPromoted: true
+interface Product {
+  id: string
+  title: string
+  description: string
+  price: number
+  originalPrice?: number
+  images: string[]
+  seller: {
+    id: string
+    businessName?: string
+    user?: { name: string }
+    location?: string
   }
-]
+  category: {
+    id: string
+    name: string
+  }
+  views?: number
+  isPromoted?: boolean
+  discount?: number
+}
 
 export function FeaturedProducts() {
   const [favorites, setFavorites] = useState<string[]>([])
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/products?limit=6')
+      .then((res) => res.json())
+      .then((data) => {
+        const list = Array.isArray(data) ? data : data.products ?? []
+        setProducts(list)
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false))
+  }, [])
 
   const toggleFavorite = (productId: string) => {
-    setFavorites(prev =>
+    setFavorites((prev) =>
       prev.includes(productId)
-        ? prev.filter(id => id !== productId)
+        ? prev.filter((id) => id !== productId)
         : [...prev, productId]
     )
+  }
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-muted/20">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Featured{' '}
+              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Listings
+              </span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Handpicked products from our trusted sellers, showcasing the finest
+              African craftsmanship and culture
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="h-80 bg-muted rounded-xl animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (products.length === 0) {
+    return null
   }
 
   return (
@@ -133,7 +106,10 @@ export function FeaturedProducts() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Featured <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Listings</span>
+            Featured{' '}
+            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Listings
+            </span>
           </motion.h2>
           <motion.p
             className="text-xl text-muted-foreground max-w-2xl mx-auto"
@@ -141,12 +117,13 @@ export function FeaturedProducts() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Handpicked products from our trusted sellers, showcasing the finest African craftsmanship and culture
+            Handpicked products from our trusted sellers, showcasing the finest
+            African craftsmanship and culture
           </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProducts.map((product, index) => (
+          {products.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
@@ -156,7 +133,11 @@ export function FeaturedProducts() {
               <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
                 <div className="relative aspect-video">
                   <Image
-                    src={product.image}
+                    src={
+                      Array.isArray(product.images) && product.images.length > 0
+                        ? product.images[0]
+                        : '/placeholder-product.jpg'
+                    }
                     alt={product.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -181,27 +162,42 @@ export function FeaturedProducts() {
                       className="h-8 w-8 bg-white/90 hover:bg-white"
                       onClick={() => toggleFavorite(product.id)}
                     >
-                      <Heart className={`h-4 w-4 ${favorites.includes(product.id) ? 'fill-red-500 text-red-500' : ''}`} />
+                      <Heart
+                        className={`h-4 w-4 ${
+                          favorites.includes(product.id)
+                            ? 'fill-red-500 text-red-500'
+                            : ''
+                        }`}
+                      />
                     </Button>
                   </div>
 
                   {/* Stats */}
                   <div className="absolute bottom-4 left-4 flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-white text-sm bg-black/50 px-2 py-1 rounded">
-                      <Eye className="h-3 w-3" />
-                      <span>{product.views}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-white text-sm bg-black/50 px-2 py-1 rounded">
-                      <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                      <span>{product.seller.rating}</span>
-                    </div>
+                    {product.views !== undefined && (
+                      <div className="flex items-center gap-1 text-white text-sm bg-black/50 px-2 py-1 rounded">
+                        <Eye className="h-3 w-3" />
+                        <span>{product.views}</span>
+                      </div>
+                    )}
+                    {product.seller && (
+                      <div className="flex items-center gap-1 text-white text-sm bg-black/50 px-2 py-1 rounded">
+                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        <span>
+                          {typeof product.seller === 'object' &&
+                          'rating' in product.seller
+                            ? (product.seller as { rating?: number }).rating
+                            : ''}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-2">
                     <Badge variant="outline" className="text-xs">
-                      {product.category}
+                      {product.category?.name ?? 'Uncategorised'}
                     </Badge>
                   </div>
 
@@ -227,20 +223,33 @@ export function FeaturedProducts() {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center text-white font-bold text-sm">
-                        {product.seller.name.charAt(0)}
+                        {(
+                          product.seller?.businessName ??
+                          product.seller?.user?.name ??
+                          '?'
+                        ).charAt(0)}
                       </div>
                       <div>
-                        <p className="text-sm font-medium">{product.seller.name}</p>
+                        <p className="text-sm font-medium">
+                          {product.seller?.businessName ??
+                            product.seller?.user?.name ??
+                            'Seller'}
+                        </p>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <MapPin className="h-3 w-3" />
-                          {product.seller.location}
+                          <span>
+                            {product.seller?.location ?? 'Location TBC'}
+                          </span>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex gap-2">
-                    <Link href={`/products/${product.id}`} className="flex-1">
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="flex-1"
+                    >
                       <Button className="w-full" variant="outline">
                         View Details
                       </Button>
