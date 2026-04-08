@@ -18,17 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
   MessageCircle,
-  Shield,
-  Eye,
-  CheckCircle,
-  AlertCircle,
-  Lock,
-  UserCheck,
-  Flag,
-  Lightbulb,
 } from 'lucide-react'
-
-// ─── FAQ Data ─────────────────────────────────────────────────────────────────
 
 interface FAQItem {
   question: string
@@ -51,22 +41,22 @@ const faqSections: FAQSection[] = [
       {
         question: 'How do I create an account?',
         answer:
-          'Click "Join Now" in the top right corner and choose whether you want to register as a buyer or seller. Fill in your name, email address, and password. You will receive a confirmation email — click the link inside to activate your account and you are ready to go. The whole process takes under two minutes.',
+          'Click "Join Now" in the top right corner and choose whether you want to register as a buyer or seller. Complete the registration form with your details. You will receive a confirmation email — click the link to activate your account and you are ready to go.',
       },
       {
         question: "What's the difference between a buyer and seller account?",
         answer:
-          'Buyer accounts let you browse the marketplace, search for products, save favourites to a wishlist, and contact sellers directly. Seller accounts include everything a buyer can do, plus a personal dashboard where you can create and manage your own listings, upload product photos, set prices, and receive enquiries from interested buyers. You can register as both if you want to buy and sell.',
+          'Buyer accounts allow you to browse the marketplace, search products, and access seller contact details to reach out directly. Seller accounts include a personal dashboard where you can create and manage listings, upload photos, and set prices. You can register as both if you wish to buy and sell.',
       },
       {
         question: 'Is registration free?',
         answer:
-          'Yes — completely free, for everyone, forever. There are no listing fees, no subscription charges, no commission taken from your sales, and no hidden costs of any kind. EburutuMart exists to serve the African diaspora community, not to profit from it.',
+          'Yes — completely free for both buyers and sellers. There are no listing fees, no subscription charges, no commission on sales, and no hidden costs. EburutuMart is built to empower the African diaspora community, not to profit from it.',
       },
       {
         question: 'Can I use EburutuMart if I am outside the UK?',
         answer:
-          'Absolutely. While EburutuMart is based in the UK and primarily serves the African diaspora community here, anyone from anywhere in the world can register, browse, and list products. Delivery and collection arrangements are agreed directly between buyers and sellers, so international transactions are entirely possible.',
+          'Yes. While EburutuMart is based in the UK and primarily serves the African diaspora community here, anyone from anywhere in the world can register, browse, and list products. Delivery and collection arrangements are agreed directly between buyers and sellers.',
       },
       {
         question: 'Do I need to be of African heritage to join?',
@@ -76,7 +66,7 @@ const faqSections: FAQSection[] = [
       {
         question: "I registered but haven't received a confirmation email. What should I do?",
         answer:
-          'First, check your spam or junk folder — confirmation emails sometimes land there. If you still cannot find it, return to the login page and use the "Resend confirmation email" option. If the problem continues, contact us at info@eburutumart.com and we will sort it out promptly.',
+          'Check your spam or junk folder first. If you still cannot find it, return to the login page and use the "Resend confirmation email" option. If the problem continues, contact us at info@eburutumart.com and we will resolve it promptly.',
       },
     ],
   },
@@ -88,37 +78,37 @@ const faqSections: FAQSection[] = [
       {
         question: 'How do I search for products?',
         answer:
-          'Use the search bar at the top of any page to search by keyword, product name, or category. You can also browse by category using the Categories menu in the navigation. Filter results by price range, location, and condition to narrow down exactly what you are looking for.',
+          'Use the search bar at the top of any page to search by keyword, product name, or category. You can also browse using the Categories menu in the navigation. Filter results by price range, location, and condition to find exactly what you are looking for.',
       },
       {
         question: 'How do I contact a seller?',
         answer:
-          'Open any product listing and click the "Contact Seller" button. This opens a direct message thread between you and the seller within our platform. You can ask questions, negotiate, arrange viewing or collection, and agree on payment — all in one place.',
+          'Open any product listing and click "Contact Seller". As a registered buyer, you will be provided with the seller\'s email address so you can reach out to them directly. All enquiries, negotiations, and arrangements are conducted between you and the seller.',
       },
       {
         question: 'How do payments work?',
         answer:
-          'EburutuMart is a free listing and connection platform — we do not process, hold, or handle any payments. Once a buyer and seller agree on a deal, they arrange payment entirely between themselves using whichever method they are both comfortable with, such as bank transfer, cash on collection, PayPal, or any other agreed method.',
+          'EburutuMart is a listing and connection platform — we do not process, hold, or facilitate any payments. Once a buyer and seller have agreed on a deal, payment is arranged entirely between themselves through whichever method both parties are comfortable with. EburutuMart bears no responsibility for any transaction conducted outside our platform.',
       },
       {
         question: 'Can I negotiate the price with a seller?',
         answer:
-          'Yes, absolutely. Many sellers are open to offers. Simply message the seller through the listing and discuss the price directly. EburutuMart encourages open, community-spirited trading, and negotiation is a normal part of that.',
+          'Yes. Many sellers are open to reasonable offers. Contact the seller directly using the email address provided on the listing and discuss terms between yourselves. EburutuMart encourages fair, community-spirited trading.',
+      },
+      {
+        question: 'What precautions should I take before buying?',
+        answer:
+          'Buyers are strongly encouraged to exercise due diligence before committing to any purchase. Ask the seller for detailed photos, condition information, and any relevant background on the item. Where possible, arrange to view the item in person before making payment. EburutuMart connects buyers and sellers — responsibility for verifying the suitability of any transaction rests with both parties.',
       },
       {
         question: 'What if a product is not as described?',
         answer:
-          'We encourage all buyers to ask detailed questions before agreeing to a purchase, request additional photos if needed, and where possible arrange to view items in person before paying. If something goes wrong, contact the seller first. If you cannot resolve it, report the listing to us and our support team will investigate.',
+          'We strongly recommend clarifying all details with the seller before agreeing to a purchase. If a concern arises after a transaction, contact the seller in the first instance. You may also report the listing to us and our support team will review the matter. Please note that since EburutuMart does not handle payments, any financial dispute must be resolved through the payment method used by both parties.',
       },
       {
         question: 'Is there a wishlist or save feature?',
         answer:
-          'Yes. When you are browsing, you can tap the heart icon on any listing to save it to your personal wishlist. Saved items are accessible from your account dashboard so you can return to them later.',
-      },
-      {
-        question: 'How do I know a listing is genuine?',
-        answer:
-          'Every member of EburutuMart has a verified email address, meaning all accounts belong to real people. Listings also display seller ratings and reviews left by previous buyers. We encourage you to read reviews, check profile history, and message the seller with any questions before committing to a purchase.',
+          'Yes. Tap the heart icon on any listing to save it to your personal wishlist. Saved items are accessible from your account dashboard whenever you are ready to return to them.',
       },
     ],
   },
@@ -130,37 +120,37 @@ const faqSections: FAQSection[] = [
       {
         question: 'How do I list my first product?',
         answer:
-          'Once you have a seller account, go to your dashboard and click "Add New Product". Fill in the product title, description, price, category, and location. Upload clear photos from multiple angles — good photos make a huge difference. Hit publish and your listing goes live immediately.',
+          'Once you have a seller account, go to your dashboard and click "Add New Product". Fill in the product title, description, price, category, and location. Upload clear photos from multiple angles and publish. Your listing goes live immediately.',
       },
       {
         question: 'What can I sell on EburutuMart?',
         answer:
-          'EburutuMart is designed for authentic African and African-inspired products. This includes clothing and fashion, food and ingredients, art and crafts, furniture, jewellery, homeware, music, books, beauty products, cultural artefacts, and services. If it connects to African culture and heritage, it belongs here. Items that are illegal, counterfeit, or violate our community guidelines are not permitted.',
+          'EburutuMart is designed for authentic African and African-inspired products — clothing, food, art, crafts, jewellery, homeware, books, beauty products, cultural artefacts, and services. If it connects to African culture and heritage, it belongs here. Listings that are illegal, counterfeit, or in violation of our community guidelines will be removed.',
       },
       {
         question: 'Are there any fees for listing or selling?',
         answer:
-          'None whatsoever. Listing a product is free. There is no commission on sales, no monthly fee, and no charges of any kind. Every penny from your sale goes directly to you.',
+          'None at all. Listing is free, there is no commission on sales, and there are no monthly charges. Every penny from your sale goes directly to you.',
       },
       {
         question: 'How many products can I list?',
         answer:
-          'There is no fixed limit. You can list as many products as you like. Whether you are selling one handmade item or running a full catalogue of hundreds of products, EburutuMart supports you.',
-      },
-      {
-        question: 'Can I edit or delete a listing after publishing?',
-        answer:
-          'Yes, at any time. Go to your seller dashboard, find the listing you want to change, and click Edit. You can update the title, description, price, photos, and availability. You can also mark a listing as sold or remove it completely.',
+          'There is no fixed limit. You can list as many products as you like, from a single handmade item to a full catalogue.',
       },
       {
         question: 'How will buyers contact me?',
         answer:
-          'Interested buyers will message you directly through the EburutuMart messaging system. You will receive a notification when a new message arrives. All communication is kept within the platform to keep things organised and safe for both parties.',
+          'Registered buyers who express interest in your listing will contact you directly via email. Your contact details are shared only with verified, registered buyers — they are not displayed publicly on your listing.',
       },
       {
-        question: 'What happens if I have a problem with a buyer?',
+        question: 'Can I edit or remove a listing after publishing?',
         answer:
-          'Contact our support team at info@eburutumart.com and explain the situation. We take community safety seriously and will investigate any reports of fraudulent or abusive behaviour. Accounts that violate our community standards are removed.',
+          'Yes, at any time. Go to your seller dashboard, find the listing, and click Edit to update any details. You can also mark it as sold or remove it entirely once it is no longer available.',
+      },
+      {
+        question: 'What are my responsibilities as a seller?',
+        answer:
+          'Sellers are expected to represent their products honestly, respond to buyer enquiries promptly, and honour any commitments made during the sales process. EburutuMart facilitates the connection between buyers and sellers — the responsibility for completing transactions fairly and safely rests with both parties.',
       },
     ],
   },
@@ -170,34 +160,29 @@ const faqSections: FAQSection[] = [
     color: 'text-purple-600',
     items: [
       {
-        question: 'How do I arrange payment with a seller?',
+        question: 'How do payments work between buyers and sellers?',
         answer:
-          'EburutuMart does not process or handle payments. Buyers and sellers agree on a payment method directly between themselves. Common methods used in our community include bank transfer, cash on collection, and PayPal. Always confirm the method before completing a transaction.',
-      },
-      {
-        question: "Is it safe to buy from someone I don't know?",
-        answer:
-          'We have several measures in place to protect you. Every account holder has a verified email address. Seller profiles show ratings and reviews from past buyers. You can message sellers to ask questions before committing. For high-value items, we strongly recommend meeting in a public place to view the item before paying.',
-      },
-      {
-        question: 'What safe trading tips do you recommend?',
-        answer:
-          'For physical goods: meet in a public place, inspect the item before paying, and never transfer large sums before seeing the item. For services: agree terms clearly in writing via the message system and check reviews. Trust your instincts — if something feels off, walk away and report it.',
+          'EburutuMart does not process or handle payments of any kind. All financial arrangements are made directly between buyers and sellers, through whatever method both parties agree upon. We strongly encourage the use of traceable, secure payment methods — particularly for higher-value transactions.',
       },
       {
         question: 'Is my personal information secure?',
         answer:
-          'Yes. Your account information is protected with industry-standard encryption. We do not share your personal details with third parties without your consent. Since EburutuMart does not handle payments, no financial data is ever stored on our platform.',
+          'Yes. Your account information is protected with industry-standard encryption. Since we do not process payments, no financial data is ever stored on our platform. Your email address is only made available to other registered members in the context of an active listing — it is never displayed publicly.',
       },
       {
-        question: 'How do I report a suspicious listing or user?',
+        question: 'What safe trading practices do you recommend?',
         answer:
-          'Every listing and seller profile has a "Report" button. Click it, choose the reason, and add any relevant details. Our moderation team reviews all reports promptly. You can also email us directly at info@eburutumart.com if you have an urgent concern.',
+          'For physical goods, we recommend meeting in a well-lit, public location and inspecting items thoroughly before making any payment. For services, agree all terms clearly in writing by email before any work begins. Both buyers and sellers should ask questions, verify details, and never feel pressured into completing a transaction hastily. Safe trading is the shared responsibility of all parties.',
       },
       {
         question: 'What if I have a dispute with the other party?',
         answer:
-          'Start by messaging the other party to try to resolve it directly — most disputes are misunderstandings that can be cleared up quickly. If that does not work, contact our support team with the details of the transaction and the issue. We will do our best to mediate a fair resolution.',
+          'Attempt to resolve the matter directly with the other party first — many issues are misunderstandings that can be cleared up quickly. If you are unable to reach a resolution, contact our support team at info@eburutumart.com with the relevant details. We will do our best to assist, though please note that financial disputes must ultimately be handled through the payment method used, as EburutuMart is not a party to any transaction.',
+      },
+      {
+        question: 'How do I report a suspicious listing or user?',
+        answer:
+          'Every listing and profile includes a Report button. Click it, select the reason, and provide any relevant details. Our moderation team reviews all reports and takes appropriate action. For urgent concerns, email us directly at info@eburutumart.com.',
       },
     ],
   },
@@ -209,22 +194,22 @@ const faqSections: FAQSection[] = [
       {
         question: 'What makes EburutuMart different from other marketplaces?',
         answer:
-          'EburutuMart is built specifically for the African diaspora community. It is not a generic marketplace — every product, seller, and buyer is connected by a shared heritage and cultural identity. There are no fees, no gatekeeping, and no corporate barriers. It is a community-first platform where cultural commerce and human connection come before profit.',
+          'EburutuMart is built specifically for the African diaspora community. It is not a generic marketplace — every product, seller, and buyer is connected by a shared heritage and cultural identity. There are no fees, no barriers to entry, and no corporate middlemen. It is a community-first platform where cultural commerce and genuine human connection take priority.',
       },
       {
         question: 'How do reviews and ratings work?',
         answer:
-          'After a transaction is completed, both buyers and sellers can leave a review for each other. Reviews are visible on seller profiles and help the whole community make informed decisions. We encourage honest, constructive feedback. Reviews cannot be deleted by the person being reviewed, only by our moderation team if they violate our guidelines.',
+          'After a transaction, both buyers and sellers are encouraged to leave honest reviews. These are visible on profiles and help the community make well-informed decisions. Reviews cannot be removed by the person being reviewed — only by our moderation team where community guidelines have been breached.',
       },
       {
         question: 'How does EburutuMart support African artisans and small businesses?',
         answer:
-          'By providing a completely free platform with no listing fees or commissions, we ensure that every penny from a sale goes directly to the seller. We also promote community members through our blog, social media channels, and featured listings. Our mission is to help African entrepreneurs reach a wider audience without financial barriers.',
+          'By offering a completely free platform with no fees or commissions, every penny from a sale goes directly to the seller. We also promote community members through our blog, social media, and featured listings, helping African entrepreneurs reach a wider audience without financial barriers.',
       },
       {
         question: 'What are the community guidelines?',
         answer:
-          'EburutuMart is a respectful, inclusive, and positive space. We do not tolerate discrimination, harassment, fraudulent listings, counterfeit goods, or anything that harms community members. All users agree to our community standards on registration. Violations can result in listings being removed and accounts being suspended or permanently banned.',
+          'EburutuMart is a respectful, inclusive space. We do not tolerate discrimination, harassment, fraudulent listings, or counterfeit goods. All users agree to our community standards at the point of registration. Violations may result in listings being removed and accounts being suspended or permanently banned.',
       },
     ],
   },
@@ -236,38 +221,36 @@ const faqSections: FAQSection[] = [
       {
         question: "I can't log into my account. What should I do?",
         answer:
-          'First, try the "Forgot Password" link on the login page — this will send a reset link to your registered email address. Check your spam folder if the email does not arrive within a few minutes. If you are still having trouble, contact us at info@eburutumart.com.',
+          'Use the "Forgot Password" link on the login page to receive a reset link to your registered email address. Check your spam folder if it does not arrive promptly. If you are still unable to access your account, contact us at info@eburutumart.com.',
       },
       {
         question: 'How do I reset my password?',
         answer:
-          'Click "Forgot Password" on the login page, enter your registered email address, and we will send you a secure reset link. The link is valid for 24 hours. If you do not receive the email, check your spam folder or contact support.',
+          'Click "Forgot Password" on the login page, enter your registered email address, and we will send you a secure reset link valid for 24 hours. If the email does not arrive, check your spam folder or contact our support team.',
       },
       {
         question: 'The website is running slowly. What can I do?',
         answer:
-          'Try clearing your browser cache and cookies, then reload the page. If that does not help, try a different browser or disable any browser extensions that might be interfering. If the problem persists, please let us know at info@eburutumart.com.',
+          'Try clearing your browser cache and cookies, then reload the page. If the issue persists across different browsers or devices, it may be a temporary problem on our end — please let us know at info@eburutumart.com so we can investigate.',
       },
       {
         question: 'I found a bug or error. How do I report it?',
         answer:
-          'We genuinely appreciate bug reports — they help us improve the platform for everyone. Please email info@eburutumart.com with as much detail as possible: what you were doing when the error occurred, which page it happened on, any error message you saw, and the device and browser you were using. Screenshots are very helpful.',
+          'Please email info@eburutumart.com with as much detail as possible — what you were doing when the error occurred, which page it was on, any error message displayed, and your device and browser. Screenshots are particularly helpful.',
       },
       {
         question: 'Does EburutuMart have a mobile app?',
         answer:
-          'Not yet, but EburutuMart is fully optimised for mobile browsers, so it works beautifully on any smartphone or tablet without needing an app. A dedicated mobile app is on our roadmap for a future release.',
+          'Not yet, but EburutuMart is fully optimised for mobile browsers and works well on any smartphone or tablet. A dedicated mobile app is planned for a future release.',
       },
       {
         question: 'How do I delete my account?',
         answer:
-          'You can request account deletion by emailing info@eburutumart.com from your registered email address. We will process your request within 7 days and permanently delete your data in accordance with UK GDPR.',
+          'Send a deletion request to info@eburutumart.com from your registered email address. We will process it within 7 days and permanently remove your data in line with UK GDPR. Any active listings will be taken down as part of this process.',
       },
     ],
   },
 ]
-
-// ─── Accordion Item ───────────────────────────────────────────────────────────
 
 function FAQAccordionItem({ item }: { item: FAQItem }) {
   const [open, setOpen] = useState(false)
@@ -293,8 +276,6 @@ function FAQAccordionItem({ item }: { item: FAQItem }) {
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function HelpPage() {
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -318,12 +299,10 @@ export default function HelpPage() {
 
       <div className="max-w-4xl mx-auto px-4 py-10">
 
-        {/* Back */}
         <Link href="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900 mb-8">
           ← Back to Home
         </Link>
 
-        {/* Hero */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-gray-900 mb-3">Help Center</h1>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">
@@ -331,9 +310,7 @@ export default function HelpPage() {
           </p>
         </div>
 
-        {/* Top 3 cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {/* Contact Support */}
           <Card className="text-center">
             <CardHeader className="pb-2">
               <div className="flex justify-center mb-2">
@@ -352,7 +329,6 @@ export default function HelpPage() {
             </CardContent>
           </Card>
 
-          {/* User Guide */}
           <Card className="text-center">
             <CardHeader className="pb-2">
               <div className="flex justify-center mb-2">
@@ -371,7 +347,6 @@ export default function HelpPage() {
             </CardContent>
           </Card>
 
-          {/* Search FAQs */}
           <Card className="text-center">
             <CardHeader className="pb-2">
               <div className="flex justify-center mb-2">
@@ -395,7 +370,6 @@ export default function HelpPage() {
           </Card>
         </div>
 
-        {/* FAQ heading */}
         <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">
           Frequently Asked Questions
         </h2>
@@ -408,7 +382,6 @@ export default function HelpPage() {
           </p>
         )}
 
-        {/* FAQ Sections */}
         <div className="mt-6 space-y-6">
           {filteredSections.length === 0 ? (
             <div className="text-center py-16 border border-gray-100 rounded-2xl">
@@ -423,10 +396,7 @@ export default function HelpPage() {
             </div>
           ) : (
             filteredSections.map((section, idx) => (
-              <div
-                key={idx}
-                className="border border-gray-100 rounded-2xl shadow-sm overflow-hidden"
-              >
+              <div key={idx} className="border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-gray-50">
                   <span className={section.color}>{section.icon}</span>
                   <h3 className="text-lg font-bold text-gray-900">{section.title}</h3>
@@ -441,7 +411,6 @@ export default function HelpPage() {
           )}
         </div>
 
-        {/* Still need help */}
         <div className="mt-12 bg-gray-50 rounded-2xl p-8 text-center border border-gray-100">
           <h3 className="text-xl font-bold text-gray-900 mb-2">Still Need Help?</h3>
           <p className="text-gray-500 text-sm mb-6">
