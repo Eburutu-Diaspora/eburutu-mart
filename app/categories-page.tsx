@@ -1,5 +1,7 @@
 
-import { prisma } from '@/lib/db'
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -15,10 +17,9 @@ import {
   Package,
   ArrowLeft,
   Wrench,
-  Briefcase
+  Briefcase,
+  Loader2
 } from 'lucide-react'
-
-export const dynamic = 'force-dynamic'
 
 const categoryConfig: Record<string, {
   icon: React.ComponentType<{ className?: string }>,
@@ -32,8 +33,8 @@ const categoryConfig: Record<string, {
   'fashion-clothing': { icon: Shirt, bgColor: 'bg-pink-100', iconColor: 'text-pink-600', hoverBg: 'hover:bg-pink-200', borderColor: 'border-pink-200', gradientFrom: 'from-pink-500', gradientTo: 'to-rose-500' },
   'food-groceries': { icon: Utensils, bgColor: 'bg-orange-100', iconColor: 'text-orange-600', hoverBg: 'hover:bg-orange-200', borderColor: 'border-orange-200', gradientFrom: 'from-orange-500', gradientTo: 'to-amber-500' },
   'beauty-haircare': { icon: Sparkles, bgColor: 'bg-rose-100', iconColor: 'text-rose-600', hoverBg: 'hover:bg-rose-200', borderColor: 'border-rose-200', gradientFrom: 'from-rose-500', gradientTo: 'to-pink-500' },
-  'art-crafts': { icon: Palette, bgColor: 'bg-purple-100', iconColor: 'text-purple-600', hoverBg: 'hover:bg-purple-200', borderColor: 'border-purple-200', gradientFrom: 'from-purple-500', gradientTo: 'to-indigo-500' },
-  'electronics': { icon: Package, bgColor: 'bg-blue-100', iconColor: 'text-blue-600', hoverBg: 'hover:bg-blue-200', borderColor: 'border-blue-200', gradientFrom: 'from-blue-500', gradientTo: 'to-cyan-500' },
+  'art-crafts': { icon: Palette, bgColor: 'bg-purple-100', iconColor: 'text-purple-600', hoverBg: 'hover:bg-purple-200', borderColor: 'border-purple-200', gradientFrom: 'from-purple-500', gradientTo: 'to-violet-500' },
+  'electronics': { icon: Package, bgColor: 'bg-blue-100', iconColor: 'text-blue-600', hoverBg: 'hover:bg-blue-200', borderColor: 'border-blue-200', gradientFrom: 'from-blue-500', gradientTo: 'to-indigo-500' },
   'home-living': { icon: Users, bgColor: 'bg-cyan-100', iconColor: 'text-cyan-600', hoverBg: 'hover:bg-cyan-200', borderColor: 'border-cyan-200', gradientFrom: 'from-cyan-500', gradientTo: 'to-teal-500' },
   'health-wellness': { icon: Wrench, bgColor: 'bg-emerald-100', iconColor: 'text-emerald-600', hoverBg: 'hover:bg-emerald-200', borderColor: 'border-emerald-200', gradientFrom: 'from-emerald-500', gradientTo: 'to-green-500' },
   'books-media': { icon: Music, bgColor: 'bg-blue-100', iconColor: 'text-blue-600', hoverBg: 'hover:bg-blue-200', borderColor: 'border-blue-200', gradientFrom: 'from-blue-500', gradientTo: 'to-indigo-500' },
@@ -41,15 +42,27 @@ const categoryConfig: Record<string, {
   'default': { icon: Package, bgColor: 'bg-gray-100', iconColor: 'text-gray-600', hoverBg: 'hover:bg-gray-200', borderColor: 'border-gray-200', gradientFrom: 'from-gray-500', gradientTo: 'to-slate-500' },
 }
 
-export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: {
-        select: { id: true }
-      }
-    },
-    orderBy: { sortOrder: 'asc' }
-  })
+interface Category {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  products: { id: string }[]
+}
+
+export default function CategoriesPage() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        setCategories(data)
+        setLoading(false)
+      })
+      .catch(() => setLoading(false))
+  }, [])
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -85,39 +98,46 @@ export default async function CategoriesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((category) => {
-              const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
-              const IconComponent = config.icon
-              const productCount = category.products.length
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+              <span className="ml-3 text-muted-foreground">Loading categories...</span>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.map((category) => {
+                const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
+                const IconComponent = config.icon
+                const productCount = category.products.length
 
-              return (
-                <Link key={category.id} href={`/categories/${category.slug}`}>
-                  <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-50`}>
-                    <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity`} />
-                    <CardHeader className="text-center relative z-10">
-                      <div className={`mx-auto mb-4 p-4 ${config.bgColor} rounded-2xl w-20 h-20 flex items-center justify-center ${config.hoverBg} transition-all duration-300`}>
-                        <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
-                      </div>
-                      <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
-                        {category.name}
-                      </CardTitle>
-                      <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                        {category.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-0 relative z-10">
-                      <div className="flex items-center justify-center">
-                        <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
-                          {productCount} {productCount === 1 ? 'Product' : 'Products'}
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )
-            })}
-          </div>
+                return (
+                  <Link key={category.id} href={`/categories/${category.slug}`}>
+                    <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-100`}>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                      <CardHeader className="text-center relative z-10">
+                        <div className={`mx-auto mb-4 p-4 rounded-2xl w-20 h-20 flex items-center justify-center ${config.bgColor} ${config.hoverBg} transition-all duration-300`}>
+                          <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
+                        </div>
+                        <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300`}>
+                          {category.name}
+                        </CardTitle>
+                        <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                          {category.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0 relative z-10">
+                        <div className="flex items-center justify-center">
+                          <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
+                            {productCount} {productCount === 1 ? 'Product' : 'Products'}
+                          </Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
 
           <div className="mt-16 text-center">
             <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
