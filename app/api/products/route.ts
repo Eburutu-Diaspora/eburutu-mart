@@ -9,18 +9,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category') || undefined
     const search = searchParams.get('search') || undefined
-    const location = searchParams.get('location') || undefined
-    const minPrice = searchParams.get('minPrice') || undefined
-    const maxPrice = searchParams.get('maxPrice') || undefined
     const page = parseInt(searchParams.get('page') || '1')
     const limit = 12
 
     const where: any = {}
 
     if (category) {
-      where.category = {
-        slug: category
-      }
+      where.category = { slug: category }
     }
 
     if (search) {
@@ -30,37 +25,12 @@ export async function GET(request: Request) {
       ]
     }
 
-    if (location) {
-      where.seller = {
-        user: {
-          location: { contains: location, mode: 'insensitive' }
-        }
-      }
-    }
-
-    if (minPrice) {
-      where.price = { ...where.price, gte: parseFloat(minPrice) }
-    }
-
-    if (maxPrice) {
-      where.price = { ...where.price, lte: parseFloat(maxPrice) }
-    }
-
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
         include: {
           category: true,
-          seller: {
-            include: {
-              user: {
-                select: {
-                  name: true,
-                  location: true,
-                }
-              }
-            }
-          },
+          seller: true,
           images: true,
         },
         orderBy: { createdAt: 'desc' },
