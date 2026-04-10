@@ -30,9 +30,7 @@ export async function GET(request: NextRequest) {
 
     if (location) {
       where.seller = {
-        user: {
-          location: { contains: location, mode: 'insensitive' }
-        }
+        location: { contains: location, mode: 'insensitive' }
       }
     }
 
@@ -49,16 +47,7 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           category: true,
-          seller: {
-            include: {
-              user: {
-                select: {
-                  name: true,
-                  location: true,
-                }
-              }
-            },
-          },
+          seller: true,
           images: true,
         },
         orderBy: { createdAt: 'desc' },
