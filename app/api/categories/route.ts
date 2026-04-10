@@ -9,34 +9,19 @@ export async function GET() {
     const categories = await prisma.category.findMany({
       where: { isActive: true },
       include: {
-        _count: {
-          select: { products: true }
-        },
-        children: {
-          where: { isActive: true },
-          include: {
-            _count: {
-              select: { products: true }
-            }
-          }
         products: {
           select: { id: true }
-        }
+        },
       },
       orderBy: { sortOrder: 'asc' }
     })
 
     const formattedCategories = categories.map(category => ({
       ...category,
-      productCount: category._count?.products || 0,
-      children: category.children?.map(child => ({
-        ...child,
-        productCount: child._count?.products || 0
-      })) || []
+      productCount: category.products.length,
     }))
 
     return NextResponse.json(formattedCategories)
-    return NextResponse.json(categories)
   } catch (error) {
     console.error('Error fetching categories:', error)
     return NextResponse.json(
@@ -50,7 +35,6 @@ export async function POST(request: Request) {
   try {
     const { name, slug, description, imageUrl, parentId } = await request.json()
 
-    // Check if category already exists
     const existingCategory = await prisma.category.findFirst({
       where: {
         OR: [
@@ -84,6 +68,5 @@ export async function POST(request: Request) {
       { error: 'Internal server error' },
       { status: 500 }
     )
-    return NextResponse.json([], { status: 200 })
   }
 }
