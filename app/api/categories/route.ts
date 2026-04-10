@@ -52,13 +52,7 @@ export async function POST(request: Request) {
     }
 
     const category = await prisma.category.create({
-      data: {
-        name,
-        slug,
-        description,
-        imageUrl,
-        parentId
-      }
+      data: { name, slug, description, imageUrl, parentId }
     })
 
     return NextResponse.json(category, { status: 201 })
