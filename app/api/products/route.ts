@@ -1,5 +1,12 @@
 
- const { searchParams } = new URL(request.url)
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
     const category = searchParams.get('category') || undefined
     const search = searchParams.get('search') || undefined
     const location = searchParams.get('location') || undefined
@@ -11,14 +18,13 @@
     const where: any = {}
 
     if (category) {
-      where.category = {
-        slug: category
-      }
       where.category = { slug: category }
     }
 
     if (search) {
-@@ -30,58 +25,33 @@
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
       ]
     }
 
@@ -51,9 +57,8 @@
                   location: true,
                 }
               }
-            }
+            },
           },
-          seller: true,
           images: true,
         },
         orderBy: { createdAt: 'desc' },
@@ -78,3 +83,4 @@
       totalPages: 0,
     })
   }
+}
