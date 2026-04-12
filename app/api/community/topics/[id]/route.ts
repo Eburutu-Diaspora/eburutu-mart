@@ -1,0 +1,39 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/db'
+
+export const dynamic = 'force-dynamic'
+
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const topic = await prisma.discussionTopic.findUnique({
+      where: { id: params.id },
+      include: {
+        author: { select: { id: true, name: true, avatar: true } },
+        category: true,
+        replies: {
+          where: { status: 'APPROVED' },
+          include: {
+            author: { select: { id: true, name: true, avatar: true } },
+            _count: { select: { votes: true } }
+          },
+          orderBy: { createdAt: 'asc' }
+        },
+        _count: { select: { votes: true } }
+      }
+    })
+
+    if (!topic || topic.status !== 'APPROVED') {
+      return NextResponse.json({ error: 'Topic not found' }, { status: 404 })
+    }
+
+    await prisma.discussionTopic.update({
+      where: { id: params.id },
+      data: { viewCount: { increment: 1 } }
+    }).catch(() => {})
+
+    return NextResponse.json(topic)
+  } catch (error) {
+    console.error('Error fetching topic:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
