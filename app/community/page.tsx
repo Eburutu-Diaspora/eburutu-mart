@@ -19,7 +19,6 @@ import {
   Music,
   Utensils,
   Shirt,
-  Star,
   ExternalLink,
 } from 'lucide-react'
 
@@ -182,15 +181,18 @@ export default function CommunityPage() {
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {reasons.map((r) => (
-                <div key={r.title} className={`${r.light} rounded-2xl p-6 hover:shadow-md transition-all duration-200`}>
-                  <div className={`${r.color} w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
-                    <r.icon className="w-6 h-6 text-white" />
+              {reasons.map((reason) => {
+                const ReasonIcon = reason.icon
+                return (
+                  <div key={reason.title} className={`${reason.light} rounded-2xl p-6 hover:shadow-md transition-all duration-200`}>
+                    <div className={`${reason.color} w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
+                      <ReasonIcon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className={`font-bold text-lg mb-2 ${reason.text}`}>{reason.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{reason.description}</p>
                   </div>
-                  <h3 className={`font-bold text-lg mb-2 ${r.text}`}>{r.title}</h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{r.description}</p>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </section>
@@ -202,14 +204,17 @@ export default function CommunityPage() {
               What you can find here
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {browseCategories.map((c) => (
-                <Link key={c.label} href="/categories">
-                  <div className="flex items-center gap-2 bg-background border rounded-full px-4 py-2 text-sm font-medium hover:shadow-md transition-all duration-200 hover:scale-105">
-                    <c.icon className={`w-4 h-4 ${c.color}`} />
-                    {c.label}
-                  </div>
-                </Link>
-              ))}
+              {browseCategories.map((cat) => {
+                const CatIcon = cat.icon
+                return (
+                  <Link key={cat.label} href="/categories">
+                    <div className="flex items-center gap-2 bg-background border rounded-full px-4 py-2 text-sm font-medium hover:shadow-md transition-all duration-200 hover:scale-105">
+                      <CatIcon className={`w-4 h-4 ${cat.color}`} />
+                      {cat.label}
+                    </div>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </section>
@@ -264,10 +269,12 @@ export default function CommunityPage() {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => { setEmail(e.target.value); setStatus('idle') }}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setStatus('idle')
+                  }}
                   placeholder="your@email.com"
-                  className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 transition"
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleSubscribe() }}
+                  className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-3 text-white placeholder:text-white/40 focus:outline-none focus:border-emerald-400 transition"
                 />
                 <button
                   onClick={handleSubscribe}
@@ -275,7 +282,7 @@ export default function CommunityPage() {
                   className="bg-emerald-500 hover:bg-emerald-400 disabled:opacity-60 text-white font-bold px-6 py-3 rounded-xl transition-all duration-200 hover:scale-105 inline-flex items-center gap-2 justify-center"
                 >
                   {status === 'loading' ? (
-                    <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                    <span className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full inline-block" />
                   ) : (
                     <Send className="w-4 h-4" />
                   )}
