@@ -1,6 +1,8 @@
 
+'use client'
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { prisma } from '@/lib/db'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Header } from '@/components/navigation/header'
@@ -18,8 +20,6 @@ import {
   Briefcase,
   Loader2,
 } from 'lucide-react'
-
-export const dynamic = 'force-dynamic'
 
 const categoryConfig: Record<string, {
   icon: React.ComponentType<{ className?: string }>,
@@ -47,18 +47,23 @@ interface Category {
   name: string
   slug: string
   description: string | null
-  products: { id: string }[]
+  _count?: { products: number }
+  products?: { id: string }[]
 }
 
-export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany({
-    include: {
-      products: {
-        select: { id: true }
-      },
-    },
-    orderBy: { sortOrder: 'asc' }
-  })
+export default function CategoriesPage() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        setCategories(Array.isArray(data) ? data : [])
+      })
+      .catch(() => setCategories([]))
+      .finally(() => setIsLoading(false))
+  }, [])
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -94,39 +99,49 @@ export default async function CategoriesPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {categories.map((category) => {
-              const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
-              const IconComponent = config.icon
-              const productCount = category.products.length
+          {isLoading ? (
+            <div className="flex items-center justify-center py-24">
+              <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            </div>
+          ) : categories.length === 0 ? (
+            <div className="text-center py-24 text-muted-foreground">
+              No categories found.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categories.map((category) => {
+                const config = categoryConfig[category.slug as keyof typeof categoryConfig] || categoryConfig.default
+                const IconComponent = config.icon
+                const productCount = category._count?.products ?? category.products?.length ?? 0
 
-              return (
-                <Link key={category.id} href={`/categories/${category.slug}`}>
-                  <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-100`}>
-                    <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
-                    <CardHeader className="text-center relative z-10">
-                      <div className={`mx-auto mb-4 p-4 rounded-2xl w-20 h-20 flex items-center justify-center ${config.bgColor} ${config.hoverBg} transition-all duration-300`}>
-                        <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
-                      </div>
-                      <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition-all`}>
-                        {category.name}
-                      </CardTitle>
-                      <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                        {category.description}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-0 relative z-10">
-                      <div className="flex items-center justify-center">
-                        <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
-                          {productCount} {productCount === 1 ? 'Product' : 'Products'}
-                        </Badge>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              )
-            })}
-          </div>
+                return (
+                  <Link key={category.id} href={`/categories/${category.slug}`}>
+                    <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-100`}>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
+                      <CardHeader className="text-center relative">
+                        <div className={`mx-auto mb-4 p-4 rounded-2xl w-20 h-20 flex items-center justify-center ${config.bgColor} ${config.hoverBg} transition-all duration-300`}>
+                          <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
+                        </div>
+                        <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition`}>
+                          {category.name}
+                        </CardTitle>
+                        <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                          {category.description}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="pt-0 relative z-10">
+                        <div className="flex items-center justify-center">
+                          <Badge className={`text-sm px-4 py-1 bg-gradient-to-r ${config.gradientFrom} ${config.gradientTo} text-white border-0 shadow-md`}>
+                            {productCount} {productCount === 1 ? 'Product' : 'Products'}
+                          </Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
+          )}
 
           <div className="mt-16 text-center">
             <div className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
