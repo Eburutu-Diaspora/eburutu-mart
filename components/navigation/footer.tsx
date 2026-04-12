@@ -229,7 +229,7 @@ export function Footer() {
                 Newsletter
               </h3>
               <p className="text-slate-400 text-sm mb-3">
-                Join our community for exclusive updates and African diaspora stories.
+                Get new listings, seller spotlights, and diaspora stories — straight to your inbox. Free, always.
               </p>
 
               {isSubscribed ? (
@@ -271,7 +271,7 @@ export function Footer() {
               )}
 
               <p className="text-xs text-slate-500 mt-3">
-                Join 10,000+ African diaspora members worldwide
+               Be among the first to know about new sellers and listings
               </p>
             </div>
 
