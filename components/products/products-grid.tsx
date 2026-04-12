@@ -122,7 +122,7 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
           <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
             <div className="relative aspect-video">
             <img
-  src={product.images?.[0]?.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
+ src={product.images?.[0]?.imageUrl || (product as any).imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
   alt={product.images?.[0]?.alt || product.title}
   onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
