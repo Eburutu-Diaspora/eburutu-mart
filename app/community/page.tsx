@@ -248,7 +248,7 @@ export default function CommunityPage() {
                   rel="noopener noreferrer"
                   className={`${s.bg} ${s.color} text-white flex items-center gap-3 px-6 py-4 rounded-xl font-medium transition-all duration-200 hover:scale-105 shadow-md`}
                 >
-                  {s.icon}
+                <s.Icon />
                   <div className="text-left">
                     <div className="text-xs opacity-75">{s.name}</div>
                     <div className="font-semibold">{s.handle}</div>
