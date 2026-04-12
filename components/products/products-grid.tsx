@@ -7,11 +7,11 @@ import Image from 'next/image'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { 
-  Star, 
-  MapPin, 
-  Eye, 
-  MessageCircle, 
+import {
+  Star,
+  MapPin,
+  Eye,
+  MessageCircle,
   Heart,
   ShoppingBag,
   ChevronLeft,
@@ -34,12 +34,9 @@ interface ProductsGridProps {
 
 interface ProductsResponse {
   products: ProductWithDetails[]
-  pagination: {
-    page: number
-    limit: number
-    total: number
-    pages: number
-  }
+  total: number
+  page: number
+  totalPages: number
 }
 
 export function ProductsGrid({ searchParams }: ProductsGridProps) {
@@ -55,11 +52,9 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
-      
       Object.entries(searchParams).forEach(([key, value]) => {
         if (value) params.set(key, value)
       })
-
       const response = await fetch(`/api/products?${params.toString()}`)
       if (response.ok) {
         const data = await response.json()
@@ -73,8 +68,8 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
   }
 
   const toggleFavorite = (productId: string) => {
-    setFavorites(prev => 
-      prev.includes(productId) 
+    setFavorites(prev =>
+      prev.includes(productId)
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     )
@@ -110,18 +105,20 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
     )
   }
 
+  const { products, total, totalPages } = productsData
+
   return (
     <div className="space-y-6">
       {/* Results Summary */}
       <div className="flex items-center justify-between">
         <p className="text-muted-foreground">
-          Showing {((currentPage - 1) * productsData.pagination.limit) + 1} - {Math.min(currentPage * productsData.pagination.limit, productsData.pagination.total)} of {productsData.pagination.total} products
+          Showing {total} product{total !== 1 ? 's' : ''}
         </p>
       </div>
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {productsData.products.map((product) => (
+        {products.map((product) => (
           <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
             <div className="relative aspect-video">
               <Image
@@ -131,14 +128,11 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-              
+
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-col gap-2">
                 {product.isPromoted && (
                   <Badge className="bg-accent text-white">Featured</Badge>
-                )}
-                {product.seller?.sellerProfile?.verificationStatus === 'VERIFIED' && (
-                  <Badge variant="verified">Verified Seller</Badge>
                 )}
               </div>
 
@@ -160,12 +154,6 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
                   <Eye className="h-3 w-3" />
                   <span>{product.viewCount}</span>
                 </div>
-                {product.seller?.sellerProfile?.verificationStatus === 'VERIFIED' && (
-                  <div className="flex items-center gap-1 text-white text-sm bg-black/50 px-2 py-1 rounded">
-                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                    <span>4.8</span>
-                  </div>
-                )}
               </div>
             </div>
 
@@ -175,13 +163,13 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
                   {product.category?.name}
                 </Badge>
               </div>
-              
+
               <Link href={`/products/${product.id}`}>
                 <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
                   {product.title}
                 </h3>
               </Link>
-              
+
               <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                 {product.description}
               </p>
@@ -228,28 +216,24 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
       </div>
 
       {/* Pagination */}
-      {productsData.pagination.pages > 1 && (
+      {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 mt-8">
-          <Link 
+          <Link
             href={generatePageUrl(currentPage - 1)}
             className={currentPage <= 1 ? 'pointer-events-none' : ''}
           >
-            <Button 
-              variant="outline" 
-              size="icon"
-              disabled={currentPage <= 1}
-            >
+            <Button variant="outline" size="icon" disabled={currentPage <= 1}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
           </Link>
 
           <div className="flex items-center gap-1">
-            {Array.from({ length: Math.min(5, productsData.pagination.pages) }, (_, i) => {
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
               const page = i + 1
               return (
                 <Link key={page} href={generatePageUrl(page)}>
-                  <Button 
-                    variant={currentPage === page ? "default" : "outline"}
+                  <Button
+                    variant={currentPage === page ? 'default' : 'outline'}
                     size="sm"
                   >
                     {page}
@@ -259,15 +243,11 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
             })}
           </div>
 
-          <Link 
+          <Link
             href={generatePageUrl(currentPage + 1)}
-            className={currentPage >= productsData.pagination.pages ? 'pointer-events-none' : ''}
+            className={currentPage >= totalPages ? 'pointer-events-none' : ''}
           >
-            <Button 
-              variant="outline" 
-              size="icon"
-              disabled={currentPage >= productsData.pagination.pages}
-            >
+            <Button variant="outline" size="icon" disabled={currentPage >= totalPages}>
               <ChevronRight className="h-4 w-4" />
             </Button>
           </Link>
