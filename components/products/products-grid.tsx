@@ -121,12 +121,11 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
         {products.map((product) => (
           <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
             <div className="relative aspect-video">
-             <Image
-  src={product.images?.[0]?.imageUrl || '/placeholder-product.jpg'}
+            <img
+  src={product.images?.[0]?.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
   alt={product.images?.[0]?.alt || product.title}
-  fill
-  unoptimized
-  className="object-cover group-hover:scale-105 transition-transform duration-300"
+  onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
+  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
 />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
