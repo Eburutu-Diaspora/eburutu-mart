@@ -15,7 +15,7 @@ export function HeroSection() {
     {
       title: "Authentic African Products",
       subtitle: "Discover the richness of African culture",
-      image: "https://cdn.abacus.ai/images/97a64b3c-8801-4bcf-982f-6d1e2d4c0027.png",
+     image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
       cta: "Shop Now"
     },
     {
@@ -84,8 +84,8 @@ export function HeroSection() {
                 <div className="text-sm text-white/80">No Fees</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-1">Verified</div>
-                <div className="text-sm text-white/80">Sellers</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-1">Open</div>
+                <div className="text-sm text-white/80">No Barriers</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-yellow-400 mb-1">Global</div>
