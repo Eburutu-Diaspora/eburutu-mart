@@ -121,12 +121,13 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
         {products.map((product) => (
           <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
             <div className="relative aspect-video">
-              <Image
-                src={product.images?.[0]?.imageUrl || '/placeholder-product.jpg'}
-                alt={product.images?.[0]?.alt || product.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+             <Image
+  src={product.images?.[0]?.imageUrl || '/placeholder-product.jpg'}
+  alt={product.images?.[0]?.alt || product.title}
+  fill
+  unoptimized
+  className="object-cover group-hover:scale-105 transition-transform duration-300"
+/>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
               {/* Badges */}
