@@ -2,6 +2,8 @@
 'use client'
 
 import Link from 'next/link'
+import { Header } from '@/components/navigation/header'
+import { Footer } from '@/components/navigation/footer'
 import {
   Users,
   Globe,
@@ -68,7 +70,8 @@ const values = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
+   <div className="min-h-screen bg-white">
+        <Header />
       <div className="max-w-5xl mx-auto px-4 py-12">
 
         {/* Back */}
@@ -167,7 +170,7 @@ export default function AboutPage() {
             <h3 className="text-xl font-bold text-gray-900 mb-2">Join Us</h3>
             <p className="text-gray-500 mb-6">Be part of the community we&apos;re building together</p>
             <Link
-              href="/register"
+             href="/auth/register"
               className="inline-block bg-emerald-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-emerald-800 transition-colors"
             >
               Get Started Free
@@ -175,7 +178,8 @@ export default function AboutPage() {
           </div>
         </div>
 
-      </div>
-    </div>
-  )
+   </div>
+        <Footer />
+  </div>
+)
 }
