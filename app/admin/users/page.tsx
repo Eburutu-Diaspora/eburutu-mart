@@ -6,25 +6,20 @@ import { useRouter } from 'next/navigation'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead,
+  TableHeader, TableRow,
 } from '@/components/ui/table'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem,
+  SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { ArrowLeft, Search, Users, Store, Shield, Mail, MapPin, Calendar } from 'lucide-react'
+import {
+  ArrowLeft, Search, Users, Store, Shield,
+  Mail, MapPin, Calendar, Trash2, ExternalLink, Loader2,
+} from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
@@ -34,11 +29,8 @@ interface User {
   email: string
   role: string
   location: string | null
-  phone: string | null
   createdAt: string
-  _count: {
-    products: number
-  }
+  _count: { products: number }
 }
 
 export default function AdminUsersPage() {
@@ -48,6 +40,7 @@ export default function AdminUsersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState<string>('all')
+  const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -66,10 +59,28 @@ export default function AdminUsersPage() {
         setUsers(data)
       }
     } catch (error) {
-      console.error('Error fetching users:', error)
       toast.error('Failed to load users')
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleDeleteUser = async (userId: string, userName: string) => {
+    if (!confirm(`Remove ${userName} from the platform? This deletes their account and all their listings. This cannot be undone.`)) return
+    setDeletingId(userId)
+    try {
+      const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' })
+      if (res.ok) {
+        setUsers(prev => prev.filter(u => u.id !== userId))
+        toast.success(`${userName} has been removed.`)
+      } else {
+        const data = await res.json()
+        toast.error(data.error || 'Failed to remove user')
+      }
+    } catch {
+      toast.error('Something went wrong')
+    } finally {
+      setDeletingId(null)
     }
   }
 
@@ -87,7 +98,7 @@ export default function AdminUsersPage() {
   }
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = 
+    const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesRole = roleFilter === 'all' || user.role === roleFilter
@@ -98,7 +109,7 @@ export default function AdminUsersPage() {
     total: users.length,
     buyers: users.filter(u => u.role === 'BUYER').length,
     sellers: users.filter(u => u.role === 'SELLER').length,
-    admins: users.filter(u => u.role === 'ADMIN').length
+    admins: users.filter(u => u.role === 'ADMIN').length,
   }
 
   if (status === 'loading' || isLoading) {
@@ -119,53 +130,39 @@ export default function AdminUsersPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="container mx-auto px-4 py-8">
-        {/* Back Button */}
-        <Link href="/dashboard">
-          <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
+
+        <Link href="/admin">
+          <button className="mb-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
+            <ArrowLeft className="w-4 h-4" />
             Back to Dashboard
-          </Button>
+          </button>
         </Link>
 
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">User Management</h1>
-          <p className="text-muted-foreground">
-            View and manage all registered users
-          </p>
+          <p className="text-muted-foreground">View and manage all registered users</p>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <div className="text-sm text-muted-foreground">Total Users</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-blue-500">{stats.buyers}</div>
-              <div className="text-sm text-muted-foreground">Buyers</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">{stats.sellers}</div>
-              <div className="text-sm text-muted-foreground">Sellers</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-purple-500">{stats.admins}</div>
-              <div className="text-sm text-muted-foreground">Admins</div>
-            </CardContent>
-          </Card>
+          <Card><CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold">{stats.total}</div>
+            <div className="text-sm text-muted-foreground">Total Users</div>
+          </CardContent></Card>
+          <Card><CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-blue-500">{stats.buyers}</div>
+            <div className="text-sm text-muted-foreground">Buyers</div>
+          </CardContent></Card>
+          <Card><CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-green-500">{stats.sellers}</div>
+            <div className="text-sm text-muted-foreground">Sellers</div>
+          </CardContent></Card>
+          <Card><CardContent className="p-4 text-center">
+            <div className="text-2xl font-bold text-purple-500">{stats.admins}</div>
+            <div className="text-sm text-muted-foreground">Admins</div>
+          </CardContent></Card>
         </div>
 
-        {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -189,7 +186,6 @@ export default function AdminUsersPage() {
           </Select>
         </div>
 
-        {/* Users Table */}
         <Card>
           <CardContent className="p-0">
             <Table>
@@ -200,12 +196,13 @@ export default function AdminUsersPage() {
                   <TableHead>Location</TableHead>
                   <TableHead>Products</TableHead>
                   <TableHead>Joined</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                       No users found
                     </TableCell>
                   </TableRow>
@@ -216,8 +213,7 @@ export default function AdminUsersPage() {
                         <div>
                           <p className="font-medium">{user.name}</p>
                           <p className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Mail className="w-3 h-3" />
-                            {user.email}
+                            <Mail className="w-3 h-3" />{user.email}
                           </p>
                         </div>
                       </TableCell>
@@ -225,29 +221,39 @@ export default function AdminUsersPage() {
                       <TableCell>
                         {user.location ? (
                           <span className="flex items-center gap-1 text-sm">
-                            <MapPin className="w-3 h-3" />
-                            {user.location}
+                            <MapPin className="w-3 h-3" />{user.location}
                           </span>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
+                        ) : <span className="text-muted-foreground">-</span>}
                       </TableCell>
                       <TableCell>
                         {user._count.products > 0 ? (
-                          <Badge variant="outline">{user._count.products} products</Badge>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
+                          <Link href={`/products?seller=${user.id}`} className="flex items-center gap-1 text-sm text-primary hover:underline">
+                            <ExternalLink className="w-3 h-3" />
+                            {user._count.products} listings
+                          </Link>
+                        ) : <span className="text-muted-foreground">-</span>}
                       </TableCell>
                       <TableCell>
                         <span className="flex items-center gap-1 text-sm text-muted-foreground">
                           <Calendar className="w-3 h-3" />
                           {new Date(user.createdAt).toLocaleDateString('en-GB', {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
+                            day: 'numeric', month: 'short', year: 'numeric'
                           })}
                         </span>
+                      </TableCell>
+                      <TableCell>
+                        {user.role !== 'ADMIN' && (
+                          <button
+                            onClick={() => handleDeleteUser(user.id, user.name)}
+                            disabled={deletingId === user.id}
+                            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                          >
+                            {deletingId === user.id
+                              ? <Loader2 className="w-3 h-3 animate-spin" />
+                              : <Trash2 className="w-3 h-3" />}
+                            Remove
+                          </button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
@@ -256,8 +262,8 @@ export default function AdminUsersPage() {
             </Table>
           </CardContent>
         </Card>
-      </main>
 
+      </main>
       <Footer />
     </div>
   )
