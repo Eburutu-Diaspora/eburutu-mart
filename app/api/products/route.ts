@@ -7,13 +7,13 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category') || undefined
-    const search = searchParams.get('search') || undefined
-    const location = searchParams.get('location') || undefined
-    const minPrice = searchParams.get('minPrice') || undefined
-    const maxPrice = searchParams.get('maxPrice') || undefined
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = 12
+    const category  = searchParams.get('category')  || undefined
+    const search    = searchParams.get('search')    || undefined
+    const location  = searchParams.get('location')  || undefined
+    const minPrice  = searchParams.get('minPrice')  || undefined
+    const maxPrice  = searchParams.get('maxPrice')  || undefined
+    const page      = parseInt(searchParams.get('page')  || '1')
+    const limit     = parseInt(searchParams.get('limit') || '12')
 
     const where: any = {}
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
+        { name:        { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
       ]
     }
@@ -42,12 +42,14 @@ export async function GET(request: NextRequest) {
       where.price = { ...where.price, lte: parseFloat(maxPrice) }
     }
 
-    const [products, total] = await Promise.all([
+    const [rawProducts, total] = await Promise.all([
       prisma.product.findMany({
         where,
         include: {
           category: true,
-          seller: true,
+          seller: {
+            include: { user: true },
+          },
           images: true,
         },
         orderBy: { createdAt: 'desc' },
@@ -57,12 +59,22 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
+    // Flatten images to a plain string array so every component
+    // can safely do product.images[0] and get a URL string
+    const products = rawProducts.map((p) => ({
+      ...p,
+      images: p.images.map((img: any) =>
+        typeof img === 'string' ? img : img.url ?? img.imageUrl ?? ''
+      ),
+    }))
+
     return NextResponse.json({
       products,
       total,
       page,
       totalPages: Math.ceil(total / limit),
     })
+
   } catch (error) {
     console.error('Error fetching products:', error)
     return NextResponse.json({
