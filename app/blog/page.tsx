@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -61,14 +62,28 @@ const blogPosts = [
 ]
 
 export default function BlogPage() {
+  const [subEmail, setSubEmail] = useState('')
+  const [subDone, setSubDone] = useState(false)
+
+  const handleSubscribe = async () => {
+    if (!subEmail || !subEmail.includes('@')) return
+    await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: subEmail }),
+    })
+    setSubDone(true)
+    setSubEmail('')
+  }
+
   const featuredPosts = blogPosts.filter(post => post.featured)
   const regularPosts = blogPosts.filter(post => !post.featured)
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="container mx-auto px-4 py-12">
+
         {/* Back Link */}
         <Link
           href="/"
@@ -88,7 +103,7 @@ export default function BlogPage() {
             Our <span className="text-primary">Blog</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Stories, insights, and guides for Africans thriving in the diaspora. 
+            Stories, insights, and guides for Africans thriving in the diaspora.
             Connect with your heritage while building your future.
           </p>
         </div>
@@ -200,19 +215,32 @@ export default function BlogPage() {
             Get the latest articles, marketplace updates, and community news delivered to your inbox.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-foreground bg-white focus:outline-none focus:ring-2 focus:ring-white/50"
-            />
-            <Button className="bg-white text-primary hover:bg-white/90 px-6">
-              Subscribe
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            {subDone ? (
+              <p className="text-white font-semibold py-3">
+                ✓ You&apos;re subscribed! Welcome to the community.
+              </p>
+            ) : (
+              <>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={subEmail}
+                  onChange={(e) => setSubEmail(e.target.value)}
+                  className="flex-1 px-4 py-3 rounded-lg text-foreground bg-white focus:outline-none focus:ring-2 focus:ring-white/50"
+                />
+                <Button
+                  onClick={handleSubscribe}
+                  className="bg-white text-primary hover:bg-white/90 px-6"
+                >
+                  Subscribe
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </>
+            )}
           </div>
         </section>
-      </main>
 
+      </main>
       <Footer />
     </div>
   )
