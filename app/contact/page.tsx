@@ -283,9 +283,11 @@ export default function ContactPage() {
                 <p className="text-muted-foreground text-sm mb-4">
                   Check out our FAQ section for instant answers to common questions
                 </p>
-                <Button variant="outline">
-                  View FAQ
-                </Button>
+                <Link href="/help">
+  <Button variant="outline">
+    View FAQ
+  </Button>
+</Link>
               </CardContent>
             </Card>
           </div>
