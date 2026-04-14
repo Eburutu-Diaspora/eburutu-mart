@@ -20,21 +20,11 @@ export async function DELETE(
 
     const { id } = params
 
-    // Prevent admin from deleting themselves
     if (id === session.user.id) {
       return NextResponse.json({ error: 'Cannot delete your own account' }, { status: 400 })
     }
 
-    // Delete in order: products images → products → seller profile → user
-    const seller = await prisma.seller.findUnique({ where: { userId: id } })
-    if (seller) {
-      await prisma.productImage.deleteMany({
-        where: { product: { sellerId: seller.id } }
-      })
-      await prisma.product.deleteMany({ where: { sellerId: seller.id } })
-      await prisma.seller.delete({ where: { userId: id } })
-    }
-
+    // Delete the user — DB cascades handle related records
     await prisma.user.delete({ where: { id } })
 
     return NextResponse.json({ success: true })
