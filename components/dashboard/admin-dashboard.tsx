@@ -2,19 +2,11 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
-  Users,
-  Store,
-  Package,
-  MessageCircle,
-  TrendingUp,
-  CheckCircle,
-  Clock,
-  XCircle,
-  Loader2,
+  Users, Store, Package, MessageCircle, TrendingUp,
+  CheckCircle, Clock, XCircle, Loader2, Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -59,6 +51,7 @@ export function AdminDashboard() {
   const [pendingReplies, setPendingReplies] = useState<PendingReply[]>([])
   const [communityLoading, setCommunityLoading] = useState(false)
   const [moderating, setModerating] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   useEffect(() => { fetchAdminStats() }, [])
 
@@ -115,6 +108,23 @@ export function AdminDashboard() {
     }
   }
 
+  const deleteTopic = async (id: string) => {
+    if (!confirm('Permanently delete this discussion? This cannot be undone.')) return
+    setDeleting(id)
+    try {
+      const res = await fetch('/api/community/topics/' + id, { method: 'DELETE' })
+      if (res.ok) {
+        setPendingTopics(prev => prev.filter(t => t.id !== id))
+      } else {
+        alert('Delete failed. Please try again.')
+      }
+    } catch {
+      alert('Delete failed. Please try again.')
+    } finally {
+      setDeleting(null)
+    }
+  }
+
   const adminStats = [
     { title: 'Total Users', value: stats?.totalUsers?.toString() || '0', icon: Users, color: 'from-blue-500 to-purple-500' },
     { title: 'Active Sellers', value: stats?.totalSellers?.toString() || '0', icon: Store, color: 'from-green-500 to-teal-500' },
@@ -152,6 +162,11 @@ export function AdminDashboard() {
           <p className="text-muted-foreground mt-1">Manage your EburutuMart platform</p>
         </div>
         <div className="flex gap-2">
+          <Link href="/">
+            <button className="text-sm text-muted-foreground hover:text-primary px-3 py-2">
+              ← Back to Home
+            </button>
+          </Link>
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'overview' ? 'bg-primary text-white' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
@@ -247,6 +262,7 @@ export function AdminDashboard() {
                     Refresh
                   </button>
                 </div>
+
                 {pendingTopics.length === 0 ? (
                   <Card>
                     <CardContent className="py-10 text-center">
@@ -276,10 +292,10 @@ export function AdminDashboard() {
                                 Posted by <strong>{topic.author.name || 'Unknown'}</strong> ({topic.author.email})
                               </p>
                             </div>
-                            <div className="flex gap-2 flex-shrink-0">
+                            <div className="flex gap-2 flex-shrink-0 flex-wrap justify-end">
                               <button
                                 onClick={() => moderate('topic', topic.id, 'approve')}
-                                disabled={moderating === topic.id}
+                                disabled={moderating === topic.id || deleting === topic.id}
                                 className="flex items-center gap-1.5 bg-green-600 hover:bg-green-500 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
                               >
                                 {moderating === topic.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle className="w-3 h-3" />}
@@ -287,11 +303,19 @@ export function AdminDashboard() {
                               </button>
                               <button
                                 onClick={() => moderate('topic', topic.id, 'reject')}
-                                disabled={moderating === topic.id}
-                                className="flex items-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
+                                disabled={moderating === topic.id || deleting === topic.id}
+                                className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
                               >
                                 {moderating === topic.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <XCircle className="w-3 h-3" />}
                                 Reject
+                              </button>
+                              <button
+                                onClick={() => deleteTopic(topic.id)}
+                                disabled={moderating === topic.id || deleting === topic.id}
+                                className="flex items-center gap-1.5 bg-red-600 hover:bg-red-500 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60"
+                              >
+                                {deleting === topic.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                                Delete
                               </button>
                             </div>
                           </div>
