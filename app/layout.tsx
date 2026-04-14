@@ -3,6 +3,12 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers'
+import dynamic from 'next/dynamic'
+
+const FixedChatbot = dynamic(
+  () => import('@/components/fixed-chatbot').then(mod => ({ default: mod.FixedChatbot })),
+  { ssr: false }
+)
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           {children}
+          <FixedChatbot />
         </Providers>
       </body>
     </html>
