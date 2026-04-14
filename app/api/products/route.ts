@@ -47,11 +47,7 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           category: true,
-          seller: {
-            include: { user: true },
-          },
-          images: true,
-        },
+         seller: true,
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
