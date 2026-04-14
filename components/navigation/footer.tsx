@@ -191,6 +191,12 @@ export function Footer() {
                     Contact
                   </Link>
                 </li>
+                <li>
+                <Link href="/community" className="text-slate-400 hover:text-pink-400 transition-colors flex items-center group text-sm">
+                  <span className="w-0 group-hover:w-2 h-0.5 bg-pink-400 mr-0 group-hover:mr-2 transition-all duration-300"></span>
+                  Community
+                </Link>
+              </li>
               </ul>
             </div>
 
