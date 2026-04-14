@@ -7,13 +7,13 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const category  = searchParams.get('category')  || undefined
-    const search    = searchParams.get('search')    || undefined
-    const location  = searchParams.get('location')  || undefined
-    const minPrice  = searchParams.get('minPrice')  || undefined
-    const maxPrice  = searchParams.get('maxPrice')  || undefined
-    const page      = parseInt(searchParams.get('page')  || '1')
-    const limit     = parseInt(searchParams.get('limit') || '12')
+    const category = searchParams.get('category') || undefined
+    const search   = searchParams.get('search')   || undefined
+    const location = searchParams.get('location') || undefined
+    const minPrice = searchParams.get('minPrice') || undefined
+    const maxPrice = searchParams.get('maxPrice') || undefined
+    const page     = parseInt(searchParams.get('page')  || '1')
+    const limit    = parseInt(searchParams.get('limit') || '12')
 
     const where: any = {}
 
@@ -47,7 +47,9 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           category: true,
-         seller: true,
+          seller: true,
+          images: true,
+        },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
@@ -55,8 +57,6 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
-    // Flatten images to a plain string array so every component
-    // can safely do product.images[0] and get a URL string
     const products = rawProducts.map((p) => ({
       ...p,
       images: p.images.map((img: any) =>
