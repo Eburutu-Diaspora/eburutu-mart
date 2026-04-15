@@ -658,14 +658,13 @@ export default function RegisterPage() {
               )}
 
               {selectedRole === 'SELLER' && (
-                <Alert className="border-purple-200 bg-purple-50">
-                  <Store className="h-4 w-4 text-purple-600" />
-                  <AlertDescription className="text-purple-800">
-                    As a seller, you'll need to complete email and phone verification before listing products. 
-                    <strong> Business entity sellers</strong> will be required to upload business registration documents for additional verification.
-                  </AlertDescription>
-                </Alert>
-              )}
+            <Alert className="border-emerald-200 bg-emerald-50">
+              <Store className="h-4 w-4 text-emerald-600" />
+              <AlertDescription className="text-emerald-800">
+                Start listing your products immediately after email confirmation. <strong>No documents, no fees</strong> — Eburutu Mart is a free diaspora Marketplace .
+              </AlertDescription>
+            </Alert>
+          )}
 
               {error && (
                 <Alert variant="destructive">
