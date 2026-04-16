@@ -88,7 +88,7 @@ export function RecommendedProducts() {
                 <div className="group cursor-pointer bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 overflow-hidden">
                   <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
                     <ProductImage
-                      src={product.images?.[0]?.url}
+                     src={product.images?.[0]?.imageUrl}
                       alt={product.title}
                     />
                     {index === 0 && (
