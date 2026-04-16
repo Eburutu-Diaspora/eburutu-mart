@@ -15,6 +15,7 @@ interface Category {
   name: string
   slug: string
   description: string | null
+  productCount: number
   _count?: { products: number }
 }
 
@@ -33,10 +34,13 @@ export default function CategoryPage() {
       .then(res => res.json())
       .then(categories => {
         const found = Array.isArray(categories)
-          ? categories.find((cat: Category) => cat.slug === slug)
+          ? categories.find((cat: any) => cat.slug === slug)
           : null
         if (found) {
-          setCategory(found)
+          setCategory({
+            ...found,
+            productCount: found._count?.products ?? found.productCount ?? 0,
+          })
         } else {
           setNotFound(true)
         }
