@@ -10,7 +10,7 @@ interface Product {
   id: string
   title: string
   price: number
-  images: { url: string }[]
+ images: { imageUrl: string }[]
   location: string
   views: number
   category?: { name: string }
