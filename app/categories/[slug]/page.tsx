@@ -14,7 +14,7 @@ interface Category {
   id: string
   name: string
   slug: string
-  description: string | null
+  description: string | undefined
   productCount: number
   _count?: { products: number }
 }
@@ -38,7 +38,10 @@ export default function CategoryPage() {
           : null
         if (found) {
           setCategory({
-            ...found,
+            id: found.id,
+            name: found.name,
+            slug: found.slug,
+            description: found.description ?? undefined,
             productCount: found._count?.products ?? found.productCount ?? 0,
           })
         } else {
