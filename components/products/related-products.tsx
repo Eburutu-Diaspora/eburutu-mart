@@ -73,12 +73,12 @@ export function RelatedProducts({ categoryId, currentProductId }: RelatedProduct
         {products.map((product) => (
           <Card key={product.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
             <div className="relative aspect-video">
-              <Image
-                src={product.images?.[0]?.imageUrl || '/placeholder-product.jpg'}
-                alt={product.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-              />
+            <img
+  src={product.images?.[0]?.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
+  alt={product.title}
+  onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
+  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+/>
               {product.isPromoted && (
                 <Badge className="absolute top-2 left-2 bg-accent text-white">
                   Featured
