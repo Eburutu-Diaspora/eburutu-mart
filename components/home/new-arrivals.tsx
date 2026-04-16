@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { MapPin, Eye, Clock } from 'lucide-react'
+import { MapPin, Eye, Clock, ShoppingBag } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
@@ -17,6 +16,25 @@ interface Product {
   category?: { name: string }
 }
 
+function ProductImage({ src, alt }: { src?: string; alt: string }) {
+  const [error, setError] = useState(false)
+  if (!src || error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
+        <ShoppingBag className="h-8 w-8 text-amber-400" />
+      </div>
+    )
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      onError={() => setError(true)}
+    />
+  )
+}
+
 export function NewArrivals() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -24,7 +42,10 @@ export function NewArrivals() {
   useEffect(() => {
     fetch('/api/products?limit=6&sort=newest')
       .then(res => res.json())
-      .then(data => setProducts(Array.isArray(data?.products) ? data.products : Array.isArray(data) ? data : []))
+      .then(data => setProducts(
+        Array.isArray(data?.products) ? data.products :
+        Array.isArray(data) ? data : []
+      ))
       .catch(() => setProducts([]))
       .finally(() => setIsLoading(false))
   }, [])
@@ -43,7 +64,7 @@ export function NewArrivals() {
             <h2 className="text-3xl font-bold text-gray-900">New Arrivals</h2>
             <p className="text-gray-500 mt-1">The latest products from our community</p>
           </div>
-          <Link href="/products?sort=newest">
+          <Link href="/products">
             <Button variant="outline" className="hidden sm:flex">View All New →</Button>
           </Link>
         </div>
@@ -64,21 +85,13 @@ export function NewArrivals() {
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                    {product.images?.[0]?.url ? (
-                      <Image
-                        src={product.images[0].url}
-                        alt={product.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 50vw, 16vw"
-                        unoptimized
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-100 to-orange-100">
-                        <span className="text-3xl">🛍️</span>
-                      </div>
-                    )}
-                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">New</Badge>
+                    <ProductImage
+                      src={product.images?.[0]?.url}
+                      alt={product.title}
+                    />
+                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">
+                      New
+                    </Badge>
                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
                       <Eye className="h-3 w-3" />
                       {product.views || 0}
@@ -103,7 +116,7 @@ export function NewArrivals() {
         )}
 
         <div className="mt-6 text-center sm:hidden">
-          <Link href="/products?sort=newest">
+          <Link href="/products">
             <Button variant="outline" size="sm">View All New Arrivals →</Button>
           </Link>
         </div>
