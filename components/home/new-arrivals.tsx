@@ -86,7 +86,7 @@ export function NewArrivals() {
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
                     <ProductImage
-                      src={product.images?.[0]?.url}
+                     src={product.images?.[0]?.imageUrl}
                       alt={product.title}
                     />
                     <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">
