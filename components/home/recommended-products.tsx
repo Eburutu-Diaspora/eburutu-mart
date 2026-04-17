@@ -1,38 +1,23 @@
+
 'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Eye, ThumbsUp, Globe } from 'lucide-react'
+import { MapPin, Eye, ThumbsUp } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+const FALLBACK = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'
 
 interface Product {
   id: string
   title: string
   price: number
- images: { imageUrl: string }[]
+  images: { imageUrl: string }[]
+  imageUrl?: string
   location: string
-  views: number
+  viewCount: number
   category?: { name: string }
-}
-
-function ProductImage({ src, alt }: { src?: string; alt: string }) {
-  const [error, setError] = useState(false)
-  if (!src || error) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100">
-        <Globe className="h-10 w-10 text-emerald-300" />
-      </div>
-    )
-  }
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-      onError={() => setError(true)}
-    />
-  )
 }
 
 export function RecommendedProducts() {
@@ -40,12 +25,13 @@ export function RecommendedProducts() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/products?limit=4')
+    fetch('/api/products?page=1')
       .then(res => res.json())
-      .then(data => setProducts(
-        Array.isArray(data?.products) ? data.products :
-        Array.isArray(data) ? data : []
-      ))
+      .then(data => {
+        const list = Array.isArray(data?.products) ? data.products
+          : Array.isArray(data) ? data : []
+        setProducts(list.slice(0, 4))
+      })
       .catch(() => setProducts([]))
       .finally(() => setIsLoading(false))
   }, [])
@@ -59,9 +45,7 @@ export function RecommendedProducts() {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <ThumbsUp className="h-5 w-5 text-emerald-600" />
-              <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">
-                Picked For You
-              </span>
+              <span className="text-sm font-medium text-emerald-600 uppercase tracking-wide">Picked For You</span>
             </div>
             <h2 className="text-3xl font-bold text-gray-900">Recommended Products</h2>
             <p className="text-gray-500 mt-1">Popular items loved by our community</p>
@@ -87,9 +71,11 @@ export function RecommendedProducts() {
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="group cursor-pointer bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 overflow-hidden">
                   <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
-                    <ProductImage
-                     src={product.images?.[0]?.imageUrl}
+                    <img
+                      src={product.images?.[0]?.imageUrl || product.imageUrl || FALLBACK}
                       alt={product.title}
+                      onError={(e) => { e.currentTarget.src = FALLBACK }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {index === 0 && (
                       <Badge className="absolute top-3 left-3 bg-emerald-600 text-white border-0 text-xs">
@@ -98,7 +84,7 @@ export function RecommendedProducts() {
                     )}
                     <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
                       <Eye className="h-3 w-3" />
-                      {product.views || 0}
+                      {product.viewCount || 0}
                     </div>
                   </div>
                   <div className="p-4">
@@ -127,12 +113,6 @@ export function RecommendedProducts() {
             ))}
           </div>
         )}
-
-        <div className="mt-6 text-center sm:hidden">
-          <Link href="/products">
-            <Button variant="outline" size="sm">Browse All →</Button>
-          </Link>
-        </div>
       </div>
     </section>
   )
