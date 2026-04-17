@@ -1,5 +1,5 @@
 
-import { User, UserRole, VerificationStatus, Product, Category, Message, ConversationParticipant, SellerProfile } from '@prisma/client'
+import { User, UserRole, Product, Category, Message, ConversationParticipant, SellerProfile } from '@prisma/client'
 
 export interface ExtendedUser extends User {
   sellerProfile?: SellerProfile
@@ -11,6 +11,7 @@ export interface ProductWithDetails extends Product {
   }
   category: Category
   images: { id: string; imageUrl: string; alt: string | null }[]
+  imageUrl?: string | null
   _count?: {
     conversations: number
   }
@@ -27,7 +28,6 @@ declare module "next-auth" {
       role?: string
     }
   }
-
   interface User {
     id: string
     role?: string
@@ -68,21 +68,18 @@ export interface SellerStats {
   activeProducts: number
   totalViews: number
   totalMessages: number
-  verificationStatus: VerificationStatus
 }
 
 export interface AdminStats {
   totalUsers: number
   totalSellers: number
   totalProducts: number
-  pendingVerifications: number
   totalMessages: number
 }
 
 export type {
   User,
   UserRole,
-  VerificationStatus,
   Product,
   Category,
   Message,
