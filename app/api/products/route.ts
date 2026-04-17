@@ -8,12 +8,12 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category') || undefined
-    const search   = searchParams.get('search')   || undefined
+    const search = searchParams.get('search') || undefined
     const location = searchParams.get('location') || undefined
     const minPrice = searchParams.get('minPrice') || undefined
     const maxPrice = searchParams.get('maxPrice') || undefined
-    const page     = parseInt(searchParams.get('page')  || '1')
-    const limit    = parseInt(searchParams.get('limit') || '12')
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = 12
 
     const where: any = {}
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { name:        { contains: search, mode: 'insensitive' } },
+        { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
       ]
     }
@@ -42,13 +42,16 @@ export async function GET(request: NextRequest) {
       where.price = { ...where.price, lte: parseFloat(maxPrice) }
     }
 
-    const [rawProducts, total] = await Promise.all([
+    const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
         include: {
           category: true,
           seller: true,
-          images: true,
+          images: {
+            orderBy: { sortOrder: 'asc' },
+            take: 1,
+          },
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
@@ -57,20 +60,19 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
-    const products = rawProducts.map((p) => ({
+    // Flatten imageUrl directly onto each product for easy access
+    const mappedProducts = products.map(p => ({
       ...p,
-      images: p.images.map((img: any) =>
-        typeof img === 'string' ? img : img.url ?? img.imageUrl ?? ''
-      ),
+      price: Number(p.price),
+      imageUrl: p.images?.[0]?.imageUrl ?? null,
     }))
 
     return NextResponse.json({
-      products,
+      products: mappedProducts,
       total,
       page,
       totalPages: Math.ceil(total / limit),
     })
-
   } catch (error) {
     console.error('Error fetching products:', error)
     return NextResponse.json({
