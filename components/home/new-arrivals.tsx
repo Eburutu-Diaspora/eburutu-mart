@@ -6,14 +6,13 @@ import { MapPin, Eye, Clock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 
-const FALLBACK = 'https://placehold.co/400x400/e2e8f0/94a3b8?text=No+Image'
+const FALLBACK = 'https://placehold.co/400x400/d4edda/2d6a4f?text=EburutuMart'
 
 interface Product {
   id: string
   title: string
   price: number
-  images: { imageUrl: string }[]
-  imageUrl?: string
+  imageUrl: string | null
   location: string
   viewCount: number
   category?: { name: string }
@@ -27,8 +26,7 @@ export function NewArrivals() {
     fetch('/api/products?page=1')
       .then(res => res.json())
       .then(data => {
-        const list = Array.isArray(data?.products) ? data.products
-          : Array.isArray(data) ? data : []
+        const list = Array.isArray(data?.products) ? data.products : []
         setProducts(list.slice(0, 6))
       })
       .catch(() => setProducts([]))
@@ -71,7 +69,7 @@ export function NewArrivals() {
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
                     <img
-                      src={product.images?.[0]?.imageUrl || product.imageUrl || FALLBACK}
+                      src={product.imageUrl || FALLBACK}
                       alt={product.title}
                       onError={(e) => { e.currentTarget.src = FALLBACK }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
