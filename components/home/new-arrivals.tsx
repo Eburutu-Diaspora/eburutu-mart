@@ -2,37 +2,21 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Eye, Clock, ShoppingBag } from 'lucide-react'
+import { MapPin, Eye, Clock } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+const FALLBACK = 'https://placehold.co/400x400/e2e8f0/94a3b8?text=No+Image'
 
 interface Product {
   id: string
   title: string
   price: number
- images: { imageUrl: string }[]
+  images: { imageUrl: string }[]
+  imageUrl?: string
   location: string
-  views: number
+  viewCount: number
   category?: { name: string }
-}
-
-function ProductImage({ src, alt }: { src?: string; alt: string }) {
-  const [error, setError] = useState(false)
-  if (!src || error) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
-        <ShoppingBag className="h-8 w-8 text-amber-400" />
-      </div>
-    )
-  }
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-      onError={() => setError(true)}
-    />
-  )
 }
 
 export function NewArrivals() {
@@ -40,12 +24,13 @@ export function NewArrivals() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/products?limit=6&sort=newest')
+    fetch('/api/products?page=1')
       .then(res => res.json())
-      .then(data => setProducts(
-        Array.isArray(data?.products) ? data.products :
-        Array.isArray(data) ? data : []
-      ))
+      .then(data => {
+        const list = Array.isArray(data?.products) ? data.products
+          : Array.isArray(data) ? data : []
+        setProducts(list.slice(0, 6))
+      })
       .catch(() => setProducts([]))
       .finally(() => setIsLoading(false))
   }, [])
@@ -65,7 +50,7 @@ export function NewArrivals() {
             <p className="text-gray-500 mt-1">The latest products from our community</p>
           </div>
           <Link href="/products">
-            <Button variant="outline" className="hidden sm:flex">View All New →</Button>
+            <Button variant="outline" className="hidden sm:flex">View All →</Button>
           </Link>
         </div>
 
@@ -85,16 +70,16 @@ export function NewArrivals() {
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                    <ProductImage
-                     src={product.images?.[0]?.imageUrl}
+                    <img
+                      src={product.images?.[0]?.imageUrl || product.imageUrl || FALLBACK}
                       alt={product.title}
+                      onError={(e) => { e.currentTarget.src = FALLBACK }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">
-                      New
-                    </Badge>
+                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">New</Badge>
                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
                       <Eye className="h-3 w-3" />
-                      {product.views || 0}
+                      {product.viewCount || 0}
                     </div>
                   </div>
                   <p className="text-sm font-medium text-gray-900 truncate group-hover:text-emerald-700 transition-colors">
@@ -114,12 +99,6 @@ export function NewArrivals() {
             ))}
           </div>
         )}
-
-        <div className="mt-6 text-center sm:hidden">
-          <Link href="/products">
-            <Button variant="outline" size="sm">View All New Arrivals →</Button>
-          </Link>
-        </div>
       </div>
     </section>
   )
