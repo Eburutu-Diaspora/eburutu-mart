@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
+
 import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -132,16 +132,17 @@ export function FeaturedProducts() {
             >
               <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
                 <div className="relative aspect-video">
-                  <Image
-                    src={
-                      Array.isArray(product.images) && product.images.length > 0
-                        ? product.images[0]
-                        : '/placeholder-product.jpg'
-                    }
-                    alt={product.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                 <img
+  src={
+    (Array.isArray(product.images) && product.images.length > 0
+      ? product.images[0]
+      : '') ||
+    'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'
+  }
+  alt={product.title}
+  onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
+  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+/>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
                   {/* Badges */}
