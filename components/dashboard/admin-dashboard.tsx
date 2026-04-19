@@ -162,11 +162,7 @@ export function AdminDashboard() {
     <p className="text-muted-foreground mt-1">Manage your EburutuMart platform</p>
   </div>
   <div className="flex gap-2 flex-wrap">
-          <Link href="/">
-            <button className="text-sm text-muted-foreground hover:text-primary px-3 py-2">
-              ← Back to Home
-            </button>
-          </Link>
+          
           <button
             onClick={() => setActiveTab('overview')}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === 'overview' ? 'bg-primary text-white' : 'bg-muted text-muted-foreground hover:bg-muted/80'}`}
