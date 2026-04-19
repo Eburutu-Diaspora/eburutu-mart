@@ -62,7 +62,6 @@ export function FixedChatbot() {
       })
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-
       const data = await res.json()
 
       if (data.message) {
@@ -95,6 +94,7 @@ export function FixedChatbot() {
 
   return (
     <>
+      {/* Floating button — only when chat is closed */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
@@ -106,11 +106,14 @@ export function FixedChatbot() {
         </button>
       )}
 
+      {/* Chat window */}
       {isOpen && (
         <div
-          className={`fixed bottom-6 right-6 z-50 bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col transition-all duration-300 ${
-            isMinimized ? 'w-72 h-14' : 'w-[380px] h-[560px]'
-          }`}
+          className={`fixed z-50 bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col transition-all duration-300
+            ${isMinimized
+              ? 'bottom-6 right-6 w-72 h-14'
+              : 'bottom-0 right-0 left-0 h-[75vh] sm:bottom-6 sm:right-6 sm:left-auto sm:w-[380px] sm:h-[560px] rounded-b-none sm:rounded-b-xl'
+            }`}
         >
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#1a237e] text-white rounded-t-xl shrink-0">
@@ -133,7 +136,7 @@ export function FixedChatbot() {
                 {isMinimized ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
               </button>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => { setIsOpen(false); setIsMinimized(false) }}
                 className="p-1 hover:bg-white/20 rounded transition-colors"
                 aria-label="Close chat"
               >
