@@ -49,7 +49,7 @@ export function ProductsHeader() {
         <div>
           <h1 className="text-3xl font-bold mb-2">Explore Products</h1>
           <p className="text-muted-foreground">
-            Discover authentic African products from verified sellers across the UK
+            Discover authentic African products from sellers across in the diaspora
           </p>
         </div>
         
