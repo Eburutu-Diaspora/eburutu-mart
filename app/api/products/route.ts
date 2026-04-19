@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
     const minPrice = searchParams.get('minPrice') || undefined
     const maxPrice = searchParams.get('maxPrice') || undefined
     const page = parseInt(searchParams.get('page') || '1')
-    const limit = 12
+  const limit = parseInt(searchParams.get('limit') || '12')
 
     const where: any = {}
 
