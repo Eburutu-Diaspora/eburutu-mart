@@ -156,12 +156,12 @@ export function AdminDashboard() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Manage your EburutuMart platform</p>
-        </div>
-        <div className="flex gap-2">
+     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div>
+    <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+    <p className="text-muted-foreground mt-1">Manage your EburutuMart platform</p>
+  </div>
+  <div className="flex gap-2 flex-wrap">
           <Link href="/">
             <button className="text-sm text-muted-foreground hover:text-primary px-3 py-2">
               ← Back to Home
