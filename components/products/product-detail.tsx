@@ -23,7 +23,7 @@ import {
   MessageCircle, 
   Heart,
   Share2,
-  ShieldCheck,
+  
   Calendar,
   Package,
   ArrowLeft,
@@ -270,12 +270,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-semibold">{product.seller?.name}</h3>
-                    {product.seller?.sellerProfile?.verificationStatus === 'VERIFIED' && (
-                      <Badge variant="verified" className="text-xs">
-                        <ShieldCheck className="w-3 h-3 mr-1" />
-                        Verified
-                      </Badge>
-                    )}
+                  
                   </div>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground mt-1">
                     <Calendar className="w-3 h-3" />
