@@ -6,20 +6,16 @@ import { useRouter } from 'next/navigation'
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
 import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
-  Table, TableBody, TableCell, TableHead,
-  TableHeader, TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
 import {
-  Select, SelectContent, SelectItem,
-  SelectTrigger, SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import {
-  ArrowLeft, Search, Users, Store, Shield,
-  Mail, MapPin, Calendar, Trash2, ExternalLink, Loader2,
-} from 'lucide-react'
+import { ArrowLeft, Search, Users, Store, Shield, Mail, MapPin, Calendar, Trash2, Eye } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
@@ -40,7 +36,7 @@ export default function AdminUsersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState<string>('all')
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [removing, setRemoving] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'loading') return
@@ -65,42 +61,37 @@ export default function AdminUsersPage() {
     }
   }
 
-  const handleDeleteUser = async (userId: string, userName: string) => {
-    if (!confirm(`Remove ${userName} from the platform? This deletes their account and all their listings. This cannot be undone.`)) return
-    setDeletingId(userId)
+  const handleRemove = async (userId: string, userName: string) => {
+    if (!confirm(`Are you sure you want to remove ${userName}? This will delete their account and all their listings.`)) return
+    setRemoving(userId)
     try {
-      const res = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' })
-      if (res.ok) {
+      const response = await fetch(`/api/admin/users/${userId}`, { method: 'DELETE' })
+      if (response.ok) {
+        toast.success(`${userName} has been removed`)
         setUsers(prev => prev.filter(u => u.id !== userId))
-        toast.success(`${userName} has been removed.`)
       } else {
-        const data = await res.json()
-        toast.error(data.error || 'Failed to remove user')
+        toast.error('Failed to remove user')
       }
     } catch {
-      toast.error('Something went wrong')
+      toast.error('An error occurred')
     } finally {
-      setDeletingId(null)
+      setRemoving(null)
     }
   }
 
   const getRoleBadge = (role: string) => {
     switch (role) {
-      case 'ADMIN':
-        return <Badge className="bg-purple-500"><Shield className="w-3 h-3 mr-1" />Admin</Badge>
-      case 'SELLER':
-        return <Badge className="bg-green-500"><Store className="w-3 h-3 mr-1" />Seller</Badge>
-      case 'BUYER':
-        return <Badge variant="outline"><Users className="w-3 h-3 mr-1" />Buyer</Badge>
-      default:
-        return <Badge variant="outline">{role}</Badge>
+      case 'ADMIN': return <Badge className="bg-purple-500"><Shield className="w-3 h-3 mr-1" />Admin</Badge>
+      case 'SELLER': return <Badge className="bg-green-500"><Store className="w-3 h-3 mr-1" />Seller</Badge>
+      case 'BUYER': return <Badge variant="outline"><Users className="w-3 h-3 mr-1" />Buyer</Badge>
+      default: return <Badge variant="outline">{role}</Badge>
     }
   }
 
   const filteredUsers = users.filter(user => {
     const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesRole = roleFilter === 'all' || user.role === roleFilter
     return matchesSearch && matchesRole
   })
@@ -131,12 +122,10 @@ export default function AdminUsersPage() {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="container mx-auto px-4 py-8">
-
         <Link href="/admin">
-          <button className="mb-6 flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </button>
+          <Button variant="ghost" className="mb-6">
+            <ArrowLeft className="w-4 h-4 mr-2" />Back to Dashboard
+          </Button>
         </Link>
 
         <div className="mb-8">
@@ -145,38 +134,19 @@ export default function AdminUsersPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card><CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold">{stats.total}</div>
-            <div className="text-sm text-muted-foreground">Total Users</div>
-          </CardContent></Card>
-          <Card><CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-blue-500">{stats.buyers}</div>
-            <div className="text-sm text-muted-foreground">Buyers</div>
-          </CardContent></Card>
-          <Card><CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-green-500">{stats.sellers}</div>
-            <div className="text-sm text-muted-foreground">Sellers</div>
-          </CardContent></Card>
-          <Card><CardContent className="p-4 text-center">
-            <div className="text-2xl font-bold text-purple-500">{stats.admins}</div>
-            <div className="text-sm text-muted-foreground">Admins</div>
-          </CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{stats.total}</div><div className="text-sm text-muted-foreground">Total Users</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-blue-500">{stats.buyers}</div><div className="text-sm text-muted-foreground">Buyers</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-green-500">{stats.sellers}</div><div className="text-sm text-muted-foreground">Sellers</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-purple-500">{stats.admins}</div><div className="text-sm text-muted-foreground">Admins</div></CardContent></Card>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name or email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+            <Input placeholder="Search by name or email..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
           </div>
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by role" />
-            </SelectTrigger>
+            <SelectTrigger className="w-[180px]"><SelectValue placeholder="Filter by role" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Roles</SelectItem>
               <SelectItem value="BUYER">Buyers</SelectItem>
@@ -194,66 +164,59 @@ export default function AdminUsersPage() {
                   <TableHead>User</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Location</TableHead>
-                  <TableHead>Products</TableHead>
+                  <TableHead>Listings</TableHead>
                   <TableHead>Joined</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredUsers.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      No users found
-                    </TableCell>
-                  </TableRow>
+                  <TableRow><TableCell colSpan={6} className="text-center py-8 text-muted-foreground">No users found</TableCell></TableRow>
                 ) : (
                   filteredUsers.map((user) => (
                     <TableRow key={user.id}>
                       <TableCell>
                         <div>
                           <p className="font-medium">{user.name}</p>
-                          <p className="text-sm text-muted-foreground flex items-center gap-1">
-                            <Mail className="w-3 h-3" />{user.email}
-                          </p>
+                          <p className="text-sm text-muted-foreground flex items-center gap-1"><Mail className="w-3 h-3" />{user.email}</p>
                         </div>
                       </TableCell>
                       <TableCell>{getRoleBadge(user.role)}</TableCell>
                       <TableCell>
-                        {user.location ? (
-                          <span className="flex items-center gap-1 text-sm">
-                            <MapPin className="w-3 h-3" />{user.location}
-                          </span>
-                        ) : <span className="text-muted-foreground">-</span>}
+                        {user.location
+                          ? <span className="flex items-center gap-1 text-sm"><MapPin className="w-3 h-3" />{user.location}</span>
+                          : <span className="text-muted-foreground">-</span>}
                       </TableCell>
                       <TableCell>
-                        {user._count.products > 0 ? (
-                          <Link href={`/products?seller=${user.id}`} className="flex items-center gap-1 text-sm text-primary hover:underline">
-                            <ExternalLink className="w-3 h-3" />
-                            {user._count.products} listings
-                          </Link>
-                        ) : <span className="text-muted-foreground">-</span>}
+                        {user._count.products > 0
+                          ? <Badge variant="outline">{user._count.products} listings</Badge>
+                          : <span className="text-muted-foreground">-</span>}
                       </TableCell>
                       <TableCell>
                         <span className="flex items-center gap-1 text-sm text-muted-foreground">
                           <Calendar className="w-3 h-3" />
-                          {new Date(user.createdAt).toLocaleDateString('en-GB', {
-                            day: 'numeric', month: 'short', year: 'numeric'
-                          })}
+                          {new Date(user.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </span>
                       </TableCell>
-                      <TableCell>
-                        {user.role !== 'ADMIN' && (
-                          <button
-                            onClick={() => handleDeleteUser(user.id, user.name)}
-                            disabled={deletingId === user.id}
-                            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
-                          >
-                            {deletingId === user.id
-                              ? <Loader2 className="w-3 h-3 animate-spin" />
-                              : <Trash2 className="w-3 h-3" />}
-                            Remove
-                          </button>
-                        )}
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link href={`/admin/users/${user.id}`}>
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-1" />View
+                            </Button>
+                          </Link>
+                          {user.role !== 'ADMIN' && (
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              disabled={removing === user.id}
+                              onClick={() => handleRemove(user.id, user.name)}
+                            >
+                              <Trash2 className="w-4 h-4 mr-1" />
+                              {removing === user.id ? 'Removing...' : 'Remove'}
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
@@ -262,7 +225,6 @@ export default function AdminUsersPage() {
             </Table>
           </CardContent>
         </Card>
-
       </main>
       <Footer />
     </div>
