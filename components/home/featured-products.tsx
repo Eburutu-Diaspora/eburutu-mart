@@ -23,7 +23,7 @@ interface Product {
   description: string
   price: number
   originalPrice?: number
-  images: string[]
+ images: { imageUrl: string }[]
   seller: {
     id: string
     businessName?: string
