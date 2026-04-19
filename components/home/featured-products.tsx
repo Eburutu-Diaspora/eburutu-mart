@@ -135,7 +135,7 @@ export function FeaturedProducts() {
                  <img
   src={
     (Array.isArray(product.images) && product.images.length > 0
-      ? product.images[0]
+     ? product.images[0]?.imageUrl
       : '') ||
     'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'
   }
