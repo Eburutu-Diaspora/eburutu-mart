@@ -80,46 +80,21 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
-// Seller profile with verification system
+// Seller profile
 model SellerProfile {
-  id                    String              @id @default(cuid())
-  userId                String              @unique
-  businessName          String?
-  businessDescription   String?
-  businessType          String?
-  verificationStatus    VerificationStatus  @default(PENDING)
-  verificationNotes     String?
-  
-  // Verification steps
-  emailVerified         Boolean             @default(false)
-  phoneVerified         Boolean             @default(false)
-  documentsUploaded     Boolean             @default(false)
-  adminApproved         Boolean             @default(false)
-  
-  // Document uploads
-  idDocumentUrl         String?
-  businessLicenseUrl    String?
-  proofOfAddressUrl     String?
-  
-  // Verification dates
-  emailVerifiedAt       DateTime?
-  phoneVerifiedAt       DateTime?
-  documentsUploadedAt   DateTime?
-  adminApprovedAt       DateTime?
-  
-  // Admin review
-  reviewedBy            String?
-  reviewedAt            DateTime?
-  
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  businessName        String?
+  businessDescription String?
+  businessType        String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
   // Relations
-  user                  User                @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("seller_profiles")
 }
-
 // Product categories
 model Category {
   id          String    @id @default(cuid())
@@ -272,12 +247,6 @@ enum UserRole {
   ADMIN
 }
 
-enum VerificationStatus {
-  PENDING
-  IN_REVIEW
-  VERIFIED
-  REJECTED
-}
 
 enum ContactFormType {
   GENERAL
