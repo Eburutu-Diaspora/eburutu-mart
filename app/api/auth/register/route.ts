@@ -51,11 +51,10 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    if (role === UserRole.SELLER) {
+   if (role === UserRole.SELLER) {
       await prisma.sellerProfile.create({
         data: {
           userId: user.id,
-          verificationStatus: 'PENDING'
         }
       })
     }
