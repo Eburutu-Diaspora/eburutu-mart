@@ -102,7 +102,7 @@ const whyUs = [
 
 export function CommunitySection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/20">
+   <section className="py-20 bg-gradient-to-b from-slate-50 via-emerald-50/30 to-white">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
@@ -203,9 +203,9 @@ export function CommunitySection() {
         </div>
 
         {/* Testimonials */}
-        <div className="mb-16">
-          <motion.h3
-            className="text-2xl font-bold text-center mb-12"
+        <div className="mb-16 bg-gradient-to-br from-emerald-50/60 to-amber-50/40 rounded-3xl p-8">
+  <motion.h3
+    className="text-2xl font-bold text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -272,9 +272,9 @@ export function CommunitySection() {
                 </Button>
               </Link>
               <Link href="/auth/register">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
-                  Start Selling
-                </Button>
+              <Button variant="outline" size="lg" className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-primary">
+  Start Selling
+</Button>
               </Link>
             </div>
           </Card>
