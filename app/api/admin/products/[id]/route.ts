@@ -1,9 +1,9 @@
+export const dynamic = 'force-dynamic'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-
-export const dynamic = 'force-dynamic'
 
 export async function PATCH(
   request: NextRequest,
@@ -15,12 +15,23 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { status } = await request.json()
-    const isActive = status === 'ACTIVE'
+    const body = await request.json()
+    const { id } = params
+    const updateData: any = { updatedAt: new Date() }
+
+    // Handle status change
+    if (body.status !== undefined) {
+      updateData.isActive = body.status === 'ACTIVE'
+    }
+
+    // Handle featured toggle
+    if (body.isPromoted !== undefined) {
+      updateData.isPromoted = body.isPromoted
+    }
 
     const product = await prisma.product.update({
-      where: { id: params.id },
-      data: { isActive, updatedAt: new Date() }
+      where: { id },
+      data: updateData,
     })
 
     return NextResponse.json(product)
@@ -40,14 +51,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Null out conversations referencing this product before deleting
-    await prisma.conversation.updateMany({
-      where: { productId: params.id },
-      data: { productId: null }
-    })
-
     await prisma.product.delete({ where: { id: params.id } })
-
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Error deleting product:', error)
