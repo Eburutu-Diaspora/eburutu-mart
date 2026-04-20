@@ -104,24 +104,7 @@ export function CommunitySection() {
   return (
   <section className="py-20" style={{ background: 'linear-gradient(to bottom, #f0faf4, #e8f5ee, #ffffff)' }}>
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Join Our <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Thriving Community</span>
-          </motion.h2>
-          <motion.p
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            Connect with fellow members of the African diaspora, share culture, and build meaningful relationships
-          </motion.p>
-        </div>
+        
 
         {/* Why EburutuMart */}
         <motion.div
