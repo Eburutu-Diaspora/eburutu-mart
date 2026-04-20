@@ -96,6 +96,21 @@ export default function AdminProductsPage() {
       toast.error('An error occurred')
     }
   }
+  
+  const handleDelete = async (productId: string, productTitle: string) => {
+    if (!confirm(`Delete "${productTitle}"? This cannot be undone.`)) return
+    try {
+      const response = await fetch(`/api/admin/products/${productId}`, { method: 'DELETE' })
+      if (response.ok) {
+        toast.success('Product deleted')
+        setProducts(prev => prev.filter(p => p.id !== productId))
+      } else {
+        toast.error('Failed to delete product')
+      }
+    } catch {
+      toast.error('An error occurred')
+    }
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -275,33 +290,32 @@ export default function AdminProductsPage() {
                         </span>
                       </TableCell>
                       <TableCell>{getStatusBadge(product.status)}</TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link href={`/products/${product.id}`}>
-                            <Button variant="outline" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                          {product.status === 'PENDING' && (
-                            <>
-                              <Button
-                                size="sm"
-                                className="bg-green-600 hover:bg-green-700"
-                                onClick={() => handleStatusChange(product.id, 'ACTIVE')}
-                              >
-                                <CheckCircle className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handleStatusChange(product.id, 'REJECTED')}
-                              >
-                                <XCircle className="w-4 h-4" />
-                              </Button>
-                            </>
-                          )}
-                        </div>
-                      </TableCell>
+                    <TableCell className="text-right">
+  <div className="flex items-center justify-end gap-2">
+    <Link href={`/products/${product.id}`}>
+      <Button variant="outline" size="sm">
+        <Eye className="w-4 h-4" />
+      </Button>
+    </Link>
+    {product.status === 'PENDING' && (
+      <>
+        <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleStatusChange(product.id, 'ACTIVE')}>
+          <CheckCircle className="w-4 h-4" />
+        </Button>
+        <Button size="sm" variant="destructive" onClick={() => handleStatusChange(product.id, 'REJECTED')}>
+          <XCircle className="w-4 h-4" />
+        </Button>
+      </>
+    )}
+    <Button
+      size="sm"
+      variant="destructive"
+      onClick={() => handleDelete(product.id, product.title)}
+    >
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  </div>
+</TableCell>
                     </TableRow>
                   ))
                 )}
