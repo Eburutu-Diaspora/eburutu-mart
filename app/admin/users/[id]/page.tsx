@@ -8,7 +8,7 @@ import { Footer } from '@/components/navigation/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, Mail, MapPin, Calendar, Package, Trash2, Store, Users } from 'lucide-react'
+import { ArrowLeft, Mail, MapPin, Calendar, Package, Trash2, Store, Users, Phone } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
@@ -19,6 +19,7 @@ interface UserDetail {
   role: string
   location: string | null
   phone: string | null
+  avatar: string | null
   createdAt: string
   products: {
     id: string
@@ -137,9 +138,12 @@ export default function AdminUserDetailPage() {
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-xl font-bold text-primary">
-                {user.name?.charAt(0) || '?'}
-              </div>
+             <div className="w-16 h-16 rounded-full overflow-hidden bg-primary/10 flex items-center justify-center text-xl font-bold text-primary flex-shrink-0">
+  {user.avatar
+    ? <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+    : <span>{user.name?.charAt(0) || '?'}</span>
+  }
+</div>
               <div>
                 <h1 className="text-2xl font-bold">{user.name}</h1>
                 <div className="flex items-center gap-2 mt-1">
@@ -150,7 +154,8 @@ export default function AdminUserDetailPage() {
             </div>
             <div className="space-y-1 text-sm text-muted-foreground ml-15">
               <p className="flex items-center gap-2"><Mail className="w-4 h-4" />{user.email}</p>
-              {user.location && <p className="flex items-center gap-2"><MapPin className="w-4 h-4" />{user.location}</p>}
+             {user.location && <p className="flex items-center gap-2"><MapPin className="w-4 h-4" />{user.location}</p>}
+{user.phone && <p className="flex items-center gap-2"><Phone className="w-4 h-4" />{user.phone}</p>}
               <p className="flex items-center gap-2"><Calendar className="w-4 h-4" />Member since {new Date(user.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
             </div>
           </div>
