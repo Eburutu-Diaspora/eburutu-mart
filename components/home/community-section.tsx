@@ -102,7 +102,7 @@ const whyUs = [
 
 export function CommunitySection() {
   return (
-   <section className="py-20 bg-gradient-to-b from-slate-50 via-emerald-50/30 to-white">
+  <section className="py-20" style={{ background: 'linear-gradient(to bottom, #f0faf4, #e8f5ee, #ffffff)' }}>
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
