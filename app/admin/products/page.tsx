@@ -10,23 +10,13 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { ArrowLeft, Search, Package, Eye, Trash2, CheckCircle, XCircle, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Search, Package, Eye, Trash2, CheckCircle, XCircle, Star } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 import toast from 'react-hot-toast'
 
 interface Product {
@@ -35,6 +25,7 @@ interface Product {
   price: number
   currency: string
   status: string
+  isPromoted: boolean
   images: string[]
   createdAt: string
   seller: {
@@ -72,7 +63,6 @@ export default function AdminProductsPage() {
         setProducts(data)
       }
     } catch (error) {
-      console.error('Error fetching products:', error)
       toast.error('Failed to load products')
     } finally {
       setIsLoading(false)
@@ -92,11 +82,11 @@ export default function AdminProductsPage() {
       } else {
         toast.error('Failed to update product')
       }
-    } catch (error) {
+    } catch {
       toast.error('An error occurred')
     }
   }
-  
+
   const handleDelete = async (productId: string, productTitle: string) => {
     if (!confirm(`Delete "${productTitle}"? This cannot be undone.`)) return
     try {
@@ -112,23 +102,38 @@ export default function AdminProductsPage() {
     }
   }
 
+  const handleFeatureToggle = async (productId: string, currentlyFeatured: boolean) => {
+    try {
+      const response = await fetch(`/api/admin/products/${productId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPromoted: !currentlyFeatured })
+      })
+      if (response.ok) {
+        toast.success(currentlyFeatured ? 'Removed from Featured Listings' : 'Added to Featured Listings')
+        setProducts(prev => prev.map(p =>
+          p.id === productId ? { ...p, isPromoted: !currentlyFeatured } : p
+        ))
+      } else {
+        toast.error('Failed to update featured status')
+      }
+    } catch {
+      toast.error('An error occurred')
+    }
+  }
+
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'ACTIVE':
-        return <Badge variant="verified"><CheckCircle className="w-3 h-3 mr-1" />Active</Badge>
-      case 'PENDING':
-        return <Badge variant="pending">Pending</Badge>
-      case 'REJECTED':
-        return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>
-      case 'SOLD':
-        return <Badge variant="outline">Sold</Badge>
-      default:
-        return <Badge variant="outline">{status}</Badge>
+      case 'ACTIVE': return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Active</Badge>
+      case 'PENDING': return <Badge className="bg-yellow-500">Pending</Badge>
+      case 'REJECTED': return <Badge variant="destructive"><XCircle className="w-3 h-3 mr-1" />Rejected</Badge>
+      case 'SOLD': return <Badge variant="outline">Sold</Badge>
+      default: return <Badge variant="outline">{status}</Badge>
     }
   }
 
   const filteredProducts = products.filter(product => {
-    const matchesSearch = 
+    const matchesSearch =
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.seller.name.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesStatus = statusFilter === 'all' || product.status === statusFilter
@@ -138,8 +143,8 @@ export default function AdminProductsPage() {
   const stats = {
     total: products.length,
     active: products.filter(p => p.status === 'ACTIVE').length,
+    featured: products.filter(p => p.isPromoted).length,
     pending: products.filter(p => p.status === 'PENDING').length,
-    rejected: products.filter(p => p.status === 'REJECTED').length
   }
 
   if (status === 'loading' || isLoading) {
@@ -160,50 +165,25 @@ export default function AdminProductsPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
       <main className="container mx-auto px-4 py-8">
-        {/* Back Button */}
-        <Link href="/dashboard">
+
+        <Link href="/admin">
           <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            <ArrowLeft className="w-4 h-4 mr-2" />Back to Dashboard
           </Button>
         </Link>
 
-        {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Product Moderation</h1>
-          <p className="text-muted-foreground">
-            Review and moderate product listings
-          </p>
+          <p className="text-muted-foreground">Review, moderate and feature product listings</p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold">{stats.total}</div>
-              <div className="text-sm text-muted-foreground">Total Products</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-green-500">{stats.active}</div>
-              <div className="text-sm text-muted-foreground">Active</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-500">{stats.pending}</div>
-              <div className="text-sm text-muted-foreground">Pending</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-red-500">{stats.rejected}</div>
-              <div className="text-sm text-muted-foreground">Rejected</div>
-            </CardContent>
-          </Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold">{stats.total}</div><div className="text-sm text-muted-foreground">Total Products</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-green-500">{stats.active}</div><div className="text-sm text-muted-foreground">Active</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-amber-500">{stats.featured}</div><div className="text-sm text-muted-foreground">Featured</div></CardContent></Card>
+          <Card><CardContent className="p-4 text-center"><div className="text-2xl font-bold text-yellow-500">{stats.pending}</div><div className="text-sm text-muted-foreground">Pending</div></CardContent></Card>
         </div>
 
         {/* Filters */}
@@ -218,9 +198,7 @@ export default function AdminProductsPage() {
             />
           </div>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
+            <SelectTrigger className="w-[180px]"><SelectValue placeholder="Filter by status" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="ACTIVE">Active</SelectItem>
@@ -257,20 +235,20 @@ export default function AdminProductsPage() {
                     <TableRow key={product.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="relative w-12 h-12 rounded overflow-hidden bg-muted">
-                            {product.images[0] ? (
-                              <Image
-                                src={product.images[0]}
-                                alt={product.title}
-                                fill
-                                className="object-cover"
-                              />
+                          <div className="relative w-12 h-12 rounded overflow-hidden bg-muted flex-shrink-0">
+                            {product.images?.[0] ? (
+                              <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover" />
                             ) : (
                               <Package className="w-6 h-6 absolute inset-0 m-auto text-muted-foreground" />
                             )}
                           </div>
-                          <div className="max-w-[200px]">
+                          <div className="max-w-[160px]">
                             <p className="font-medium truncate">{product.title}</p>
+                            {product.isPromoted && (
+                              <span className="inline-flex items-center gap-1 text-xs text-amber-600 font-medium">
+                                <Star className="w-3 h-3 fill-amber-500 text-amber-500" />Featured
+                              </span>
+                            )}
                           </div>
                         </div>
                       </TableCell>
@@ -290,32 +268,41 @@ export default function AdminProductsPage() {
                         </span>
                       </TableCell>
                       <TableCell>{getStatusBadge(product.status)}</TableCell>
-                    <TableCell className="text-right">
-  <div className="flex items-center justify-end gap-2">
-    <Link href={`/products/${product.id}`}>
-      <Button variant="outline" size="sm">
-        <Eye className="w-4 h-4" />
-      </Button>
-    </Link>
-    {product.status === 'PENDING' && (
-      <>
-        <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleStatusChange(product.id, 'ACTIVE')}>
-          <CheckCircle className="w-4 h-4" />
-        </Button>
-        <Button size="sm" variant="destructive" onClick={() => handleStatusChange(product.id, 'REJECTED')}>
-          <XCircle className="w-4 h-4" />
-        </Button>
-      </>
-    )}
-    <Button
-      size="sm"
-      variant="destructive"
-      onClick={() => handleDelete(product.id, product.title)}
-    >
-      <Trash2 className="w-4 h-4" />
-    </Button>
-  </div>
-</TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Featured toggle */}
+                          <Button
+                            size="sm"
+                            variant={product.isPromoted ? 'default' : 'outline'}
+                            className={product.isPromoted ? 'bg-amber-500 hover:bg-amber-600 border-amber-500' : ''}
+                            onClick={() => handleFeatureToggle(product.id, product.isPromoted)}
+                            title={product.isPromoted ? 'Remove from Featured' : 'Add to Featured Listings'}
+                          >
+                            <Star className={`w-4 h-4 ${product.isPromoted ? 'fill-white text-white' : ''}`} />
+                          </Button>
+                          {/* View */}
+                          <Link href={`/products/${product.id}`}>
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                          {/* Approve/Reject for pending */}
+                          {product.status === 'PENDING' && (
+                            <>
+                              <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleStatusChange(product.id, 'ACTIVE')}>
+                                <CheckCircle className="w-4 h-4" />
+                              </Button>
+                              <Button size="sm" variant="destructive" onClick={() => handleStatusChange(product.id, 'REJECTED')}>
+                                <XCircle className="w-4 h-4" />
+                              </Button>
+                            </>
+                          )}
+                          {/* Delete */}
+                          <Button size="sm" variant="destructive" onClick={() => handleDelete(product.id, product.title)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
@@ -323,8 +310,8 @@ export default function AdminProductsPage() {
             </Table>
           </CardContent>
         </Card>
-      </main>
 
+      </main>
       <Footer />
     </div>
   )
