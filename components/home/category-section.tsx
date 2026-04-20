@@ -74,7 +74,7 @@ export function CategorySection() {
   }, [])
 
   return (
-    <section className="py-20 bg-background">
+  <section className="py-20 bg-gradient-to-b from-amber-50/70 via-orange-50/30 to-white">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
