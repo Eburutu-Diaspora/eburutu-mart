@@ -36,7 +36,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full" style={{ background: '#ffffff', borderBottom: '2px solid #e8f5e9', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -55,19 +55,19 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link href="/" className="text-sm font-medium text-gray-800 hover:text-primary transition-colors">
               Home
             </Link>
-            <Link href="/products" className="text-sm font-medium hover:text-primary transition-colors">
+            <Link href="/products" className="text-sm font-medium text-gray-800 hover:text-primary transition-colors">
               Shop
             </Link>
-            <Link href="/categories" className="text-sm font-medium hover:text-primary transition-colors">
+           <Link href="/categories" className="text-sm font-medium text-gray-800 hover:text-primary transition-colors">
               Categories
             </Link>
-            <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
+           <Link href="/blog" className="text-sm font-medium text-gray-800 hover:text-primary transition-colors">
               Blog
             </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-primary transition-colors">
+           <Link href="/about" className="text-sm font-medium text-gray-800 hover:text-primary transition-colors">
               About
             </Link>
           </nav>
