@@ -11,7 +11,6 @@ export interface ProductWithDetails extends Product {
   }
   category: Category
   images: { id: string; imageUrl: string; alt: string | null }[]
-  imageUrl?: string | null
   _count?: {
     conversations: number
   }
