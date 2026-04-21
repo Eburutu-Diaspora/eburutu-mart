@@ -75,6 +75,8 @@
     "vaul": "0.9.9",
    "zod": "3.23.8",
    "resend": "^3.2.0",
+    "nodemailer": "^6.9.0",
+"@types/nodemailer": "^6.4.0",
 "@supabase/supabase-js": "^2.39.0"
 },
   "engines": {
