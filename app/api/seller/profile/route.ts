@@ -74,7 +74,6 @@ export async function PUT(request: Request) {
         businessName,
         businessDescription,
         businessType,
-        verificationStatus: 'VERIFIED', // Open marketplace — verified on email confirmation
       }
     })
 
