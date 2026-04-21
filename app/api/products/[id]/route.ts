@@ -19,7 +19,7 @@ export async function GET(
             createdAt: true,
             sellerProfile: {
               select: {
-                verificationStatus: true,
+              
                 businessName: true,
               },
             },
