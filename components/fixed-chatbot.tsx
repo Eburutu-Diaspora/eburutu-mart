@@ -92,8 +92,9 @@ export function FixedChatbot() {
 
   const showSuggestions = messages.length === 1
 
-  return (
-    <>
+return (
+    <div className="hidden lg:block">
+      </div>
       {/* Floating button — only when chat is closed */}
       {!isOpen && (
         <button
