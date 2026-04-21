@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
         email,
         subject,
         message,
-        type: type || 'GENERAL',
+       type: ['GENERAL', 'SELLER_INQUIRY', 'TECHNICAL_SUPPORT', 'REPORT_ISSUE'].includes(type) ? type : 'GENERAL',
         userId: session?.user?.id || null
       }
     })
