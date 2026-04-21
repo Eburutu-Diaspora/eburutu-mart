@@ -171,14 +171,6 @@ async function main() {
         businessName,
         businessDescription,
         businessType,
-       
-        adminApproved: true,
-        emailVerifiedAt: new Date(),
-        phoneVerifiedAt: new Date(),
-        documentsUploadedAt: new Date(),
-        adminApprovedAt: new Date(),
-        reviewedBy: admin.id,
-        reviewedAt: new Date()
       }
     })
 
