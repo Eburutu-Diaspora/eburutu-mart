@@ -1,5 +1,5 @@
 
-import { PrismaClient, UserRole, VerificationStatus } from '@prisma/client'
+import { PrismaClient, UserRole } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -171,10 +171,7 @@ async function main() {
         businessName,
         businessDescription,
         businessType,
-        verificationStatus: VerificationStatus.VERIFIED,
-        emailVerified: true,
-        phoneVerified: true,
-        documentsUploaded: true,
+       
         adminApproved: true,
         emailVerifiedAt: new Date(),
         phoneVerifiedAt: new Date(),
