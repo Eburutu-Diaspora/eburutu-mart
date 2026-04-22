@@ -35,6 +35,8 @@ model User {
   discussionTopics  DiscussionTopic[]
   discussionReplies DiscussionReply[]
   discussionVotes   DiscussionVote[]
+reviewsGiven    Review[]  @relation("BuyerReviews")
+reviewsReceived Review[]  @relation("SellerReviews")
   @@map("users")
 }
 
@@ -333,4 +335,19 @@ enum DiscussionStatus {
   PENDING
   APPROVED
   REJECTED
+}
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  buyerId   String
+  sellerId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  buyer  User @relation("BuyerReviews", fields: [buyerId], references: [id], onDelete: Cascade)
+  seller User @relation("SellerReviews", fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@unique([buyerId, sellerId])
+  @@map("reviews")
 }
