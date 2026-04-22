@@ -217,7 +217,23 @@ export default function AdminUserDetailPage() {
               </div>
             )}
           </CardContent>
-        </Card>
+       </Card>
+
+        {/* Reviews */}
+        <div className="mt-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <span>⭐</span>
+                Reviews Received
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ReviewsList sellerId={user.id} />
+            </CardContent>
+          </Card>
+        </div>
+
       </main>
       <Footer />
     </div>
