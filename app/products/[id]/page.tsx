@@ -6,7 +6,7 @@ import { Footer } from '@/components/navigation/footer'
 import { ProductDetail } from '@/components/products/product-detail'
 import { RelatedProducts } from '@/components/products/related-products'
 import { ArrowLeft } from 'lucide-react'
-
+import ReviewsList from '@/components/reviews/reviews-list'
 interface ProductPageProps {
   params: {
     id: string
@@ -51,9 +51,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </Link>
 
         <ProductDetail product={product} />
-        <div className="mt-16">
+       <div className="mt-16">
           <RelatedProducts categoryId={product.categoryId} currentProductId={product.id} />
         </div>
+
+        {product.seller?.userId && (
+          <div className="mt-16">
+            <h2 className="text-xl font-semibold mb-6">Reviews for this Seller</h2>
+            <ReviewsList sellerId={product.seller.userId} />
+          </div>
+        )}
       </main>
       <Footer />
     </div>
