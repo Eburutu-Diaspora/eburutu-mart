@@ -54,13 +54,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
        <div className="mt-16">
           <RelatedProducts categoryId={product.categoryId} currentProductId={product.id} />
         </div>
-
-        {product.seller?.userId && (
-          <div className="mt-16">
-            <h2 className="text-xl font-semibold mb-6">Reviews for this Seller</h2>
-            <ReviewsList sellerId={product.seller.userId} />
-          </div>
-        )}
+{product.seller?.id && (
+  <div className="mt-16">
+    <h2 className="text-xl font-semibold mb-6">Reviews for this Seller</h2>
+    <ReviewsList sellerId={product.seller.id} />
+  </div>
+)}
       </main>
       <Footer />
     </div>
