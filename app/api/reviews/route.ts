@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       where: { sellerId },
       include: {
         buyer: {
-          select: { id: true, name: true, image: true }
+          select: { id: true, name: true, avatar: true }
         }
       },
       orderBy: { createdAt: 'desc' }
