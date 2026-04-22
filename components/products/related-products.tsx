@@ -25,7 +25,7 @@ export function RelatedProducts({ categoryId, currentProductId }: RelatedProduct
 
   const fetchRelatedProducts = async () => {
     try {
-      const response = await fetch(`/api/products?limit=4`)
+      const response = await fetch(`/api/products?limit=5`)
       if (response.ok) {
         const data = await response.json()
         // Filter out current product and limit to 4
