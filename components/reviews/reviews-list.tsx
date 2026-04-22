@@ -10,7 +10,7 @@ interface Review {
   rating: number
   comment: string | null
   createdAt: string
-  buyer: { id: string; name: string | null; image: string | null }
+  buyer: { id: string; name: string | null; avatar: string | null }
 }
 
 interface ReviewsListProps {
