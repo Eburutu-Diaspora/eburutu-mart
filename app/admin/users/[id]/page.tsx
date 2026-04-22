@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { ArrowLeft, Mail, MapPin, Calendar, Package, Trash2, Store, Users, Phone } from 'lucide-react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-
+import ReviewsList from '@/components/reviews/reviews-list'
 interface UserDetail {
   id: string
   name: string
