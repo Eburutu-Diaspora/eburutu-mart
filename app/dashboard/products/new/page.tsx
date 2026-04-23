@@ -99,9 +99,15 @@ export default function NewProductPage() {
     setImages(newImages)
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSaving(true)
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  if (!formData.categoryId) {
+    toast({ title: 'Error', description: 'Please select a category', variant: 'destructive' })
+    return
+  }
+
+  setIsSaving(true)
 
     try {
       // Convert images to base64 for submission
@@ -297,10 +303,10 @@ export default function NewProductPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category *</Label>
-                  <Select
-                    value={formData.categoryId}
-                    onValueChange={(value) => handleChange('categoryId', value)}
-                    required
+                 <Select
+  value={formData.categoryId}
+  onValueChange={(value) => handleChange('categoryId', value)}
+>
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
@@ -384,12 +390,12 @@ export default function NewProductPage() {
                   {isSaving ? (
                     <>
                       <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Creating...
+                      Listing...
                     </>
                   ) : (
                     <>
                       <Plus className="h-4 w-4 mr-2" />
-                      Create Product
+                      List Product
                     </>
                   )}
                 </Button>
