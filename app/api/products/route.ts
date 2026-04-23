@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
         color: color || null,
         size: size || null,
         sellerId: session.user.id,
-        status: 'ACTIVE',
+       
         images: {
           create: imageUrls.map((url) => ({ imageUrl: url })),
         },
