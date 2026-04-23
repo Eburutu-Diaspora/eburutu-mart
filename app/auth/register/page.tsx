@@ -661,7 +661,7 @@ export default function RegisterPage() {
             <Alert className="border-emerald-200 bg-emerald-50">
               <Store className="h-4 w-4 text-emerald-600" />
               <AlertDescription className="text-emerald-800">
-                Start listing your products immediately after email confirmation. <strong>No documents, no fees</strong> — Eburutu Mart is a free diaspora Marketplace .
+                Start listing your products after email confirmation. 
               </AlertDescription>
             </Alert>
           )}
