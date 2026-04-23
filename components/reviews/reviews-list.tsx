@@ -17,7 +17,7 @@ interface ReviewsListProps {
   sellerId: string
   readOnly?: boolean
 }
-}
+
 
 export default function ReviewsList({ sellerId, readOnly = false }: ReviewsListProps) {
   const { data: session } = useSession()
