@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Header } from '@/components/navigation/header'
 import { Footer } from '@/components/navigation/footer'
 import { ArrowLeft, Plus, Loader2, Upload, X, ImageIcon } from 'lucide-react'
-import { toast } from '@/hooks/use-toast'
+import { toast } from 'sonner'
 
 interface Category {
   id: string
@@ -99,19 +99,24 @@ export default function NewProductPage() {
     setImages(newImages)
   }
 
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
 
-  if (!formData.categoryId) {
-    toast({ title: 'Error', description: 'Please select a category', variant: 'destructive' })
-    return
-  }
+    if (!formData.categoryId) {
+      toast.error('Please select a category')
+      return
+    }
 
-  setIsSaving(true)
+    if (images.length === 0) {
+      toast.error('Please upload at least one product image')
+      return
+    }
+
+    setIsSaving(true)
 
     try {
-      // Convert images to base64 for submission
       const imageUrls: string[] = []
+
       for (const img of images) {
         const reader = new FileReader()
         const base64 = await new Promise<string>((resolve) => {
@@ -132,28 +137,16 @@ export default function NewProductPage() {
       })
 
       if (response.ok) {
-        // Clean up previews
         images.forEach(img => URL.revokeObjectURL(img.preview))
-        toast({
-          title: 'Success',
-          description: 'Product created successfully',
-        })
+        toast.success('Product listed successfully!')
         router.push('/dashboard/products')
       } else {
         const error = await response.json()
-        toast({
-          title: 'Error',
-          description: error.error || 'Failed to create product',
-          variant: 'destructive',
-        })
+        toast.error(error.error || 'Failed to list product')
       }
     } catch (error) {
-      console.error('Error creating product:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to create product',
-        variant: 'destructive',
-      })
+      console.error('Error listing product:', error)
+      toast.error('Something went wrong. Please try again.')
     } finally {
       setIsSaving(false)
     }
@@ -182,7 +175,7 @@ export default function NewProductPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       <main className="flex-1 container max-w-4xl mx-auto px-4 py-8">
-        {/* Back Link */}
+
         <Link
           href="/dashboard/products"
           className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-6"
@@ -193,11 +186,12 @@ export default function NewProductPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Add New Product</CardTitle>
-            <CardDescription>List a new product for sale on Eburutu Mart</CardDescription>
+            <CardTitle>List a New Product</CardTitle>
+            <CardDescription>Add a new listing to Eburutu Mart</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+
               {/* Title */}
               <div className="space-y-2">
                 <Label htmlFor="title">Product Title *</Label>
@@ -227,7 +221,6 @@ export default function NewProductPage() {
               <div className="space-y-2">
                 <Label>Product Images (up to 5)</Label>
                 <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
-                  {/* Image Previews */}
                   {images.length > 0 && (
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
                       {images.map((img, index) => (
@@ -249,8 +242,7 @@ export default function NewProductPage() {
                       ))}
                     </div>
                   )}
-                  
-                  {/* Upload Button */}
+
                   {images.length < 5 && (
                     <div className="flex flex-col items-center justify-center py-4">
                       <input
@@ -262,10 +254,7 @@ export default function NewProductPage() {
                         className="hidden"
                         id="image-upload"
                       />
-                      <label
-                        htmlFor="image-upload"
-                        className="flex flex-col items-center cursor-pointer"
-                      >
+                      <label htmlFor="image-upload" className="flex flex-col items-center cursor-pointer">
                         <div className="p-4 bg-primary/10 rounded-full mb-3">
                           <Upload className="h-6 w-6 text-primary" />
                         </div>
@@ -303,11 +292,10 @@ export default function NewProductPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="category">Category *</Label>
-                 <Select
-  value={formData.categoryId}
-  onValueChange={(value) => handleChange('categoryId', value)}
->
-                  
+                  <Select
+                    value={formData.categoryId}
+                    onValueChange={(value) => handleChange('categoryId', value)}
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
@@ -384,7 +372,7 @@ export default function NewProductPage() {
                 </div>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <div className="flex gap-4">
                 <Button type="submit" disabled={isSaving}>
                   {isSaving ? (
@@ -400,14 +388,14 @@ export default function NewProductPage() {
                   )}
                 </Button>
                 <Link href="/dashboard/products">
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
+                  <Button type="button" variant="outline">Cancel</Button>
                 </Link>
               </div>
+
             </form>
           </CardContent>
         </Card>
+
       </main>
       <Footer />
     </div>
