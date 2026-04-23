@@ -14,7 +14,6 @@ export async function GET() {
       where: { sellerId: session.user.id },
       include: {
         images: { take: 1 },
-        _count: { select: { views: true } }
       },
       orderBy: { createdAt: 'desc' },
       take: 20,
