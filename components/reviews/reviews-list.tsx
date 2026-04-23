@@ -15,9 +15,11 @@ interface Review {
 
 interface ReviewsListProps {
   sellerId: string
+  readOnly?: boolean
+}
 }
 
-export default function ReviewsList({ sellerId }: ReviewsListProps) {
+export default function ReviewsList({ sellerId, readOnly = false }: ReviewsListProps) {
   const { data: session } = useSession()
   const [reviews, setReviews] = useState<Review[]>([])
   const [avgRating, setAvgRating] = useState(0)
@@ -44,8 +46,7 @@ export default function ReviewsList({ sellerId }: ReviewsListProps) {
 
   const alreadyReviewed = reviews.some((r) => r.buyer.id === session?.user?.id)
   const isSeller = session?.user?.id === sellerId
-  const canReview = session?.user && !isSeller && !alreadyReviewed
-
+ const canReview = !readOnly && session?.user && !isSeller && !alreadyReviewed
   if (loading) {
     return <div className="text-sm text-gray-400 py-4">Loading reviews...</div>
   }
