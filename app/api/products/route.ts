@@ -11,8 +11,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-// ─── GET: fetch products (public) ───────────────────────────────────────────
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -76,8 +74,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// ─── POST: create product (sellers only) ────────────────────────────────────
-
 export async function POST(request: NextRequest) {
   try {
     const session = await getAuthSession()
@@ -97,7 +93,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Upload images to Supabase Storage
     const imageUrls: string[] = []
 
     for (let i = 0; i < (images || []).length; i++) {
@@ -124,7 +119,6 @@ export async function POST(request: NextRequest) {
       imageUrls.push(urlData.publicUrl)
     }
 
-    // Create product
     const product = await prisma.product.create({
       data: {
         title,
