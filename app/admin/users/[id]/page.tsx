@@ -229,7 +229,7 @@ export default function AdminUserDetailPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ReviewsList sellerId={user.id} />
+            <ReviewsList sellerId={user.id} readOnly={true} />
             </CardContent>
           </Card>
         </div>
