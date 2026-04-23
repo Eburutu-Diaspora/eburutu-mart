@@ -25,6 +25,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '12')
 
     const where: any = {}
+
     if (category) {
       where.category = { slug: category }
     }
@@ -63,14 +64,8 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
-    // Flatten images for compatibility
-    const flatProducts = products.map((p) => ({
-      ...p,
-      images: p.images.map((img: any) => img.imageUrl),
-    }))
-
     return NextResponse.json({
-      products: flatProducts,
+      products,
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -142,7 +137,6 @@ export async function POST(request: NextRequest) {
         color: color || null,
         size: size || null,
         sellerId: session.user.id,
-       
         images: {
           create: imageUrls.map((url) => ({ imageUrl: url })),
         },
