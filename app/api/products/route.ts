@@ -24,8 +24,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '12')
 
-    const where: any = { status: 'ACTIVE' }
-
+    const where: any = {}
     if (category) {
       where.category = { slug: category }
     }
