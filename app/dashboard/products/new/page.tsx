@@ -307,7 +307,7 @@ export default function NewProductPage() {
   value={formData.categoryId}
   onValueChange={(value) => handleChange('categoryId', value)}
 >
-                  >
+                  
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
