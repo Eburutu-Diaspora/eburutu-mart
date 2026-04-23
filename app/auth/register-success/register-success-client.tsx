@@ -88,7 +88,7 @@ export default function RegisterSuccessClient() {
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
               <p className="text-amber-800 text-sm">
                 <strong>Seller Account:</strong> After verifying your email, you can
-                start listing products. Complete business verification for enhanced seller features.
+                start listing products. 
               </p>
             </div>
           )}
