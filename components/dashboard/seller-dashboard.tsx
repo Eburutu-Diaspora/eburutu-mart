@@ -21,8 +21,8 @@ interface Product {
   title: string
   price: number
   status: string
+  viewCount?: number
   images: { imageUrl: string }[]
-  _count?: { views: number }
 }
 
 export function SellerDashboard() {
@@ -48,7 +48,7 @@ export function SellerDashboard() {
     }
   }
 
-  const totalViews = products.reduce((sum, p) => sum + (p._count?.views || 0), 0)
+ const totalViews = products.reduce((sum, p) => sum + ((p as any).viewCount || 0), 0)
   const activeProducts = products.filter(p => p.status === 'ACTIVE').length
 
   if (isLoading) {
@@ -202,7 +202,7 @@ export function SellerDashboard() {
                   </div>
                   <div className="flex items-center gap-1 text-sm text-muted-foreground mb-3">
                     <Eye className="w-4 h-4" />
-                    <span>{product._count?.views || 0} views</span>
+                    <span>{product.viewCount || 0} views</span>
                   </div>
                   <div className="flex gap-2">
                     <Link href={`/dashboard/products/${product.id}/edit`} className="flex-1">
