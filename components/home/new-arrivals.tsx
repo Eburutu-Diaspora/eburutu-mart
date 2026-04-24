@@ -48,7 +48,7 @@ export function NewArrivals() {
           setProducts(list.slice(0, 6))
           setIsLoading(false)
         } else {
-          return fetch('/api/products?page=1&limit=6')
+         return fetch('/api/products?page=2&limit=6')
             .then(res => res.json())
             .then(fallback => {
               const fb = Array.isArray(fallback?.products) ? fallback.products : []
