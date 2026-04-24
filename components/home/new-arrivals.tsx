@@ -18,7 +18,6 @@ interface Product {
 
 function ProductImage({ src, alt }: { src?: string; alt: string }) {
   const [error, setError] = useState(false)
-
   if (!src || error) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
@@ -26,7 +25,6 @@ function ProductImage({ src, alt }: { src?: string; alt: string }) {
       </div>
     )
   }
-
   return (
     <img
       src={src}
@@ -42,26 +40,25 @@ export function NewArrivals() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-   fetch('/api/products?newArrival=true')
-  .then(res => res.json())
-  .then(data => {
-    const list = Array.isArray(data?.products) ? data.products : []
-    if (list.length > 0) {
-      setProducts(list.slice(0, 6))
-      setIsLoading(false)
-    } else {
-      return fetch('/api/products?page=1&limit=6')
-        .then(res => res.json())
-        .then(fallback => {
-          const fb = Array.isArray(fallback?.products) ? fallback.products : []
-          setProducts(fb.slice(0, 6))
+    fetch('/api/products?newArrival=true')
+      .then(res => res.json())
+      .then(data => {
+        const list = Array.isArray(data?.products) ? data.products : []
+        if (list.length > 0) {
+          setProducts(list.slice(0, 6))
           setIsLoading(false)
-        })
-    }
-  })
-  .catch(() => { setProducts([]); setIsLoading(false) })
-
-  if (!isLoading && products.length === 0) return null
+        } else {
+          return fetch('/api/products?page=1&limit=6')
+            .then(res => res.json())
+            .then(fallback => {
+              const fb = Array.isArray(fallback?.products) ? fallback.products : []
+              setProducts(fb.slice(0, 6))
+              setIsLoading(false)
+            })
+        }
+      })
+      .catch(() => { setProducts([]); setIsLoading(false) })
+  }, [])
 
   return (
     <section className="py-16 bg-gradient-to-b from-white to-amber-50/40">
