@@ -219,7 +219,8 @@ export default function AdminUserDetailPage() {
           </CardContent>
        </Card>
 
-        {/* Reviews */}
+       {/* Reviews — sellers only */}
+      {user.role === 'SELLER' && (
         <div className="mt-8">
           <Card>
             <CardHeader>
@@ -229,11 +230,11 @@ export default function AdminUserDetailPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-            <ReviewsList sellerId={user.id} readOnly={true} />
+              <ReviewsList sellerId={user.id} readOnly={true} />
             </CardContent>
           </Card>
         </div>
-
+      )}
       </main>
       <Footer />
     </div>
