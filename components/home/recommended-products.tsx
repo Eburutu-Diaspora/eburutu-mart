@@ -32,7 +32,7 @@ export function RecommendedProducts() {
           setProducts(list.slice(0, 4))
           setIsLoading(false)
         } else {
-          return fetch('/api/products?page=2&limit=4')
+         return fetch('/api/products?page=4&limit=4')
             .then(res => res.json())
             .then(fallback => {
               const fb = Array.isArray(fallback?.products) ? fallback.products : []
