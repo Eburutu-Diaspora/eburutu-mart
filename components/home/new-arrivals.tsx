@@ -2,20 +2,39 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { MapPin, Eye, Clock } from 'lucide-react'
+import { MapPin, Eye, Clock, ShoppingBag } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
-const FALLBACK = 'https://placehold.co/400x400/d4edda/2d6a4f?text=EburutuMart'
 
 interface Product {
   id: string
   title: string
   price: number
-  imageUrl: string | null
+  images: { imageUrl: string }[]
   location: string
   viewCount: number
   category?: { name: string }
+}
+
+function ProductImage({ src, alt }: { src?: string; alt: string }) {
+  const [error, setError] = useState(false)
+
+  if (!src || error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-100">
+        <ShoppingBag className="h-8 w-8 text-amber-400" />
+      </div>
+    )
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+      onError={() => setError(true)}
+    />
+  )
 }
 
 export function NewArrivals() {
@@ -68,13 +87,13 @@ export function NewArrivals() {
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                    <img
-                      src={product.imageUrl || FALLBACK}
+                    <ProductImage
+                      src={product.images?.[0]?.imageUrl}
                       alt={product.title}
-                      onError={(e) => { e.currentTarget.src = FALLBACK }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">New</Badge>
+                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">
+                      New
+                    </Badge>
                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
                       <Eye className="h-3 w-3" />
                       {product.viewCount || 0}
@@ -97,6 +116,12 @@ export function NewArrivals() {
             ))}
           </div>
         )}
+
+        <div className="mt-6 text-center sm:hidden">
+          <Link href="/products">
+            <Button variant="outline" size="sm">View All New Arrivals →</Button>
+          </Link>
+        </div>
       </div>
     </section>
   )
