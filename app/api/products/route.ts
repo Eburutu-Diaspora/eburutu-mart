@@ -19,10 +19,17 @@ export async function GET(request: NextRequest) {
     const location = searchParams.get('location') || undefined
     const minPrice = searchParams.get('minPrice') || undefined
     const maxPrice = searchParams.get('maxPrice') || undefined
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = parseInt(searchParams.get('limit') || '12')
+   const page        = parseInt(searchParams.get('page') || '1')
+    const featured    = searchParams.get('featured') === 'true'
+    const newArrival  = searchParams.get('newArrival') === 'true'
+    const recommended = searchParams.get('recommended') === 'true'
+    const limit       = featured ? 3 : newArrival ? 6 : recommended ? 4 : parseInt(searchParams.get('limit') || '12')
 
-    const where: any = {}
+ const where: any = { isActive: true }
+
+    if (featured)    where.isFeatured    = true
+    if (newArrival)  where.isNewArrival  = true
+    if (recommended) where.isRecommended = true
 
     if (category) {
       where.category = { slug: category }
