@@ -45,7 +45,7 @@ export function FeaturedProducts() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/products?limit=6')
+   fetch('/api/products?featured=true')
       .then((res) => res.json())
       .then((data) => {
         const list = Array.isArray(data) ? data : data.products ?? []
@@ -133,12 +133,11 @@ export function FeaturedProducts() {
               <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
                 <div className="relative aspect-video">
                  <img
-  src={
-    (Array.isArray(product.images) && product.images.length > 0
-     ? product.images[0]?.imageUrl
-      : '') ||
-    'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'
-  }
+ src={
+  Array.isArray(product.images) && product.images.length > 0
+    ? (product.images[0] as any).imageUrl ?? product.images[0]
+    : '/placeholder-product.jpg'
+}
   alt={product.title}
   onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
   className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
