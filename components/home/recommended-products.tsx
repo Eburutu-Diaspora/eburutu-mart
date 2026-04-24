@@ -24,15 +24,24 @@ export function RecommendedProducts() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/products?page=1')
-      .then(res => res.json())
-      .then(data => {
-        const list = Array.isArray(data?.products) ? data.products : []
-        setProducts(list.slice(0, 4))
-      })
-      .catch(() => setProducts([]))
-      .finally(() => setIsLoading(false))
-  }, [])
+    fetch('/api/products?recommended=true')
+  .then(res => res.json())
+  .then(data => {
+    const list = Array.isArray(data?.products) ? data.products : []
+    if (list.length > 0) {
+      setProducts(list.slice(0, 4))
+      setIsLoading(false)
+    } else {
+      return fetch('/api/products?page=2&limit=4')
+        .then(res => res.json())
+        .then(fallback => {
+          const fb = Array.isArray(fallback?.products) ? fallback.products : []
+          setProducts(fb.slice(0, 4))
+          setIsLoading(false)
+        })
+    }
+  })
+  .catch(() => { setProducts([]); setIsLoading(false) })
 
   if (!isLoading && products.length === 0) return null
 
