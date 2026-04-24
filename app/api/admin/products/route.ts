@@ -40,17 +40,20 @@ export async function GET(request: NextRequest) {
     })
 
     // Transform products to include images array and status
-    const transformedProducts = products.map(p => ({
-      id: p.id,
-      title: p.title,
-      price: Number(p.price),
-      currency: p.currency,
-      status: p.isActive ? 'ACTIVE' : 'PENDING',
-      images: p.images.map(img => img.imageUrl),
-      createdAt: p.createdAt,
-      seller: p.seller,
-      category: p.category
-    }))
+   const transformedProducts = products.map(p => ({
+    id: p.id,
+    title: p.title,
+    price: Number(p.price),
+    currency: p.currency,
+    status: p.isActive ? 'ACTIVE' : 'PENDING',
+    isFeatured: p.isFeatured,
+    isNewArrival: p.isNewArrival,
+    isRecommended: p.isRecommended,
+    images: p.images.map(img => ({ imageUrl: img.imageUrl })),
+    createdAt: p.createdAt,
+    seller: p.seller,
+    category: p.category
+  }))
 
     return NextResponse.json(transformedProducts)
   } catch (error) {
