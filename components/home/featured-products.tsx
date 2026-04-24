@@ -35,23 +35,21 @@ export function FeaturedProducts() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch('/api/products?featured=true')
+  fetch('/api/products?featured=true')
       .then(res => res.json())
-      .then(data => {
-        const list = Array.isArray(data?.products) ? data.products : []
-        if (list.length > 0) {
-          setProducts(list.slice(0, 6))
-          setLoading(false)
+      .then(async data => {
+        const featured = Array.isArray(data?.products) ? data.products : []
+        if (featured.length >= 6) {
+          setProducts(featured.slice(0, 6))
         } else {
-          // fallback: show any 6 products if none allocated yet
-          return fetch('/api/products?limit=6')
-            .then(res => res.json())
-            .then(fallback => {
-              const fb = Array.isArray(fallback?.products) ? fallback.products : []
-              setProducts(fb.slice(0, 6))
-              setLoading(false)
-            })
+          const fallbackRes = await fetch('/api/products?limit=12')
+          const fallbackData = await fallbackRes.json()
+          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const featuredIds = new Set(featured.map((p: any) => p.id))
+          const extras = all.filter((p: any) => !featuredIds.has(p.id))
+          setProducts([...featured, ...extras].slice(0, 6))
         }
+        setLoading(false)
       })
       .catch(() => { setProducts([]); setLoading(false) })
   }, [])
