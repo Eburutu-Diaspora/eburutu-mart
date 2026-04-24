@@ -13,7 +13,7 @@ interface Product {
   id: string
   title: string
   price: number
-  imageUrl: string | null
+  images?: { imageUrl: string }[]
   location: string
   viewCount: number
   category?: { name: string }
@@ -70,7 +70,7 @@ export function RecommendedProducts() {
                 <div className="group cursor-pointer bg-white rounded-2xl border border-gray-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 overflow-hidden">
                   <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
                     <img
-                      src={product.imageUrl || FALLBACK}
+                      src={product.images?.[0]?.imageUrl || FALLBACK}
                       alt={product.title}
                       onError={(e) => { e.currentTarget.src = FALLBACK }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
