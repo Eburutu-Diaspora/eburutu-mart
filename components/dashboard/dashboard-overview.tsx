@@ -126,12 +126,26 @@ export function DashboardOverview() {
               </div>
             ))}
           </div>
-        ) : products.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center text-muted-foreground">
-              No recommended products yet. Check back soon!
-            </CardContent>
-          </Card>
+       ) : products.length === 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { label: 'Food & Groceries', slug: 'food-groceries', color: 'from-orange-400 to-amber-500' },
+              { label: 'Fashion & Clothing', slug: 'fashion-clothing', color: 'from-pink-400 to-rose-500' },
+              { label: 'Beauty & Haircare', slug: 'beauty-haircare', color: 'from-purple-400 to-violet-500' },
+            ].map(cat => (
+              <Link key={cat.slug} href={`/products?category=${cat.slug}`}>
+                <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer h-full overflow-hidden">
+                  <div className={`aspect-video bg-gradient-to-br ${cat.color} flex items-center justify-center`}>
+                    <ShoppingBag className="w-12 h-12 text-white/80" />
+                  </div>
+                  <CardContent className="p-4 text-center">
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">{cat.label}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">Browse products →</p>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {products.map(product => (
