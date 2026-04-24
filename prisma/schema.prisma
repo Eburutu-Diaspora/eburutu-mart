@@ -127,9 +127,12 @@ model Product {
   currency        String        @default("GBP")
   condition       String?
   location        String
-  isActive        Boolean       @default(true)
-  isPromoted      Boolean       @default(false)
-  viewCount       Int           @default(0)
+ isActive      Boolean  @default(true)
+  isPromoted    Boolean  @default(false)
+  isFeatured    Boolean  @default(false)
+  isNewArrival  Boolean  @default(false)
+  isRecommended Boolean  @default(false)
+  viewCount     Int      @default(0)
   
   // Product details
   brand           String?
