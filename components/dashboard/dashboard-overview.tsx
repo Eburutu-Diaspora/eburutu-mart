@@ -10,10 +10,20 @@ import Link from 'next/link'
 
 const FALLBACK = 'https://placehold.co/400x300/d4edda/2d6a4f?text=EburutuMart'
 
+// Bulletproof price formatter — handles string, number, Prisma Decimal, null, undefined
+function formatPrice(price: any): string {
+  try {
+    const n = parseFloat(String(price))
+    return isNaN(n) ? '0.00' : n.toFixed(2)
+  } catch {
+    return '0.00'
+  }
+}
+
 interface Product {
   id: string
   title: string
-  price: number
+  price: any
   location: string
   viewCount: number
   images: { imageUrl: string }[]
@@ -127,7 +137,7 @@ export function DashboardOverview() {
 
         {loadingProducts ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
+            {[0, 1, 2].map((i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-video bg-gray-200 rounded-xl mb-4" />
                 <div className="h-4 bg-gray-200 rounded mb-2" />
@@ -179,7 +189,7 @@ export function DashboardOverview() {
                     </h3>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
-                        £{parseFloat(String(product.price)).toFixed(2)}
+                        £{formatPrice(product.price)}
                       </span>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Eye className="w-3 h-3" />
