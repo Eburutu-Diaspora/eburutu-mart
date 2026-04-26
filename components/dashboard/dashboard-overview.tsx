@@ -7,7 +7,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag, User, Store, MapPin, Eye } from 'lucide-react'
 import Link from 'next/link'
-import Image from 'next/image'
 
 const FALLBACK = 'https://placehold.co/400x300/d4edda/2d6a4f?text=EburutuMart'
 
@@ -29,12 +28,22 @@ export function DashboardOverview() {
   useEffect(() => {
     fetch('/api/products?recommended=true')
       .then(res => res.json())
-      .then(data => {
-        const list = Array.isArray(data?.products) ? data.products : []
-        setProducts(list.slice(0, 3))
+      .then(async data => {
+        const allocated = Array.isArray(data?.products) ? data.products : []
+        if (allocated.length >= 3) {
+          setProducts(allocated.slice(0, 3))
+          setLoadingProducts(false)
+        } else {
+          const fallbackRes = await fetch('/api/products?page=1&limit=12')
+          const fallbackData = await fallbackRes.json()
+          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const allocatedIds = new Set(allocated.map((p: any) => p.id))
+          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
+          setProducts([...allocated, ...extras].slice(0, 3))
+          setLoadingProducts(false)
+        }
       })
-      .catch(() => setProducts([]))
-      .finally(() => setLoadingProducts(false))
+      .catch(() => { setProducts([]); setLoadingProducts(false) })
   }, [])
 
   const quickActions = [
@@ -126,7 +135,7 @@ export function DashboardOverview() {
               </div>
             ))}
           </div>
-       ) : products.length === 0 ? (
+        ) : products.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { label: 'Food & Groceries', slug: 'food-groceries', color: 'from-orange-400 to-amber-500' },
