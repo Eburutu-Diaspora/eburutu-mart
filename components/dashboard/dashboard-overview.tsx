@@ -179,7 +179,7 @@ export function DashboardOverview() {
                     </h3>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
-                        £{Number(product.price).toFixed(2)}
+                        £{parseFloat(String(product.price)).toFixed(2)}
                       </span>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Eye className="w-3 h-3" />
