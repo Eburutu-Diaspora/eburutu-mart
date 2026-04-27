@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -10,7 +9,6 @@ import Link from 'next/link'
 
 const FALLBACK = 'https://placehold.co/400x300/d4edda/2d6a4f?text=EburutuMart'
 
-// Bulletproof price formatter — handles string, number, Prisma Decimal, null, undefined
 function formatPrice(price: any): string {
   try {
     const n = parseFloat(String(price))
@@ -83,7 +81,6 @@ export function DashboardOverview() {
   return (
     <div className="space-y-8">
 
-      {/* Welcome Section */}
       <div className="bg-gradient-to-r from-primary to-accent rounded-2xl p-8 text-white">
         <div className="flex items-center justify-between">
           <div>
@@ -102,7 +99,6 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      {/* Quick Actions */}
       <div>
         <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -126,7 +122,6 @@ export function DashboardOverview() {
         </div>
       </div>
 
-      {/* Recommended Products */}
       <div>
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Recommended for You</h2>
