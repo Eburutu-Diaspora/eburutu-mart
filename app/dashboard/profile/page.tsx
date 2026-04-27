@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { ArrowLeft, Camera, Save, User, Mail, MapPin, Phone, Store } from 'lucide-react'
+import { ArrowLeft, Camera, Save, User, Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 
@@ -23,8 +23,6 @@ export default function ProfilePage() {
     phone: '',
     location: '',
     bio: '',
-    businessName: '',
-    businessDescription: '',
   })
 
   useEffect(() => {
@@ -177,39 +175,6 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Business Information (for sellers) */}
-          {session?.user?.role === 'SELLER' && (
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  <Store className="h-5 w-5 inline mr-2" />
-                  Business Information
-                </CardTitle>
-                <CardDescription>Your business details visible to customers</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="businessName">Business Name</Label>
-                  <Input
-                    id="businessName"
-                    value={profile.businessName}
-                    onChange={(e) => setProfile({ ...profile, businessName: e.target.value })}
-                    placeholder="Your business name"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="businessDescription">Business Description</Label>
-                  <Textarea
-                    id="businessDescription"
-                    value={profile.businessDescription}
-                    onChange={(e) => setProfile({ ...profile, businessDescription: e.target.value })}
-                    placeholder="Describe your business and what you sell..."
-                    rows={4}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Save Button */}
           <div className="flex justify-end">
