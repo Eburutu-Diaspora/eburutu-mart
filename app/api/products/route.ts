@@ -14,18 +14,18 @@ const supabase = createClient(
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
-    const category = searchParams.get('category') || undefined
-    const search = searchParams.get('search') || undefined
-    const location = searchParams.get('location') || undefined
-    const minPrice = searchParams.get('minPrice') || undefined
-    const maxPrice = searchParams.get('maxPrice') || undefined
-   const page        = parseInt(searchParams.get('page') || '1')
+    const category    = searchParams.get('category') || undefined
+    const search      = searchParams.get('search') || undefined
+    const location    = searchParams.get('location') || undefined
+    const minPrice    = searchParams.get('minPrice') || undefined
+    const maxPrice    = searchParams.get('maxPrice') || undefined
+    const page        = parseInt(searchParams.get('page') || '1')
     const featured    = searchParams.get('featured') === 'true'
     const newArrival  = searchParams.get('newArrival') === 'true'
     const recommended = searchParams.get('recommended') === 'true'
     const limit       = featured ? 3 : newArrival ? 6 : recommended ? 4 : parseInt(searchParams.get('limit') || '12')
 
- const where: any = { isActive: true }
+    const where: any = { isActive: true }
 
     if (featured)    where.isFeatured    = true
     if (newArrival)  where.isNewArrival  = true
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
+        { title:       { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
       ]
     }
@@ -59,8 +59,8 @@ export async function GET(request: NextRequest) {
         where,
         include: {
           category: true,
-          seller: true,
-          images: true,
+          seller:   true,
+          images:   true,
         },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
@@ -69,8 +69,14 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
+    // Convert Prisma Decimal price to plain number to prevent toFixed() crashes
+    const safeProducts = products.map(p => ({
+      ...p,
+      price: Number(p.price)
+    }))
+
     return NextResponse.json({
-      products,
+      products: safeProducts,
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -134,9 +140,9 @@ export async function POST(request: NextRequest) {
         categoryId,
         condition,
         location,
-        brand: brand || null,
-        color: color || null,
-        size: size || null,
+        brand:    brand || null,
+        color:    color || null,
+        size:     size  || null,
         sellerId: session.user.id,
         images: {
           create: imageUrls.map((url) => ({ imageUrl: url })),
