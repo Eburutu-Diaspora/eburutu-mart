@@ -14,8 +14,8 @@ const blogPosts = [
   {
     id: '1',
     slug: 'preserving-african-heritage-in-the-diaspora',
-    title: 'Preserving African Heritage: A Guide for Diaspora Families',
-    excerpt: 'Discover practical ways to keep your African roots alive while building a life abroad. From language preservation to cultural celebrations, here\'s how to pass on your heritage to the next generation.',
+    title: 'Preserving African Heritage: A Practical Guide for Diaspora Families in the UK',
+    excerpt: 'Discover proven ways to keep your African roots alive while raising children in Britain. From Yoruba and Igbo language preservation to cultural celebrations and traditional food — here is how diaspora families are passing on their heritage to the next generation.',
     author: 'Adaeze Okonkwo',
     date: '2026-02-05',
     readTime: '8 min read',
@@ -26,8 +26,8 @@ const blogPosts = [
   {
     id: '2',
     slug: 'building-successful-diaspora-business',
-    title: 'From Side Hustle to Empire: Building a Successful Diaspora Business',
-    excerpt: 'Learn from African entrepreneurs who turned their cultural knowledge into thriving businesses. Tips on starting, scaling, and sustaining a business that bridges continents.',
+    title: 'From Side Hustle to Empire: How to Build a Thriving African Diaspora Business in the UK',
+    excerpt: 'Learn from African entrepreneurs who turned their cultural knowledge into thriving UK businesses. Practical tips on starting, registering, scaling and sustaining a business that bridges Africa and Britain — from food and fashion to services and e-commerce.',
     author: 'Kwame Mensah',
     date: '2026-02-01',
     readTime: '12 min read',
@@ -38,8 +38,8 @@ const blogPosts = [
   {
     id: '3',
     slug: 'navigating-dual-identity',
-    title: 'Navigating Dual Identity: Thriving as an African in the UK',
-    excerpt: 'Balancing two cultures can be challenging but also incredibly rewarding. Personal stories and expert advice on embracing your dual identity with pride and confidence.',
+    title: 'Navigating Dual Identity: How to Thrive as an African in the UK Without Losing Yourself',
+    excerpt: 'Balancing African and British identity is one of the most common struggles in the diaspora. Personal stories and expert advice on embracing your dual identity — for yourself and your children — with pride, confidence and self-awareness.',
     author: 'Fatima Ibrahim',
     date: '2026-01-28',
     readTime: '10 min read',
@@ -50,13 +50,37 @@ const blogPosts = [
   {
     id: '4',
     slug: 'african-cuisine-diaspora-kitchen',
-    title: 'The Diaspora Kitchen: Bringing African Flavours to Your Table',
-    excerpt: 'Missing the taste of home? Explore how to source authentic ingredients, adapt traditional recipes, and create a thriving food culture in your new home.',
+    title: 'The Diaspora Kitchen: How to Source Authentic African Ingredients and Cook Traditional Recipes in the UK',
+    excerpt: 'Missing the taste of home? We show you exactly where to source palm oil, stockfish, egusi, crayfish and fresh African vegetables in the UK — and how to adapt traditional recipes like jollof rice, egusi soup and suya for a British kitchen.',
     author: 'Chef Amara Diallo',
     date: '2026-01-20',
     readTime: '7 min read',
     category: 'Food & Recipes',
     image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=800&auto=format&fit=crop',
+    featured: false
+  },
+  {
+    id: '5',
+    slug: 'moving-to-uk-from-africa-guide',
+    title: 'Moving to the UK from Africa: Everything Nobody Tells You Before You Arrive',
+    excerpt: 'From opening a UK bank account without a credit history to registering with the NHS, navigating council tax and finding African community groups — the practical guide every African migrant to Britain needs but rarely finds in one place.',
+    author: 'Blessing Eze',
+    date: '2026-01-15',
+    readTime: '11 min read',
+    category: 'Diaspora Life UK',
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&auto=format&fit=crop',
+    featured: false
+  },
+  {
+    id: '6',
+    slug: 'sell-african-products-uk',
+    title: 'How to Legally Sell African Food and Products in the UK: Licences, Labelling and Where to Start',
+    excerpt: 'Thousands of diaspora entrepreneurs want to sell authentic African groceries, skincare and crafts in the UK but don\'t know where to start with food safety regulations, HMRC registration and product labelling. This guide covers everything step by step.',
+    author: 'Kofi Asante',
+    date: '2026-01-10',
+    readTime: '9 min read',
+    category: 'Business & Entrepreneurship',
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&auto=format&fit=crop',
     featured: false
   }
 ]
@@ -97,14 +121,15 @@ export default function BlogPage() {
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20">
             <BookOpen className="w-4 h-4 mr-2" />
-            Diaspora Stories
+            Diaspora Stories & Guides
           </Badge>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Our <span className="text-primary">Blog</span>
+            The <span className="text-primary">EburutuMart</span> Blog
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Stories, insights, and guides for Africans thriving in the diaspora.
-            Connect with your heritage while building your future.
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+            Real stories, practical guides and expert insights for Africans thriving in the UK diaspora.
+            From preserving your culture and building a business to navigating British life —
+            everything the African community in Britain needs in one place.
           </p>
         </div>
 
@@ -211,8 +236,12 @@ export default function BlogPage() {
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             Stay Connected to Your Roots
           </h2>
-          <p className="text-white/90 mb-6 max-w-xl mx-auto">
-            Get the latest articles, marketplace updates, and community news delivered to your inbox.
+          <p className="text-white/90 mb-2 max-w-xl mx-auto">
+            Join thousands of Africans in the UK diaspora who get our weekly articles,
+            marketplace updates and community news delivered straight to their inbox.
+          </p>
+          <p className="text-white/70 text-sm mb-6 max-w-xl mx-auto">
+            No spam. Unsubscribe any time.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
             {subDone ? (
@@ -223,7 +252,7 @@ export default function BlogPage() {
               <>
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter your email address"
                   value={subEmail}
                   onChange={(e) => setSubEmail(e.target.value)}
                   className="flex-1 px-4 py-3 rounded-lg text-foreground bg-white focus:outline-none focus:ring-2 focus:ring-white/50"
@@ -232,7 +261,7 @@ export default function BlogPage() {
                   onClick={handleSubscribe}
                   className="bg-white text-primary hover:bg-white/90 px-6"
                 >
-                  Subscribe
+                  Subscribe Free
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </>
