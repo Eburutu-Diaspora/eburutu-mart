@@ -6,329 +6,396 @@ import { Footer } from '@/components/navigation/footer'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, Calendar, Clock, User, Share2, Bookmark, MessageCircle, Heart } from 'lucide-react'
+import { ArrowLeft, Calendar, Clock, User, Share2, Bookmark, MessageCircle, Heart, Check } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useState } from 'react'
 
 const blogContent: Record<string, any> = {
   'preserving-african-heritage-in-the-diaspora': {
-    title: 'Preserving African Heritage: A Guide for Diaspora Families',
+    title: 'Preserving African Heritage: A Practical Guide for Diaspora Families in the UK',
     author: 'Adaeze Okonkwo',
     authorRole: 'Cultural Heritage Consultant',
     date: '2026-02-05',
     readTime: '8 min read',
     category: 'Culture & Heritage',
     image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&auto=format&fit=crop',
+    metaDescription: 'Practical guide for African diaspora families in the UK on preserving culture, language, food traditions and heritage for the next generation.',
     content: `
-      <p class="lead">Living abroad doesn't mean leaving your heritage behind. In fact, distance often makes us cherish our cultural roots even more. Here's how diaspora families are keeping African traditions alive across generations.</p>
+      <p class="lead">Living in Britain doesn't mean leaving your African heritage behind. In fact, distance often makes us cherish our cultural roots even more. Here is how diaspora families across the UK are keeping African traditions alive — and passing them on to children born or raised far from home.</p>
 
       <h2>1. Language: The Soul of Culture</h2>
-      <p>Language is more than communication—it's a direct connection to your ancestors. Many diaspora parents struggle with passing on their native tongue, but it's one of the most valuable gifts you can give your children.</p>
+      <p>Language is more than communication — it is a direct connection to your ancestors, your community and your identity. Many diaspora parents in the UK struggle with passing on their native tongue, but it remains one of the most valuable gifts you can give your children.</p>
       <ul>
-        <li><strong>Start early:</strong> Speak your native language at home from birth. Children are natural linguists.</li>
-        <li><strong>Create immersion moments:</strong> Designate "African language only" times during meals or weekends.</li>
-        <li><strong>Use technology:</strong> Apps, YouTube channels, and online tutors can supplement your efforts.</li>
-        <li><strong>Connect with community:</strong> Join language groups with other diaspora families.</li>
+        <li><strong>Start early:</strong> Speak your native language at home from birth. Children acquire languages naturally and effortlessly in their early years.</li>
+        <li><strong>Create immersion moments:</strong> Designate "African language only" times — during meals, car journeys or weekend mornings.</li>
+        <li><strong>Use technology:</strong> Apps, YouTube channels and online tutors can supplement daily practice.</li>
+        <li><strong>Connect with community:</strong> Join language groups and cultural associations with other diaspora families in your city.</li>
       </ul>
 
-      <h2>2. Food: Taste of Home</h2>
-      <p>The kitchen is often where culture lives most vibrantly. Cooking traditional dishes creates sensory memories that last a lifetime.</p>
-      <blockquote>"When my children smell jollof rice cooking, they're not just hungry—they're home." — Yemi, Nigerian mother in London</blockquote>
-      <p>Tips for maintaining food traditions:</p>
+      <h2>2. Food: The Taste of Home</h2>
+      <p>The kitchen is often where African culture lives most vibrantly in the diaspora. Cooking traditional dishes creates sensory memories — sights, smells and tastes — that last a lifetime and connect generations.</p>
+      <blockquote>"When my children smell jollof rice cooking, they are not just hungry — they are home." — Yemi, Nigerian mother in London</blockquote>
+      <p>Tips for maintaining food traditions in the UK:</p>
       <ul>
-        <li>Teach children to cook traditional dishes alongside you</li>
-        <li>Source authentic ingredients from African stores or the Eburutu Mart</li>
-        <li>Celebrate special occasions with traditional feasts</li>
-        <li>Document family recipes before they're lost</li>
+        <li>Teach children to cook traditional dishes alongside you from a young age</li>
+        <li>Source authentic African ingredients from specialist stores or EburutuMart</li>
+        <li>Celebrate special occasions and milestones with traditional feasts</li>
+        <li>Document family recipes before they are lost — record grandparents cooking and explaining each step</li>
       </ul>
 
       <h2>3. Storytelling and Oral History</h2>
-      <p>African cultures have rich oral traditions. Don't let these stories fade away.</p>
+      <p>African cultures have rich oral traditions that go back thousands of years. Do not let these stories disappear with your generation.</p>
       <ul>
-        <li>Schedule regular "story time" with traditional folktales</li>
-        <li>Record grandparents sharing family history</li>
+        <li>Schedule regular story time with traditional folktales and proverbs</li>
+        <li>Record grandparents sharing family history over video call</li>
         <li>Create a family tree with stories attached to each person</li>
-        <li>Celebrate proverbs and their meanings</li>
+        <li>Celebrate the wisdom embedded in proverbs — explain their meaning and origin to your children</li>
       </ul>
 
       <h2>4. Celebrations and Ceremonies</h2>
-      <p>Mark important life events with traditional ceremonies, even in a modified form. Naming ceremonies, coming-of-age celebrations, and traditional weddings keep cultural practices alive.</p>
+      <p>Mark important life events with traditional ceremonies, even in a modified form. Naming ceremonies, coming-of-age celebrations and traditional wedding elements keep cultural practices alive and give children a tangible connection to their roots.</p>
 
-      <h2>5. Arts and Crafts</h2>
-      <p>Engage children with African art forms:</p>
+      <h2>5. Arts, Crafts and Music</h2>
+      <p>Engage children with African art forms and cultural expressions:</p>
       <ul>
-        <li>Traditional fabric dyeing (Adire, Kente patterns)</li>
-        <li>Beadwork and jewelry making</li>
-        <li>Traditional music and dance</li>
-        <li>Drumming and musical instruments</li>
+        <li>Traditional fabric dyeing — Adire, Kente, tie-dye patterns</li>
+        <li>Beadwork and jewellery making</li>
+        <li>African drumming, traditional music and dance</li>
+        <li>Visiting African art exhibitions and cultural events in the UK</li>
       </ul>
 
-      <h2>Building Community</h2>
-      <p>You don't have to do this alone. Connect with other diaspora families through cultural associations, churches, mosques, and community events. The Eburutu Mart is more than a shopping platform—it's a community hub where culture is celebrated and preserved.</p>
+      <h2>Building Community in the UK</h2>
+      <p>You do not have to do this alone. Connect with other diaspora families through cultural associations, churches, mosques and community events. Platforms like EburutuMart are more than a marketplace — they are hubs where African culture is celebrated, products are shared, and community is built every day.</p>
 
       <h2>Conclusion</h2>
-      <p>Preserving heritage requires intentional effort, but the rewards are immeasurable. Your children will thank you for giving them roots that ground them, no matter where life takes them. Start today—even small steps keep the flame burning for future generations.</p>
+      <p>Preserving your heritage in the UK requires intentional effort, but the rewards are immeasurable. Your children will thank you for giving them roots that ground them — no matter where life takes them. Start today. Even the smallest steps keep the flame burning for future generations.</p>
     `
   },
   'building-successful-diaspora-business': {
-    title: 'From Side Hustle to Empire: Building a Successful Diaspora Business',
+    title: 'From Side Hustle to Empire: How to Build a Thriving African Diaspora Business in the UK',
     author: 'Kwame Mensah',
     authorRole: 'Business Consultant & Entrepreneur',
     date: '2026-02-01',
     readTime: '12 min read',
     category: 'Business & Entrepreneurship',
     image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1200&auto=format&fit=crop',
+    metaDescription: 'Step-by-step guide for African diaspora entrepreneurs on how to start, register and grow a successful business in the UK — from food and fashion to services and e-commerce.',
     content: `
-      <p class="lead">The African diaspora has always been entrepreneurial. From sending remittances home to launching global brands, we've found ways to create value across continents. Here's how you can turn your cultural knowledge into a thriving business.</p>
+      <p class="lead">The African diaspora has always been entrepreneurial. From sending remittances home to launching globally recognised brands, we have found ways to create value across continents. Here is how you can turn your cultural knowledge and community connections into a thriving UK business.</p>
 
       <h2>The Diaspora Advantage</h2>
-      <p>Being part of two worlds gives you unique insights:</p>
+      <p>Being part of two worlds gives you business insights that no MBA can teach:</p>
       <ul>
-        <li><strong>Cultural bridge:</strong> You understand both markets intimately</li>
-        <li><strong>Untapped demand:</strong> Millions of Africans abroad seek authentic products and services</li>
-        <li><strong>Trust factor:</strong> Community members prefer buying from their own</li>
-        <li><strong>Global perspective:</strong> You can identify opportunities others miss</li>
+        <li><strong>Cultural bridge:</strong> You understand both African and British markets with authentic depth</li>
+        <li><strong>Untapped demand:</strong> Millions of Africans in the UK actively seek authentic products and services</li>
+        <li><strong>Community trust:</strong> People prefer buying from those who share and understand their culture</li>
+        <li><strong>Global perspective:</strong> You can identify opportunities that others simply cannot see</li>
       </ul>
 
       <h2>Finding Your Niche</h2>
-      <p>The most successful diaspora businesses solve real problems:</p>
+      <p>The most successful diaspora businesses solve real problems that the mainstream market ignores:</p>
       
-      <h3>Food & Groceries</h3>
-      <p>From palm oil to plantains, there's huge demand for authentic African ingredients. Consider importing, distributing, or even producing locally.</p>
+      <h3>Food and Groceries</h3>
+      <p>From palm oil to plantains, the demand for authentic African ingredients in the UK is enormous and growing. Consider importing, distributing, producing locally or selling through EburutuMart.</p>
       
-      <h3>Fashion & Textiles</h3>
-      <p>Ankara, Kente, and traditional attire never go out of style. Whether you're designing, tailoring, or curating, fashion offers endless possibilities.</p>
+      <h3>Fashion and Textiles</h3>
+      <p>Ankara, Kente and traditional African attire have never been more in demand. Whether you are designing, tailoring or curating — fashion offers endless opportunity in the UK diaspora market.</p>
       
       <h3>Services</h3>
-      <p>Event planning, catering, hair braiding, translation services—the diaspora needs providers who understand our culture.</p>
+      <p>Event planning, African catering, natural hair braiding, translation services, immigration advice, music promotion — the diaspora needs skilled providers who understand the culture.</p>
 
-      <h2>Starting Small, Thinking Big</h2>
-      <blockquote>"I started selling shea butter to friends. Five years later, I supply 200 stores across the UK." — Aminata, Ghanaian entrepreneur</blockquote>
+      <h2>Starting Small and Thinking Big</h2>
+      <blockquote>"I started selling shea butter to friends at church. Five years later, I supply 200 stores across the UK." — Aminata, Ghanaian entrepreneur, Birmingham</blockquote>
       
-      <p>Key steps to launch:</p>
+      <p>Key steps to launch your diaspora business:</p>
       <ol>
-        <li><strong>Validate your idea:</strong> Talk to potential customers before investing heavily</li>
-        <li><strong>Start lean:</strong> Test with minimal inventory and investment</li>
-        <li><strong>Build online presence:</strong> Social media and marketplaces like Eburutu Mart are your friends</li>
-        <li><strong>Deliver excellence:</strong> Word of mouth is powerful in our community</li>
-        <li><strong>Scale strategically:</strong> Grow as demand proves itself</li>
+        <li><strong>Validate your idea:</strong> Talk to at least 20 potential customers before investing any money</li>
+        <li><strong>Start lean:</strong> Test with minimal inventory and investment — prove demand first</li>
+        <li><strong>Register properly:</strong> Set up as a sole trader or limited company with HMRC from day one</li>
+        <li><strong>Build your online presence:</strong> Social media and marketplaces like EburutuMart give you instant reach</li>
+        <li><strong>Deliver excellence:</strong> Word of mouth is the most powerful marketing in the African community</li>
+        <li><strong>Scale strategically:</strong> Grow as demand proves itself — do not over-invest too early</li>
       </ol>
 
       <h2>Overcoming Common Challenges</h2>
       
-      <h3>Supply Chain Issues</h3>
-      <p>Importing from Africa can be complex. Build relationships with reliable suppliers, understand customs regulations, and plan for delays.</p>
+      <h3>Supply Chain and Importing from Africa</h3>
+      <p>Importing from Africa can be complex. Build relationships with reliable suppliers, understand UK customs regulations thoroughly, and always plan for delays. Join trade associations that support African importers.</p>
       
-      <h3>Building Trust</h3>
-      <p>Get verified on platforms like Eburutu Mart. Collect reviews. Be transparent about your story and sources.</p>
+      <h3>Building Trust and Credibility</h3>
+      <p>Get verified on platforms like EburutuMart. Collect reviews consistently. Be transparent about your story, your sourcing and your values. Authenticity sells.</p>
       
-      <h3>Balancing Cultures</h3>
-      <p>Adapt your business practices for the UK market while maintaining authenticity. Professional presentation matters.</p>
+      <h3>Balancing Two Business Cultures</h3>
+      <p>Adapt your business practices for the UK market while maintaining cultural authenticity. Professional presentation, clear pricing and reliable delivery are non-negotiable.</p>
 
-      <h2>Funding Your Dream</h2>
-      <p>Options for diaspora entrepreneurs:</p>
+      <h2>Funding Your Business</h2>
+      <p>Funding options specifically available to diaspora entrepreneurs in the UK:</p>
       <ul>
-        <li>Personal savings and family support (the African way!)</li>
-        <li>Government grants for minority-owned businesses</li>
-        <li>Community lending circles (esusu, stokvel)</li>
-        <li>Crowdfunding from your network</li>
-        <li>Business loans and microfinance</li>
-      </ul>
-
-      <h2>Success Stories</h2>
-      <p>Draw inspiration from those who've made it:</p>
-      <ul>
-        <li>Afrocenchix: Hair care products born from personal frustration, now a multi-million pound business</li>
-        <li>Ayo Foods: Bringing West African cuisine to mainstream supermarkets</li>
-        <li>Kente Gentlemen: Traditional fabrics reimagined for modern professionals</li>
+        <li>Personal savings and family support — the traditional African way</li>
+        <li>Government grants for minority-owned and small businesses</li>
+        <li>Community lending circles (esusu, susu, stokvel)</li>
+        <li>Crowdfunding from your social network</li>
+        <li>Start Up Loans from the British Business Bank</li>
+        <li>Prince's Trust Enterprise Programme for those under 30</li>
       </ul>
 
       <h2>Your Turn</h2>
-      <p>The diaspora economy is growing rapidly. There's never been a better time to launch your business. Start with what you know, serve your community, and watch your empire grow.</p>
+      <p>The African diaspora economy in the UK is growing rapidly. There has never been a better moment to launch. Start with what you know deeply, serve your community with excellence, and build your empire from there.</p>
       
-      <p>Ready to start selling? Join Eburutu Mart today and reach thousands of customers who are actively seeking authentic African products and services.</p>
+      <p>Ready to start selling? Join EburutuMart today — the free African marketplace connecting thousands of buyers and sellers across the UK diaspora community.</p>
     `
   },
   'navigating-dual-identity': {
-    title: 'Navigating Dual Identity: Thriving as an African in the UK',
+    title: 'Navigating Dual Identity: How to Thrive as an African in the UK Without Losing Yourself',
     author: 'Fatima Ibrahim',
-    authorRole: 'Psychologist & Identity Coach',
+    authorRole: 'Psychologist and Identity Coach',
     date: '2026-01-28',
     readTime: '10 min read',
     category: 'Lifestyle & Identity',
     image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop',
+    metaDescription: 'Advice for Africans in the UK on navigating dual identity — balancing African and British culture, raising confident diaspora children, and turning your bicultural experience into a strength.',
     content: `
-      <p class="lead">"Where are you really from?" If you've heard this question countless times, you're not alone. Living between two cultures can feel like a constant balancing act—but it can also be your greatest strength.</p>
+      <p class="lead">"Where are you really from?" If you have heard this question countless times, you are not alone. Living between two cultures can feel like a constant balancing act. But with the right mindset, your dual identity becomes your greatest strength — not your greatest burden.</p>
 
       <h2>The Dual Identity Experience</h2>
-      <p>For many Africans in the diaspora, identity isn't simple. You might feel:</p>
+      <p>For many Africans in the UK diaspora, identity is rarely simple. You might recognise some of these feelings:</p>
       <ul>
-        <li>Too African to be British, too British to be African</li>
-        <li>Pressure to choose sides or prove yourself</li>
-        <li>Exhaustion from code-switching</li>
-        <li>Grief for a home you may barely remember</li>
-        <li>Pride in your heritage mixed with frustration at stereotypes</li>
+        <li>Too African to be seen as fully British — too British to feel fully African</li>
+        <li>Pressure to choose a side or prove your belonging</li>
+        <li>Exhaustion from code-switching between environments</li>
+        <li>A quiet grief for a home country you may barely remember</li>
+        <li>Pride in your heritage mixed with frustration at persistent stereotypes</li>
       </ul>
-      <p>These feelings are valid. And they're shared by millions of people navigating similar journeys.</p>
+      <p>These feelings are entirely valid. And they are shared by millions of people navigating exactly the same journey across Britain.</p>
 
-      <h2>From Conflict to Integration</h2>
-      <p>The goal isn't to choose one identity over another—it's integration. Here's how:</p>
+      <h2>From Identity Conflict to Integration</h2>
+      <p>The goal is not to choose one identity over another — it is integration. Here is how to get there:</p>
 
       <h3>1. Embrace the "And"</h3>
-      <p>You're not African OR British. You're African AND British. This isn't contradiction—it's expansion. Your identity is additive, not either/or.</p>
+      <p>You are not African OR British. You are African AND British. This is not contradiction — it is expansion. Your identity is additive, not either/or. The sooner you internalise this, the lighter everything becomes.</p>
       
-      <blockquote>"I stopped trying to fit into boxes others created. I am Nigerian. I am British. I am both, and I am neither. I am me." — Chidi, London</blockquote>
+      <blockquote>"I stopped trying to fit into boxes others created for me. I am Nigerian. I am British. I am both, and I am neither. I am simply me." — Chidi, London</blockquote>
 
       <h3>2. Know Your Story</h3>
-      <p>Understanding your family's migration journey helps ground your identity. Ask your parents and elders:</p>
+      <p>Understanding your family's migration journey grounds your identity in something real and meaningful. Ask your parents and elders the questions that matter:</p>
       <ul>
-        <li>Why did we come here?</li>
-        <li>What did we leave behind?</li>
-        <li>What dreams did you have for us?</li>
-        <li>What traditions matter most to you?</li>
+        <li>Why did we come to the UK?</li>
+        <li>What did we sacrifice to get here?</li>
+        <li>What dreams did you carry for us?</li>
+        <li>Which traditions matter most to preserve?</li>
       </ul>
 
       <h3>3. Build Your Community</h3>
-      <p>Surround yourself with people who understand your experience. This might include:</p>
-      <ul>
-        <li>Other diaspora members from your country or region</li>
-        <li>Second-generation immigrants from other backgrounds</li>
-        <li>Supportive friends who celebrate your full identity</li>
-      </ul>
-
-      <h3>4. Create Your Own Traditions</h3>
-      <p>You don't have to choose between a British Christmas and an African celebration. Create new traditions that honour both parts of your identity.</p>
+      <p>Surround yourself intentionally with people who understand your experience — other diaspora members, second-generation immigrants from different backgrounds, and allies who celebrate your full self.</p>
 
       <h2>For Parents: Raising Confident Diaspora Children</h2>
-      <p>Your children face unique challenges. Help them by:</p>
+      <p>Your children face unique challenges that their British peers will never fully understand. Help them navigate by:</p>
       <ul>
-        <li>Teaching them about their heritage with pride, not obligation</li>
-        <li>Exposing them to diverse African role models</li>
-        <li>Validating their British experiences too</li>
-        <li>Having open conversations about race and identity</li>
-        <li>Celebrating their uniqueness rather than forcing conformity</li>
+        <li>Teaching them about their African heritage with genuine pride, not obligation</li>
+        <li>Exposing them consistently to positive African role models</li>
+        <li>Validating their British experiences and friendships equally</li>
+        <li>Having honest, age-appropriate conversations about race and identity</li>
+        <li>Celebrating their uniqueness rather than pressuring conformity to either culture</li>
       </ul>
 
-      <h2>Dealing with Microaggressions</h2>
-      <p>"Where are you really from?" and other microaggressions are exhausting. Strategies that help:</p>
+      <h2>Turning Dual Identity into Your Superpower</h2>
+      <p>Your bicultural experience offers advantages that most people never develop:</p>
       <ul>
-        <li>Prepare responses that feel authentic to you</li>
-        <li>Choose your battles—you don't owe everyone an education</li>
-        <li>Find humour where possible (but never at your own expense)</li>
-        <li>Connect with others who understand</li>
-        <li>Seek professional support if the stress becomes overwhelming</li>
-      </ul>
-
-      <h2>Turning Dual Identity into Superpower</h2>
-      <p>Your dual identity offers unique advantages:</p>
-      <ul>
-        <li><strong>Cultural intelligence:</strong> You navigate multiple worlds with ease</li>
-        <li><strong>Resilience:</strong> You've overcome challenges many never face</li>
-        <li><strong>Perspective:</strong> You see things from angles others miss</li>
-        <li><strong>Bridge-building:</strong> You connect communities and ideas</li>
-        <li><strong>Creativity:</strong> Innovation often comes from fusion</li>
+        <li><strong>Cultural intelligence:</strong> You navigate multiple social worlds with natural ease</li>
+        <li><strong>Resilience:</strong> You have overcome challenges most people in Britain never encounter</li>
+        <li><strong>Perspective:</strong> You consistently see angles and possibilities that monocultural people miss</li>
+        <li><strong>Bridge-building:</strong> You naturally connect communities, ideas and opportunities</li>
+        <li><strong>Creativity:</strong> The best innovation consistently comes from cultural fusion</li>
       </ul>
 
       <h2>You Belong Here</h2>
-      <p>Whether you were born here or arrived yesterday, you belong. Your presence enriches this country. Your heritage matters. Your future is bright.</p>
-      
-      <p>Embrace your complexity. Celebrate your journey. You are exactly who you're supposed to be.</p>
+      <p>Whether you were born in Britain or arrived last year, you belong. Your presence enriches this country. Your heritage matters deeply. Your future is genuinely bright. Embrace your complexity. Celebrate your journey. You are exactly who you are supposed to be.</p>
     `
   },
   'african-cuisine-diaspora-kitchen': {
-    title: 'The Diaspora Kitchen: Bringing African Flavours to Your Table',
+    title: 'The Diaspora Kitchen: How to Source Authentic African Ingredients and Cook Traditional Recipes in the UK',
     author: 'Chef Amara Diallo',
-    authorRole: 'Professional Chef & Food Writer',
+    authorRole: 'Professional Chef and Food Writer',
     date: '2026-01-20',
     readTime: '7 min read',
     category: 'Food & Recipes',
     image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=1200&auto=format&fit=crop',
+    metaDescription: 'Where to source authentic African ingredients in the UK and how to cook traditional African recipes — jollof rice, egusi soup, suya and more — in a British kitchen.',
     content: `
-      <p class="lead">There's nothing quite like the taste of home. For Africans in the diaspora, food is more than sustenance—it's connection, memory, and love. Here's how to keep those flavours alive in your kitchen.</p>
+      <p class="lead">There is nothing quite like the taste of home. For Africans in the UK diaspora, food is far more than sustenance — it is connection, memory, identity and love. Here is exactly how to keep those flavours alive in your British kitchen.</p>
 
-      <h2>Sourcing Authentic Ingredients</h2>
-      <p>The foundation of great African cooking is authentic ingredients. Here's where to find them:</p>
+      <h2>Where to Source Authentic African Ingredients in the UK</h2>
+      <p>The foundation of great African cooking is authentic ingredients. The good news: they are far more accessible in the UK than many people realise.</p>
       
-      <h3>African Grocery Stores</h3>
-      <p>Most UK cities have African shops. Build relationships with shop owners—they often know when fresh shipments arrive and can source special items.</p>
+      <h3>African and Caribbean Grocery Stores</h3>
+      <p>Most UK cities with sizeable African communities have specialist shops. Build relationships with shop owners — they know when fresh shipments arrive and can source specific items on request. Areas like Peckham, Brixton, Dalston, Handsworth and Toxteth are well-served.</p>
       
-      <h3>Online Marketplaces</h3>
-      <p>Platforms like Eburutu Mart connect you with verified sellers offering authentic products, from palm oil to ogbono seeds.</p>
+      <h3>Online African Marketplaces</h3>
+      <p>Platforms like EburutuMart connect you directly with verified UK-based sellers offering authentic African products — from cold-pressed palm oil to dried crayfish, ogbono seeds and smoked stockfish. Convenient, reliable and community-supporting.</p>
       
-      <h3>Farmers Markets</h3>
-      <p>You'd be surprised what you can find. Caribbean stalls often carry items used in African cooking. Nigerian yams, plantains, and scotch bonnets are increasingly common.</p>
-      
-      <h3>Grow Your Own</h3>
-      <p>Some ingredients can be grown in the UK climate—or indoors:</p>
+      <h3>Farmers Markets and Supermarkets</h3>
+      <p>Caribbean stalls at farmers markets often stock items essential to African cooking. Major supermarkets now carry plantains, scotch bonnet peppers, yams and coconut products in most large branches.</p>
+
+      <h2>Essential African Pantry Staples for UK Kitchens</h2>
+      <p>Stock these and you will always be ready to cook authentically:</p>
       <ul>
-        <li>Scotch bonnet peppers (greenhouse or windowsill)</li>
-        <li>African basil (scent leaf)</li>
-        <li>Bitter leaf</li>
-        <li>Various greens for soups</li>
+        <li><strong>Palm oil:</strong> The heart of West and Central African cooking</li>
+        <li><strong>Groundnut paste:</strong> For soups, stews and sauces</li>
+        <li><strong>Egusi (melon seeds):</strong> Ground for rich, protein-packed soups</li>
+        <li><strong>Locust beans (dawadawa/iru):</strong> A powerful umami flavour bomb</li>
+        <li><strong>Ground crayfish:</strong> Adds distinctive depth to any dish</li>
+        <li><strong>Stockfish:</strong> Essential for authentic Nigerian and Ghanaian soups</li>
+        <li><strong>Smoked fish:</strong> Adds complexity to stews and sauces</li>
+        <li><strong>Suya spice blend:</strong> For grilling meats Nigerian street-food style</li>
       </ul>
 
-      <h2>Essential Pantry Items</h2>
-      <p>Stock these staples and you'll always be ready to cook:</p>
+      <h2>Smart Substitutions When Ingredients Are Unavailable</h2>
       <ul>
-        <li><strong>Palm oil:</strong> The heart of West African cooking</li>
-        <li><strong>Groundnut (peanut) paste:</strong> For soups and sauces</li>
-        <li><strong>Egusi/melon seeds:</strong> Ground for soups</li>
-        <li><strong>Locust beans (dawadawa/iru):</strong> Umami bomb</li>
-        <li><strong>Crayfish:</strong> Dried and ground for flavour</li>
-        <li><strong>Stockfish:</strong> Essential for certain dishes</li>
-        <li><strong>Smoked fish:</strong> Adds depth to any soup</li>
-        <li><strong>Berbere/Suya spice:</strong> Regional spice blends</li>
+        <li>Fresh tomatoes → Good quality tinned plum tomatoes</li>
+        <li>Fresh peppers → Frozen chopped peppers or pepper paste</li>
+        <li>Fresh whole fish → Quality frozen equivalents</li>
+        <li>Fresh cassava → Frozen grated cassava, available in most African stores</li>
       </ul>
 
-      <h2>Adapting Recipes for UK Kitchens</h2>
-      <p>Sometimes exact ingredients aren't available. Smart substitutions:</p>
-      <ul>
-        <li>Fresh tomatoes → Quality tinned tomatoes</li>
-        <li>Fresh peppers → Frozen or paste</li>
-        <li>Fresh fish → Quality frozen options</li>
-        <li>Cassava → Available frozen, grated</li>
-        <li>Palm wine → Ginger beer (for cooking)</li>
-      </ul>
+      <blockquote>"My grandmother would be horrified by some of my shortcuts. But she would be proud that I am still cooking her recipes 4,000 miles from home." — Nkechi, Birmingham</blockquote>
 
-      <blockquote>"My grandmother would be horrified by some of my shortcuts, but she'd be proud that I'm still cooking her recipes 4,000 miles away." — Nkechi, Birmingham</blockquote>
-
-      <h2>Quick Recipes to Start</h2>
+      <h2>Essential Recipes to Master First</h2>
       
-      <h3>Simple Jollof Rice</h3>
-      <p>The eternal favourite. Master this and you'll always have a crowd-pleaser ready.</p>
+      <h3>Classic Jollof Rice</h3>
+      <p>The eternal diaspora favourite. Master a proper tomato base, the right rice-to-liquid ratio and the coveted smoky bottom, and you will always have a crowd-pleaser ready.</p>
       
       <h3>Egusi Soup</h3>
-      <p>Rich, hearty, and nutritious. Perfect with fufu, eba, or rice.</p>
+      <p>Rich, hearty and deeply nutritious. Perfect served with fufu, eba, pounded yam or rice. The key is properly frying the egusi paste before adding stock.</p>
       
       <h3>Suya</h3>
-      <p>Nigerian street food that's surprisingly easy to make at home. The spice mix is the secret.</p>
+      <p>Nigerian street food that is surprisingly straightforward to recreate at home. The groundnut and spice blend is the secret — get that right and everything else follows.</p>
       
       <h3>Kelewele</h3>
-      <p>Spicy fried plantains from Ghana. Addictively good.</p>
+      <p>Spiced fried plantains from Ghana. Quick, addictive and endlessly satisfying as a side dish or snack.</p>
 
       <h2>Cooking as Community</h2>
-      <p>Food brings people together. Consider:</p>
-      <ul>
-        <li>Hosting cooking parties where everyone contributes</li>
-        <li>Teaching children family recipes</li>
-        <li>Sharing food with non-African friends (the best cultural education!)</li>
-        <li>Documenting recipes for future generations</li>
-      </ul>
-
-      <h2>Building a Food Business</h2>
-      <p>Many diaspora food entrepreneurs started in their home kitchens:</p>
-      <ul>
-        <li>Catering for community events</li>
-        <li>Selling at local markets</li>
-        <li>Launching a food delivery service</li>
-        <li>Creating packaged spice blends</li>
-      </ul>
-      <p>The demand for authentic African food is growing. Your kitchen could be the start of something bigger.</p>
+      <p>Food in African culture is never just about eating — it is about gathering. Consider hosting cooking parties where everyone contributes a dish, teaching the next generation family recipes before they are lost, and sharing traditional food with British friends. There is no better cultural education than a shared meal.</p>
 
       <h2>Keep the Flame Burning</h2>
-      <p>Every time you cook a traditional dish, you're keeping culture alive. You're creating memories. You're building bridges between generations and continents.</p>
-      
-      <p>So heat up that palm oil. Pound that fufu. Fill your kitchen with the aromas of home. And know that across the diaspora, millions are doing the same—connected by flavour, by memory, by love.</p>
+      <p>Every time you cook a traditional dish in your UK kitchen, you are keeping culture alive. You are creating memories that will outlast you. Heat up that palm oil. Pound that fufu. Fill your home with the aromas of home. Across the diaspora, millions are doing exactly the same — connected by flavour, memory and love.</p>
+    `
+  },
+  'moving-to-uk-from-africa-guide': {
+    title: 'Moving to the UK from Africa: Everything Nobody Tells You Before You Arrive',
+    author: 'Blessing Eze',
+    authorRole: 'Diaspora Life Adviser',
+    date: '2026-01-15',
+    readTime: '11 min read',
+    category: 'Diaspora Life UK',
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=1200&auto=format&fit=crop',
+    metaDescription: 'The practical guide every African moving to the UK needs — from opening a bank account and registering with the NHS to finding community and navigating British culture.',
+    content: `
+      <p class="lead">Moving to the UK from Africa is one of the most exciting and overwhelming experiences of your life. The official guides cover visas and work permits. Nobody tells you about the cold that never quite leaves your bones in October, how to open a bank account with no credit history, or why British people apologise when you bump into them. This guide covers the real stuff.</p>
+
+      <h2>Before You Arrive: What to Sort First</h2>
+      <ul>
+        <li><strong>National Insurance Number:</strong> Apply online before or immediately after arrival. You need this to work and pay tax legally.</li>
+        <li><strong>Biometric Residence Permit (BRP):</strong> Collect yours from the designated Post Office branch within 10 days of arriving.</li>
+        <li><strong>Bank account:</strong> Most major banks require proof of address and identity. Consider Monzo, Starling or Revolut to start — they open accounts with your passport and visa only.</li>
+        <li><strong>SIM card:</strong> Get a pay-as-you-go SIM immediately at any supermarket or phone shop. You will need a UK number for almost everything.</li>
+      </ul>
+
+      <h2>The NHS: Your Most Valuable Resource</h2>
+      <p>Register with a GP (doctor) in your area within your first week. You are entitled to use the NHS if you paid the Immigration Health Surcharge with your visa. Find your nearest GP surgery at nhs.uk and register in person or online.</p>
+
+      <h2>Finding Accommodation</h2>
+      <p>The UK rental market is competitive. Landlords typically require:</p>
+      <ul>
+        <li>One to two months deposit plus first month rent in advance</li>
+        <li>References from previous landlords or employers</li>
+        <li>Proof of income (usually 2.5 to 3 times the monthly rent)</li>
+      </ul>
+      <p>If you are new with no UK rental history, some landlords will accept a larger deposit or a UK-based guarantor. African community groups on Facebook are often the best source of trusted accommodation leads.</p>
+
+      <h2>Understanding British Culture</h2>
+      <p>Things that confuse almost every African new arrival:</p>
+      <ul>
+        <li><strong>Queueing is sacred:</strong> Never, ever jump a queue. This is not a suggestion.</li>
+        <li><strong>Indirect communication:</strong> "That is quite interesting" often means "I disagree." "Not bad" can mean excellent.</li>
+        <li><strong>Personal space:</strong> British people value physical distance. Do not stand too close in conversation.</li>
+        <li><strong>The weather conversation:</strong> Yes, people genuinely discuss weather constantly. It is the universal ice-breaker.</li>
+        <li><strong>Punctuality:</strong> Arrive on time for work and appointments. "African time" will cost you opportunities here.</li>
+      </ul>
+
+      <h2>Finding Your Community</h2>
+      <p>This is the most important thing you will do in your first months. Isolation is the silent enemy of diaspora mental health. Find your people through:</p>
+      <ul>
+        <li>African and Caribbean churches and mosques</li>
+        <li>Country-specific community associations (Nigerian, Ghanaian, Kenyan, Zimbabwean etc.)</li>
+        <li>Facebook groups for Africans in your city</li>
+        <li>EburutuMart's community platform — connect with sellers and buyers who share your background</li>
+        <li>University African Caribbean Societies if you are a student</li>
+      </ul>
+
+      <h2>Your First Year Will Be Hard</h2>
+      <p>Loneliness, culture shock, financial pressure and the relentless grey skies will test you. This is normal. Every African who built a life here went through exactly the same. Give yourself time. Seek community. Call home. And know that what you are doing takes extraordinary courage.</p>
+    `
+  },
+  'sell-african-products-uk': {
+    title: 'How to Legally Sell African Food and Products in the UK: Licences, Labelling and Where to Start',
+    author: 'Kofi Asante',
+    authorRole: 'Small Business Adviser',
+    date: '2026-01-10',
+    readTime: '9 min read',
+    category: 'Business & Entrepreneurship',
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&auto=format&fit=crop',
+    metaDescription: 'Complete guide to legally selling African food, groceries and cultural products in the UK — covering food safety registration, product labelling, HMRC, import rules and how to list on EburutuMart.',
+    content: `
+      <p class="lead">Thousands of African diaspora entrepreneurs in the UK want to sell authentic food, groceries, skincare and cultural products — but are held back by uncertainty about rules, regulations and where to start. This guide covers everything you need to know to begin selling legally and confidently.</p>
+
+      <h2>Step 1: Register Your Business with HMRC</h2>
+      <p>Before you sell a single item, register with HMRC. Most food and product sellers start as sole traders — it is free, straightforward and takes about 10 minutes online at gov.uk. You will need to submit a Self Assessment tax return each year and pay tax on any profit above £12,570.</p>
+      <p>If you expect to turn over more than £85,000 per year, you must register for VAT. Most small diaspora businesses do not need to worry about this initially.</p>
+
+      <h2>Step 2: Food Business Registration</h2>
+      <p>If you are selling any food product — including packaged African groceries, homemade sauces, spice blends or snacks — you must register as a food business with your local council at least 28 days before you start trading. This is free and mandatory.</p>
+      <p>You will also need to complete a Food Hygiene course (available online for £20-£40) and ensure your preparation environment meets basic hygiene standards.</p>
+
+      <h2>Step 3: Product Labelling Requirements</h2>
+      <p>UK food labelling law requires your product labels to include:</p>
+      <ul>
+        <li>Product name and description</li>
+        <li>Full list of ingredients in descending order by weight</li>
+        <li>All 14 major allergens clearly highlighted</li>
+        <li>Net weight or volume</li>
+        <li>Best before or use by date</li>
+        <li>Storage instructions</li>
+        <li>Your business name and address</li>
+        <li>Country of origin (for meat and certain other products)</li>
+      </ul>
+      <p>Labels must be in English. This applies even to products imported from Africa that you are reselling — if the original label is not in English and does not meet UK standards, you must relabel before selling.</p>
+
+      <h2>Step 4: Importing African Products into the UK</h2>
+      <p>Importing food from Africa involves customs declarations, potential import duties and food safety checks at the border. Key points:</p>
+      <ul>
+        <li>Get an EORI number (Economic Operator Registration and Identification) — free from HMRC</li>
+        <li>Check UK import tariffs for your specific products at trade-tariff.service.gov.uk</li>
+        <li>Certain food products require health certificates from the country of origin</li>
+        <li>Some plant-based products need phytosanitary certificates</li>
+        <li>Work with a licensed customs broker for your first few shipments</li>
+      </ul>
+
+      <h2>Step 5: Where to Sell</h2>
+      <p>Once you are legally set up, the easiest place to start reaching diaspora buyers is EburutuMart — the free African marketplace connecting verified UK sellers with buyers across the community. No transaction fees, no verification gates, just list your products and start selling.</p>
+      <p>Other options include local African grocery stores (approach owners directly), market stalls, and community events. Build your reputation locally before scaling online.</p>
+
+      <h2>Common Mistakes to Avoid</h2>
+      <ul>
+        <li>Selling food without local council registration — this can result in fines and forced closure</li>
+        <li>Using original African packaging without English labelling</li>
+        <li>Not declaring allergens — this is a legal requirement and a safety issue</li>
+        <li>Underpricing to compete — price to reflect quality and your real costs</li>
+        <li>Skipping insurance — public liability insurance is essential if you sell at markets or events</li>
+      </ul>
+
+      <h2>You Are Ready</h2>
+      <p>The African food and products market in the UK is growing every year. There is real demand, real community, and real opportunity. Get registered, get labelled, and get selling. Your community is waiting.</p>
     `
   }
 }
@@ -338,6 +405,41 @@ export default function BlogPostPage() {
   const router = useRouter()
   const slug = params?.slug as string
   const post = blogContent[slug]
+  const [shared, setShared] = useState(false)
+
+  const handleShare = async () => {
+    const url = typeof window !== 'undefined' ? window.location.href : ''
+    const shareData = {
+      title: post?.title || 'EburutuMart Blog',
+      text: post?.metaDescription || 'Read this article on EburutuMart',
+      url,
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData)
+      } catch (err) {
+        // User cancelled — do nothing
+      }
+    } else {
+      // Fallback: copy URL to clipboard
+      try {
+        await navigator.clipboard.writeText(url)
+        setShared(true)
+        setTimeout(() => setShared(false), 3000)
+      } catch {
+        // Final fallback: select and copy
+        const el = document.createElement('textarea')
+        el.value = url
+        document.body.appendChild(el)
+        el.select()
+        document.execCommand('copy')
+        document.body.removeChild(el)
+        setShared(true)
+        setTimeout(() => setShared(false), 3000)
+      }
+    }
+  }
 
   if (!post) {
     return (
@@ -345,7 +447,7 @@ export default function BlogPostPage() {
         <Header />
         <main className="container mx-auto px-4 py-20 text-center">
           <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
-          <p className="text-muted-foreground mb-8">The article you're looking for doesn't exist.</p>
+          <p className="text-muted-foreground mb-8">The article you are looking for does not exist.</p>
           <Link href="/blog">
             <Button>Back to Blog</Button>
           </Link>
@@ -444,9 +546,23 @@ export default function BlogPostPage() {
                 <Bookmark className="w-4 h-4 mr-2" />
                 Save
               </Button>
-              <Button variant="outline" size="sm">
-                <Share2 className="w-4 h-4 mr-2" />
-                Share
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleShare}
+                className={shared ? 'border-green-500 text-green-600' : ''}
+              >
+                {shared ? (
+                  <>
+                    <Check className="w-4 h-4 mr-2" />
+                    Link Copied!
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -458,7 +574,7 @@ export default function BlogPostPage() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Discover more articles about life, culture, and success in the African diaspora.
+                Discover more articles about life, culture, business and food in the African diaspora.
               </p>
               <Link href="/blog">
                 <Button>
