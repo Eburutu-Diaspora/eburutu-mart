@@ -195,7 +195,7 @@ export function SellerDashboard() {
                   </div>
                   <h3 className="font-semibold mb-2 line-clamp-1">{product.title}</h3>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-lg font-bold text-primary">£{product.price.toFixed(2)}</span>
+                   <span className="text-lg font-bold text-primary">£{parseFloat(String(product.price)).toFixed(2)}</span>
                     <Badge variant={product.status === 'ACTIVE' ? 'default' : 'outline'}>
                       {product.status === 'ACTIVE' ? 'Active' : 'Draft'}
                     </Badge>
