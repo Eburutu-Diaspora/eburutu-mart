@@ -24,7 +24,7 @@ const ads = {
     type:        'image' as const,
     href:        'https://obong.co.uk',
     label:       'Sponsored',
-    image:       '/ads/obong-ad.png',   // Image path in your /public/ads/ folder
+    image:       '/obong-ad.png',   // Image path in your /public/ads/ folder
     alt:         'Obong — Royalty & Style',
     bgColor:     'bg-white',
     // Fallback text shown beside the image
