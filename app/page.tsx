@@ -7,6 +7,7 @@ import { FeaturedProducts } from '@/components/home/featured-products'
 import { NewArrivals } from '@/components/home/new-arrivals'
 import { RecommendedProducts } from '@/components/home/recommended-products'
 import { CommunitySection } from '@/components/home/community-section'
+import { AdBanner } from '@/components/home/ad-banner'
 import dynamic from 'next/dynamic'
 
 const CommoditiesTicker = dynamic(
@@ -23,7 +24,15 @@ export default function HomePage() {
         <HeroSection />
         <CategorySection />
         <FeaturedProducts />
+
+        {/* ── AD PLACEMENT A ── between Featured Listings and New Arrivals */}
+        <AdBanner placement="A" />
+
         <NewArrivals />
+
+        {/* ── AD PLACEMENT B ── between New Arrivals and Recommended Products */}
+        <AdBanner placement="B" />
+
         <RecommendedProducts />
         <CommunitySection />
       </main>
