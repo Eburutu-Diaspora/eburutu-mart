@@ -46,7 +46,7 @@ export default function TrustSafetyPage() {
       icon: Users,
       title: 'Community Accountability',
       description:
-        'Like Facebook Marketplace and Gumtree, trust is built through community transparency — visible profiles, photos, and review histories.',
+        'trust is built through community transparency — visible profiles, photos, and review histories.',
     },
     {
       icon: Shield,
@@ -88,8 +88,8 @@ export default function TrustSafetyPage() {
             <div>
               <h2 className="font-semibold text-lg mb-1">Open to Everyone</h2>
               <p className="text-muted-foreground">
-                Like Facebook Marketplace and Gumtree, EburutuMart is free and open. No ID
-                required, no documents, no approval process. Just verify your email and start
+                EburutuMart is free and open.
+                Just verify your email and start
                 buying or selling immediately. We believe in low friction and high community trust.
               </p>
             </div>
@@ -151,7 +151,7 @@ export default function TrustSafetyPage() {
           <ShoppingBag className="h-10 w-10 text-primary mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-3">Ready to Join?</h2>
           <p className="text-muted-foreground mb-6 max-w-xl mx-auto">
-            Register in minutes — no documents, no waiting, no fees. Just verify your email and
+            Register in minutes — Just verify your email and
             start connecting with the African diaspora community.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
