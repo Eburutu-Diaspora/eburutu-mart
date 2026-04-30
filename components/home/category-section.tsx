@@ -9,42 +9,42 @@ import {
   Palette, UtensilsCrossed, Hammer, BookOpen, Briefcase,
   Heart, ArrowRight, Smartphone, Home, Leaf,
 } from 'lucide-react'
-import  PromoSlotCircle  from './promo-slot-circle'
+import PromoSlotCircle from './promo-slot-circle'
 
 const iconMap: Record<string, React.ElementType> = {
-  'fashion-clothing':  Palette,
-  'food-groceries':    UtensilsCrossed,
-  'beauty-haircare':   Heart,
-  'art-crafts':        Hammer,
-  'electronics':       Smartphone,
-  'home-living':       Home,
-  'health-wellness':   Leaf,
-  'books-media':       BookOpen,
-  'services':          Briefcase,
+  'fashion-clothing': Palette,
+  'food-groceries':   UtensilsCrossed,
+  'beauty-haircare':  Heart,
+  'art-crafts':       Hammer,
+  'electronics':      Smartphone,
+  'home-living':      Home,
+  'health-wellness':  Leaf,
+  'books-media':      BookOpen,
+  'services':         Briefcase,
 }
 
 const colorMap: Record<string, string> = {
-  'fashion-clothing':  'from-pink-500 to-rose-500',
-  'food-groceries':    'from-orange-500 to-amber-500',
-  'beauty-haircare':   'from-red-500 to-pink-500',
-  'art-crafts':        'from-purple-500 to-indigo-500',
-  'electronics':       'from-blue-500 to-cyan-500',
-  'home-living':       'from-green-500 to-teal-500',
-  'health-wellness':   'from-emerald-500 to-green-500',
-  'books-media':       'from-blue-500 to-cyan-500',
-  'services':          'from-green-500 to-emerald-500',
+  'fashion-clothing': 'from-pink-500 to-rose-500',
+  'food-groceries':   'from-orange-500 to-amber-500',
+  'beauty-haircare':  'from-red-500 to-pink-500',
+  'art-crafts':       'from-purple-500 to-indigo-500',
+  'electronics':      'from-blue-500 to-cyan-500',
+  'home-living':      'from-green-500 to-teal-500',
+  'health-wellness':  'from-emerald-500 to-green-500',
+  'books-media':      'from-blue-500 to-cyan-500',
+  'services':         'from-green-500 to-emerald-500',
 }
 
 const imageMap: Record<string, string> = {
-  'fashion-clothing':  'https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=800',
-  'food-groceries':    'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800',
-  'beauty-haircare':   'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800',
-  'art-crafts':        'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=800',
-  'electronics':       'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800',
-  'home-living':       'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
-  'health-wellness':   'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800',
-  'books-media':       'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800',
-  'services':          'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800',
+  'fashion-clothing': 'https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=800',
+  'food-groceries':   'https://images.unsplash.com/photo-1596797038530-2c107229654b?w=800',
+  'beauty-haircare':  'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800',
+  'art-crafts':       'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?w=800',
+  'electronics':      'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800',
+  'home-living':      'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800',
+  'health-wellness':  'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800',
+  'books-media':      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=800',
+  'services':         'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=800',
 }
 
 interface Category {
@@ -58,7 +58,6 @@ interface Category {
 export function CategorySection() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
   const [categories, setCategories]           = useState<Category[]>([])
-  const [promoSlots, setPromoSlots]           = useState<PromoSlot[]>([])
 
   useEffect(() => {
     fetch('/api/categories')
@@ -66,16 +65,6 @@ export function CategorySection() {
       .then(data => setCategories(Array.isArray(data) ? data : []))
       .catch(() => setCategories([]))
   }, [])
-
-  useEffect(() => {
-    fetch('/api/promo-slots')
-      .then(res => res.json())
-      .then(data => setPromoSlots(Array.isArray(data) ? data : []))
-      .catch(() => setPromoSlots([]))
-  }, [])
-
-  const circleLeft  = promoSlots.find(s => s.slotKey === 'circle_left')
-  const circleRight = promoSlots.find(s => s.slotKey === 'circle_right')
 
   return (
     <section
@@ -158,14 +147,14 @@ export function CategorySection() {
           })}
         </div>
 
-        {/* ── View All Categories flanked by promo circles ── */}
+        {/* View All Categories flanked by promo circles */}
         <motion.div
           className="mt-12 flex items-center justify-center gap-8 flex-wrap"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <PromoSlotCircle slot={circleLeft} />
+          <PromoSlotCircle slotKey="circle-left" />
 
           <Link href="/categories">
             <Card className="inline-block p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group">
@@ -178,7 +167,7 @@ export function CategorySection() {
             </Card>
           </Link>
 
-          <PromoSlotCircle slot={circleRight} />
+          <PromoSlotCircle slotKey="circle-right" />
         </motion.div>
       </div>
     </section>
