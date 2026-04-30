@@ -10,7 +10,6 @@ import {
   Heart, ArrowRight, Smartphone, Home, Leaf,
 } from 'lucide-react'
 import  PromoSlotCircle  from './promo-slot-circle'
-import type { PromoSlot } from './promo-slot-circle'
 
 const iconMap: Record<string, React.ElementType> = {
   'fashion-clothing':  Palette,
