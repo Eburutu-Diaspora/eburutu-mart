@@ -8,7 +8,9 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Star, MapPin, Eye, MessageCircle, Heart, ShoppingCart } from 'lucide-react'
+import { MapPin, Eye, MessageCircle, Heart, ShoppingCart } from 'lucide-react'
+import { PromoSlotBanners } from './promo-slot-banners'
+import type { PromoSlot } from './promo-slot-circle'
 
 interface Product {
   id: string
@@ -31,22 +33,23 @@ interface Product {
 
 export function FeaturedProducts() {
   const [favorites, setFavorites] = useState<string[]>([])
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
+  const [products, setProducts]   = useState<Product[]>([])
+  const [loading, setLoading]     = useState(true)
+  const [promoSlots, setPromoSlots] = useState<PromoSlot[]>([])
 
   useEffect(() => {
-  fetch('/api/products?featured=true')
+    fetch('/api/products?featured=true')
       .then(res => res.json())
       .then(async data => {
         const featured = Array.isArray(data?.products) ? data.products : []
         if (featured.length >= 6) {
           setProducts(featured.slice(0, 6))
         } else {
-          const fallbackRes = await fetch('/api/products?limit=12')
+          const fallbackRes  = await fetch('/api/products?limit=12')
           const fallbackData = await fallbackRes.json()
-          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
-          const featuredIds = new Set(featured.map((p: any) => p.id))
-          const extras = all.filter((p: any) => !featuredIds.has(p.id))
+          const all          = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const featuredIds  = new Set(featured.map((p: any) => p.id))
+          const extras       = all.filter((p: any) => !featuredIds.has(p.id))
           setProducts([...featured, ...extras].slice(0, 6))
         }
         setLoading(false)
@@ -54,9 +57,18 @@ export function FeaturedProducts() {
       .catch(() => { setProducts([]); setLoading(false) })
   }, [])
 
+  useEffect(() => {
+    fetch('/api/promo-slots')
+      .then(res => res.json())
+      .then(data => setPromoSlots(Array.isArray(data) ? data : []))
+      .catch(() => setPromoSlots([]))
+  }, [])
+
   const toggleFavorite = (productId: string) => {
     setFavorites(prev =>
-      prev.includes(productId) ? prev.filter(id => id !== productId) : [...prev, productId]
+      prev.includes(productId)
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
     )
   }
 
@@ -184,9 +196,14 @@ export function FeaturedProducts() {
             ))}
           </div>
         )}
+      </div>
 
+      {/* ── Promo banner slots — replaces old ad banner ── */}
+      <PromoSlotBanners slots={promoSlots} />
+
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          className="text-center mt-12"
+          className="text-center mt-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
