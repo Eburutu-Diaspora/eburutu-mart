@@ -8,7 +8,7 @@ export async function GET() {
   try {
     const slots = await prisma.promoSlot.findMany({
       where: { isActive: true },
-      orderBy: { position: 'asc' },
+      orderBy: { createdAt: 'asc' },
     })
     return NextResponse.json(slots)
   } catch (error) {
@@ -22,14 +22,11 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const slot = await prisma.promoSlot.create({
       data: {
-        title: body.title,
-        description: body.description,
+        slotKey: body.slotKey,
         imageUrl: body.imageUrl,
-        linkUrl: body.linkUrl,
-        position: body.position,
-        isActive: body.isActive ?? true,
-        advertiserName: body.advertiserName,
-        advertiserEmail: body.advertiserEmail,
+        redirectUrl: body.redirectUrl,
+        altText: body.altText ?? 'Promotional content',
+        isActive: body.isActive ?? false,
       },
     })
     return NextResponse.json(slot, { status: 201 })
