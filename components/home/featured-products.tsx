@@ -9,8 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MapPin, Eye, MessageCircle, Heart, ShoppingCart } from 'lucide-react'
-import { PromoSlotBanners } from './promo-slot-banners'
-import type { PromoSlot } from './promo-slot-circle'
+import PromoSlotBanners from './promo-slot-banners'
 
 interface Product {
   id: string
@@ -35,7 +34,6 @@ export function FeaturedProducts() {
   const [favorites, setFavorites] = useState<string[]>([])
   const [products, setProducts]   = useState<Product[]>([])
   const [loading, setLoading]     = useState(true)
-  const [promoSlots, setPromoSlots] = useState<PromoSlot[]>([])
 
   useEffect(() => {
     fetch('/api/products?featured=true')
@@ -55,13 +53,6 @@ export function FeaturedProducts() {
         setLoading(false)
       })
       .catch(() => { setProducts([]); setLoading(false) })
-  }, [])
-
-  useEffect(() => {
-    fetch('/api/promo-slots')
-      .then(res => res.json())
-      .then(data => setPromoSlots(Array.isArray(data) ? data : []))
-      .catch(() => setPromoSlots([]))
   }, [])
 
   const toggleFavorite = (productId: string) => {
@@ -198,8 +189,10 @@ export function FeaturedProducts() {
         )}
       </div>
 
-      {/* ── Promo banner slots — replaces old ad banner ── */}
-      <PromoSlotBanners slots={promoSlots} />
+      {/* Promo banner slots */}
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <PromoSlotBanners />
+      </div>
 
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
