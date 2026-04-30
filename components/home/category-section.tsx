@@ -9,7 +9,7 @@ import {
   Palette, UtensilsCrossed, Hammer, BookOpen, Briefcase,
   Heart, ArrowRight, Smartphone, Home, Leaf,
 } from 'lucide-react'
-import { PromoSlotCircle } from './promo-slot-circle'
+import  PromoSlotCircle  from './promo-slot-circle'
 import type { PromoSlot } from './promo-slot-circle'
 
 const iconMap: Record<string, React.ElementType> = {
