@@ -22,11 +22,7 @@ export default function PromoSlotCircle({ slotKey }: { slotKey: string }) {
       .catch(() => setSlot(null))
   }, [slotKey])
 
-  // Still loading — render nothing to avoid layout flash
-  if (slot === undefined) return <div style={{ width: 120, height: 120 }} />
-
-  // No slot or inactive — render nothing
-  if (!slot || !slot.isActive || !slot.imageUrl) return <div style={{ width: 120, height: 120 }} />
+  if (!slot || !slot.isActive || !slot.imageUrl) return null
 
   const circle = (
     <div style={{
@@ -35,13 +31,18 @@ export default function PromoSlotCircle({ slotKey }: { slotKey: string }) {
       borderRadius: '50%',
       overflow: 'hidden',
       border: '3px solid #e5e7eb',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-      cursor: slot.redirectUrl ? 'pointer' : 'default',
+      flexShrink: 0,
     }}>
       <img
         src={slot.imageUrl}
         alt={slot.altText || 'Promotional content'}
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          objectPosition: 'center',
+          display: 'block',
+        }}
       />
     </div>
   )
