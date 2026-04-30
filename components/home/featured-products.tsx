@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Eye, MessageCircle, Heart, ShoppingCart } from 'lucide-react'
+import { MapPin, Eye, MessageCircle, Heart } from 'lucide-react'
 import PromoSlotBanners from './promo-slot-banners'
 
 interface Product {
@@ -16,7 +16,6 @@ interface Product {
   title: string
   description: string
   price: number
-  originalPrice?: number
   images: { imageUrl: string }[]
   seller: {
     id: string
@@ -26,7 +25,6 @@ interface Product {
   }
   category: { id: string; name: string }
   viewCount?: number
-  isPromoted?: boolean
   isFeatured?: boolean
 }
 
@@ -189,25 +187,9 @@ export function FeaturedProducts() {
         )}
       </div>
 
-      {/* Promo banner slots */}
+      {/* Promo banner slots — sits directly above New Arrivals */}
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <PromoSlotBanners />
-      </div>
-
-      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          className="text-center mt-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <Link href="/products">
-            <Button variant="african" size="lg" className="group">
-              Browse the Shop
-              <ShoppingCart className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
-        </motion.div>
       </div>
     </section>
   )
