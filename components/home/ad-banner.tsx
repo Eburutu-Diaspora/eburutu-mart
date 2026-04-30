@@ -1,7 +1,6 @@
-// This file has been replaced by the dynamic promo slot system.
-// Promo content is now managed via the admin dashboard at /admin/promo-slots
-// Components: promo-slot-circle.tsx and promo-slot-banners.tsx
+// Old ad system removed — replaced by dynamic promo slot system
+// See /admin/promo-slots to manage homepage promotions
 
-export function AdBanner() {
+export function AdBanner(_props?: { placement?: string }) {
   return null
 }
