@@ -1,3 +1,4 @@
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -15,28 +16,38 @@ interface PromoSlot {
 const BANNER_SLOTS = ['banner-1', 'banner-2', 'banner-3', 'banner-4']
 
 function BannerBox({ slot }: { slot: PromoSlot | null }) {
-  const placeholder = (
-    <div style={{
-      width: '100%',
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      border: '2px dashed #d1d5db',
-      borderRadius: 8,
-      color: '#9ca3af',
-      fontSize: 12,
-      gap: 4,
-      textAlign: 'center',
-    }}>
-      <span style={{ fontSize: 20 }}>📢</span>
-      <span>Ad Space</span>
-      <span style={{ fontSize: 10 }}>Available</span>
-    </div>
-  )
+  const cardStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    borderRadius: 12,
+    background: '#ffffff',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+    border: '1px solid #f0f0f0',
+    overflow: 'hidden',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 
-  if (!slot || !slot.isActive || !slot.imageUrl) return placeholder
+  if (!slot || !slot.isActive || !slot.imageUrl) {
+    return (
+      <div style={cardStyle}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#9ca3af',
+          gap: 4,
+          textAlign: 'center',
+        }}>
+          <span style={{ fontSize: 24 }}>📢</span>
+          <span style={{ fontSize: 12, fontWeight: 500 }}>Ad Space</span>
+          <span style={{ fontSize: 10 }}>Available</span>
+        </div>
+      </div>
+    )
+  }
 
   const img = (
     <img
@@ -45,24 +56,28 @@ function BannerBox({ slot }: { slot: PromoSlot | null }) {
       style={{
         width: '100%',
         height: '100%',
-        objectFit: 'cover',
+        objectFit: 'contain',
         objectPosition: 'center',
-        borderRadius: 8,
+        padding: 8,
         display: 'block',
       }}
     />
   )
 
-  return slot.redirectUrl ? (
-    <Link
-      href={slot.redirectUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{ display: 'block', width: '100%', height: '100%' }}
-    >
-      {img}
-    </Link>
-  ) : img
+  return (
+    <div style={cardStyle}>
+      {slot.redirectUrl ? (
+        <Link
+          href={slot.redirectUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: 'block', width: '100%', height: '100%' }}
+        >
+          {img}
+        </Link>
+      ) : img}
+    </div>
+  )
 }
 
 export default function PromoSlotBanners() {
@@ -86,12 +101,11 @@ export default function PromoSlotBanners() {
     <div style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: 12,
-      height: 120,
+      gap: 16,
       margin: '24px 0 0 0',
     }}>
       {BANNER_SLOTS.map(key => (
-        <div key={key} style={{ height: 120, overflow: 'hidden' }}>
+        <div key={key} style={{ height: 130 }}>
           <BannerBox slot={slots[key] ?? null} />
         </div>
       ))}
