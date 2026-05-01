@@ -15,20 +15,20 @@ interface PromoSlot {
 
 const BANNER_SLOTS = ['banner-1', 'banner-2', 'banner-3', 'banner-4']
 
-function BannerBox({ slot }: { slot: PromoSlot | null }) {
-  const cardStyle: React.CSSProperties = {
-    width: '100%',
-    height: '100%',
-    borderRadius: 12,
-    background: '#ffffff',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    border: '1px solid #f0f0f0',
-    overflow: 'hidden',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
+const cardStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+  borderRadius: 16,
+  background: '#ffffff',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06)',
+  border: '1px solid #f3f4f6',
+  overflow: 'hidden',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
 
+function BannerBox({ slot }: { slot: PromoSlot | null }) {
   if (!slot || !slot.isActive || !slot.imageUrl) {
     return (
       <div style={cardStyle}>
@@ -38,12 +38,13 @@ function BannerBox({ slot }: { slot: PromoSlot | null }) {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#9ca3af',
-          gap: 4,
+          gap: 6,
           textAlign: 'center',
+          padding: 16,
         }}>
-          <span style={{ fontSize: 24 }}>📢</span>
-          <span style={{ fontSize: 12, fontWeight: 500 }}>Ad Space</span>
-          <span style={{ fontSize: 10 }}>Available</span>
+          <span style={{ fontSize: 28 }}>📢</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#6b7280' }}>Ad Space</span>
+          <span style={{ fontSize: 11, color: '#9ca3af' }}>Available</span>
         </div>
       </div>
     )
@@ -58,8 +59,9 @@ function BannerBox({ slot }: { slot: PromoSlot | null }) {
         height: '100%',
         objectFit: 'contain',
         objectPosition: 'center',
-        padding: 8,
+        padding: 12,
         display: 'block',
+        boxSizing: 'border-box',
       }}
     />
   )
@@ -105,7 +107,7 @@ export default function PromoSlotBanners() {
       margin: '24px 0 0 0',
     }}>
       {BANNER_SLOTS.map(key => (
-        <div key={key} style={{ height: 130 }}>
+        <div key={key} style={{ height: 180 }}>
           <BannerBox slot={slots[key] ?? null} />
         </div>
       ))}
