@@ -26,8 +26,8 @@ export default function PromoSlotCircle({ slotKey }: { slotKey: string }) {
 
   const circle = (
     <div style={{
-      width: 120,
-      height: 120,
+      width: 180,
+      height: 180,
       borderRadius: '50%',
       overflow: 'hidden',
       border: '3px solid #e5e7eb',
