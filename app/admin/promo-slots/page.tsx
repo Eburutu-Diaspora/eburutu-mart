@@ -101,7 +101,10 @@ export default function PromoSlotsAdmin() {
 
   return (
     <div style={{ maxWidth: 860, margin: '0 auto', padding: '2rem' }}>
-      <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 6 }}>Promo Slots</h1>
+      <a href="/admin" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: '#6b7280', marginBottom: 20, textDecoration: 'none' }}>
+  ← Back to Dashboard
+</a>
+<h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 6 }}>Promo Slots</h1>
       <p style={{ color: '#6b7280', marginBottom: 24, fontSize: 14 }}>
         Click any slot image to upload. Add a redirect link then activate.
       </p>
