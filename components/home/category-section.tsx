@@ -149,7 +149,7 @@ export function CategorySection() {
 
         {/* View All Categories flanked by promo circles */}
         <motion.div
-          className="mt-12 flex items-center justify-center gap-8 flex-wrap"
+         className="mt-4 flex items-center justify-center gap-8 flex-wrap"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
