@@ -28,7 +28,6 @@ function BannerBox({ slot }: { slot: PromoSlot | null }) {
       color: '#9ca3af',
       fontSize: 12,
       gap: 4,
-      padding: 8,
       textAlign: 'center',
     }}>
       <span style={{ fontSize: 20 }}>📢</span>
@@ -43,12 +42,24 @@ function BannerBox({ slot }: { slot: PromoSlot | null }) {
     <img
       src={slot.imageUrl}
       alt={slot.altText || 'Advertisement'}
-      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
+      style={{
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        objectPosition: 'center',
+        borderRadius: 8,
+        display: 'block',
+      }}
     />
   )
 
   return slot.redirectUrl ? (
-    <Link href={slot.redirectUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', width: '100%', height: '100%' }}>
+    <Link
+      href={slot.redirectUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ display: 'block', width: '100%', height: '100%' }}
+    >
       {img}
     </Link>
   ) : img
@@ -76,11 +87,11 @@ export default function PromoSlotBanners() {
       display: 'grid',
       gridTemplateColumns: 'repeat(4, 1fr)',
       gap: 12,
-      height: 100,
-      margin: '16px 0',
+      height: 120,
+      margin: '24px 0 0 0',
     }}>
       {BANNER_SLOTS.map(key => (
-        <div key={key} style={{ height: '100%' }}>
+        <div key={key} style={{ height: 120, overflow: 'hidden' }}>
           <BannerBox slot={slots[key] ?? null} />
         </div>
       ))}
