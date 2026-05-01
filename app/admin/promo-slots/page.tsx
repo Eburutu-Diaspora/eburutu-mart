@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 interface PromoSlot {
   id: string
@@ -22,12 +21,11 @@ const ALL_SLOTS = [
 ]
 
 export default function PromoSlotsAdmin() {
-  const supabase = createClientComponentClient()
-  const [slots, setSlots]     = useState<Record<string, PromoSlot | null>>({})
+  const [slots, setSlots]           = useState<Record<string, PromoSlot | null>>({})
   const [redirectUrls, setRedirectUrls] = useState<Record<string, string>>({})
-  const [uploading, setUploading] = useState<string | null>(null)
-  const [saving, setSaving]   = useState<string | null>(null)
-  const [message, setMessage] = useState('')
+  const [uploading, setUploading]   = useState<string | null>(null)
+  const [saving, setSaving]         = useState<string | null>(null)
+  const [message, setMessage]       = useState('')
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({})
 
   useEffect(() => {
@@ -54,18 +52,17 @@ export default function PromoSlotsAdmin() {
   const handleFileChange = async (slotKey: string, file: File) => {
     setUploading(slotKey)
     try {
-      const ext  = file.name.split('.').pop()
-      const path = `slots/${slotKey}-${Date.now()}.${ext}`
-      const { data, error } = await supabase.storage
-        .from('promo-slots')
-        .upload(path, file, { upsert: true })
-      if (error) throw error
-      const { data: { publicUrl } } = supabase.storage
-        .from('promo-slots')
-        .getPublicUrl(data.path)
-      // Auto-save with the new image URL, keeping existing redirect
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('slotKey', slotKey)
+      const res = await fetch('/api/promo-slots/upload', {
+        method: 'POST',
+        body: formData,
+      })
+      const { publicUrl, error } = await res.json()
+      if (error) throw new Error(error)
       await saveSlot(slotKey, publicUrl, redirectUrls[slotKey] || '', true)
-    } catch (err) {
+    } catch {
       setMessage('Upload failed. Please try again.')
       setTimeout(() => setMessage(''), 3000)
     } finally {
@@ -89,7 +86,7 @@ export default function PromoSlotsAdmin() {
       const updated = await res.json()
       setSlots(prev => ({ ...prev, [slotKey]: updated }))
       setRedirectUrls(prev => ({ ...prev, [slotKey]: redirectUrl }))
-      setMessage(`"${slotKey}" saved.`)
+      setMessage(`"${slotKey}" saved successfully.`)
       setTimeout(() => setMessage(''), 3000)
     } finally {
       setSaving(null)
@@ -106,7 +103,7 @@ export default function PromoSlotsAdmin() {
     <div style={{ maxWidth: 860, margin: '0 auto', padding: '2rem' }}>
       <h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 6 }}>Promo Slots</h1>
       <p style={{ color: '#6b7280', marginBottom: 24, fontSize: 14 }}>
-        Click any slot to upload an image. Add a redirect link then activate.
+        Click any slot image to upload. Add a redirect link then activate.
       </p>
 
       {message && (
@@ -132,8 +129,6 @@ export default function PromoSlotsAdmin() {
               gap: 20,
               alignItems: 'center',
             }}>
-
-              {/* Hidden file input */}
               <input
                 type="file"
                 accept="image/*"
@@ -162,7 +157,6 @@ export default function PromoSlotsAdmin() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  position: 'relative',
                 }}
               >
                 {uploading === key ? (
@@ -195,8 +189,7 @@ export default function PromoSlotsAdmin() {
                     <span style={{ fontSize: 11, color: '#9ca3af', marginLeft: 8, fontFamily: 'monospace' }}>{key}</span>
                   </div>
                   <span style={{
-                    fontSize: 11, fontWeight: 500, padding: '2px 10px',
-                    borderRadius: 20,
+                    fontSize: 11, fontWeight: 500, padding: '2px 10px', borderRadius: 20,
                     background: isActive ? '#d1fae5' : '#f3f4f6',
                     color: isActive ? '#065f46' : '#6b7280',
                   }}>
