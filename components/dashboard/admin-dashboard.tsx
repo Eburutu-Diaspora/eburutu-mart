@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
   Users, Store, Package, MessageCircle, TrendingUp,
-  CheckCircle, Clock, XCircle, Loader2, Trash2,
+  CheckCircle, Clock, XCircle, Loader2, Trash2, Megaphone,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -132,12 +132,13 @@ export function AdminDashboard() {
     { title: 'Messages', value: stats?.totalMessages?.toString() || '0', icon: MessageCircle, color: 'from-yellow-500 to-amber-500' },
   ]
 
-  const adminActions = [
-    { title: 'Manage Users', description: 'View and manage user accounts', icon: Users, href: '/admin/users', color: 'from-blue-500 to-cyan-500' },
-    { title: 'Product Moderation', description: 'Review and moderate listings', icon: Package, href: '/admin/products', color: 'from-purple-500 to-pink-500' },
-    { title: 'Community Board', description: 'Approve discussions and replies', icon: MessageCircle, href: '#', color: 'from-green-500 to-emerald-500', onClick: () => setActiveTab('community') },
-    { title: 'Platform Analytics', description: 'View marketplace statistics', icon: TrendingUp, href: '/admin/analytics', color: 'from-gray-500 to-slate-500' },
-  ]
+ const adminActions = [
+  { title: 'Manage Users', description: 'View and manage user accounts', icon: Users, href: '/admin/users', color: 'from-blue-500 to-cyan-500' },
+  { title: 'Product Moderation', description: 'Review and moderate listings', icon: Package, href: '/admin/products', color: 'from-purple-500 to-pink-500' },
+  { title: 'Community Board', description: 'Approve discussions and replies', icon: MessageCircle, href: '#', color: 'from-green-500 to-emerald-500', onClick: () => setActiveTab('community') },
+  { title: 'Platform Analytics', description: 'View marketplace statistics', icon: TrendingUp, href: '/admin/analytics', color: 'from-gray-500 to-slate-500' },
+  { title: 'Promo Slots', description: 'Manage homepage ad spaces', icon: Megaphone, href: '/admin/promo-slots', color: 'from-orange-500 to-amber-500' },
+]
 
   if (isLoading) {
     return (
