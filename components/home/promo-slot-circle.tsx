@@ -1,3 +1,5 @@
+
+
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -30,7 +32,12 @@ export default function PromoSlotCircle({ slotKey }: { slotKey: string }) {
       height: 180,
       borderRadius: '50%',
       overflow: 'hidden',
-      border: '3px solid #e5e7eb',
+      border: '3px solid #f0f0f0',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+      background: '#ffffff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       flexShrink: 0,
     }}>
       <img
@@ -39,8 +46,9 @@ export default function PromoSlotCircle({ slotKey }: { slotKey: string }) {
         style={{
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
+          objectFit: 'contain',
           objectPosition: 'center',
+          padding: 10,
           display: 'block',
         }}
       />
