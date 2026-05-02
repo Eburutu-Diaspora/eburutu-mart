@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import { prisma } from '@/lib/prisma'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +21,40 @@ export async function POST(request: NextRequest) {
         { error: 'Valid email required' },
         { status: 400 }
       )
+    }
+
+    // Check if already subscribed
+    const existing = await prisma.newsletterSubscription.findFirst({
+      where: { email },
+    })
+
+    if (existing) {
+      if (existing.status === 'ACTIVE') {
+        return NextResponse.json(
+          { message: 'Already subscribed' },
+          { status: 200 }
+        )
+      }
+      // Re-activate if previously unsubscribed
+      await prisma.newsletterSubscription.update({
+        where: { id: existing.id },
+        data: {
+          status: 'ACTIVE',
+          subscribedAt: new Date(),
+          unsubscribedAt: null,
+          updatedAt: new Date(),
+        },
+      })
+    } else {
+      // Save new subscription to database
+      await prisma.newsletterSubscription.create({
+        data: {
+          email,
+          status: 'ACTIVE',
+          source: 'website',
+          subscribedAt: new Date(),
+        },
+      })
     }
 
     // Notify admin of new subscriber
