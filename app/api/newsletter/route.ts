@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
           status: 'ACTIVE',
           subscribedAt: new Date(),
           unsubscribedAt: null,
-          updatedAt: new Date(),
         },
       })
     } else {
@@ -52,7 +51,6 @@ export async function POST(request: NextRequest) {
           email,
           status: 'ACTIVE',
           source: 'website',
-          subscribedAt: new Date(),
         },
       })
     }
