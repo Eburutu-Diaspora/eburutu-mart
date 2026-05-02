@@ -367,3 +367,18 @@ model PromoSlot {
 
   @@map("promo_slots")
 }
+
+model NewsletterSubscription {
+  id               String    @id @default(cuid())
+  email            String    @unique
+  name             String?
+  status           String    @default("ACTIVE")
+  source           String?
+  userId           String?
+  subscribedAt     DateTime  @default(now())
+  unsubscribedAt   DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@map("newsletter_subscriptions")
+}
