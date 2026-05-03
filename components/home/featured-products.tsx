@@ -60,7 +60,7 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section className="pt-20 pb-0 bg-muted/20 mt-8">
+    <section className="pt-8 pb-0 bg-muted/20">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
@@ -190,5 +190,3 @@ export function FeaturedProducts() {
     </section>
   )
 }
-
-
