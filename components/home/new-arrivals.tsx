@@ -39,25 +39,18 @@ export function NewArrivals() {
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
- useEffect(() => {
+  useEffect(() => {
     fetch('/api/products?newArrival=true')
       .then(res => res.json())
-      .then(async data => {
+      .then(data => {
         const allocated = Array.isArray(data?.products) ? data.products : []
-        if (allocated.length >= 6) {
-          setProducts(allocated.slice(0, 6))
-        } else {
-          const fallbackRes = await fetch('/api/products?page=1&limit=12')
-          const fallbackData = await fallbackRes.json()
-          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
-          const allocatedIds = new Set(allocated.map((p: any) => p.id))
-          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
-          setProducts([...allocated, ...extras].slice(0, 6))
-        }
+        setProducts(allocated.slice(0, 6))
         setIsLoading(false)
       })
       .catch(() => { setProducts([]); setIsLoading(false) })
   }, [])
+
+  if (!isLoading && products.length === 0) return null
 
   return (
     <section className="py-16 bg-gradient-to-b from-white to-amber-50/40">
