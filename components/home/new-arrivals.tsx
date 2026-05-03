@@ -47,12 +47,11 @@ export function NewArrivals() {
         if (allocated.length >= 6) {
           setProducts(allocated.slice(0, 6))
         } else {
-          const fallbackRes = await fetch('/api/products?limit=6')
+          // Fallback: page 2 — products 7–12 (different from Featured)
+          const fallbackRes = await fetch('/api/products?limit=6&page=2')
           const fallbackData = await fallbackRes.json()
           const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
-          const allocatedIds = new Set(allocated.map((p: any) => p.id))
-          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
-          setProducts([...allocated, ...extras].slice(0, 6))
+          setProducts(all.slice(0, 6))
         }
         setIsLoading(false)
       })
