@@ -26,15 +26,22 @@ export function RecommendedProducts() {
   useEffect(() => {
     fetch('/api/products?recommended=true')
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         const allocated = Array.isArray(data?.products) ? data.products : []
-        setProducts(allocated.slice(0, 4))
+        if (allocated.length >= 4) {
+          setProducts(allocated.slice(0, 4))
+        } else {
+          const fallbackRes = await fetch('/api/products?limit=4')
+          const fallbackData = await fallbackRes.json()
+          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const allocatedIds = new Set(allocated.map((p: any) => p.id))
+          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
+          setProducts([...allocated, ...extras].slice(0, 4))
+        }
         setIsLoading(false)
       })
       .catch(() => { setProducts([]); setIsLoading(false) })
   }, [])
-
-  if (!isLoading && products.length === 0) return null
 
   return (
     <section className="py-16 bg-white">
@@ -76,9 +83,7 @@ export function RecommendedProducts() {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {index === 0 && (
-                      <Badge className="absolute top-3 left-3 bg-emerald-600 text-white border-0 text-xs">
-                        Most Popular
-                      </Badge>
+                      <Badge className="absolute top-3 left-3 bg-emerald-600 text-white border-0 text-xs">Most Popular</Badge>
                     )}
                     <div className="absolute bottom-3 right-3 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
                       <Eye className="h-3 w-3" />
@@ -87,17 +92,11 @@ export function RecommendedProducts() {
                   </div>
                   <div className="p-4">
                     {product.category?.name && (
-                      <span className="text-xs text-emerald-600 font-medium uppercase tracking-wide">
-                        {product.category.name}
-                      </span>
+                      <span className="text-xs text-emerald-600 font-medium uppercase tracking-wide">{product.category.name}</span>
                     )}
-                    <h3 className="font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">
-                      {product.title}
-                    </h3>
+                    <h3 className="font-semibold text-gray-900 mt-1 mb-2 line-clamp-2 group-hover:text-emerald-700 transition-colors">{product.title}</h3>
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-emerald-700">
-                        £{Number(product.price).toFixed(2)}
-                      </span>
+                      <span className="text-lg font-bold text-emerald-700">£{Number(product.price).toFixed(2)}</span>
                       {product.location && (
                         <div className="flex items-center gap-1 text-xs text-gray-400">
                           <MapPin className="h-3 w-3" />
