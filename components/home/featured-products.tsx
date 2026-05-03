@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Eye, MessageCircle, Heart, Star } from 'lucide-react'
+import { MapPin, Eye, MessageCircle, Heart } from 'lucide-react'
 import PromoSlotBanners from './promo-slot-banners'
 
 interface Product {
@@ -35,9 +35,16 @@ export function FeaturedProducts() {
   useEffect(() => {
     fetch('/api/products?featured=true')
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         const featured = Array.isArray(data?.products) ? data.products : []
-        setProducts(featured.slice(0, 6))
+        if (featured.length >= 3) {
+          setProducts(featured.slice(0, 6))
+        } else {
+          const fallbackRes  = await fetch('/api/products?limit=6')
+          const fallbackData = await fallbackRes.json()
+          const all          = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          setProducts(all.slice(0, 6))
+        }
         setLoading(false)
       })
       .catch(() => { setProducts([]); setLoading(false) })
@@ -60,9 +67,9 @@ export function FeaturedProducts() {
   }
 
   return (
-    <section className="pt-8 pb-0 bg-muted/20">
+    <section className="py-16 bg-muted/20">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <motion.h2
             className="text-3xl md:text-4xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
@@ -91,12 +98,6 @@ export function FeaturedProducts() {
               <div key={i} className="h-80 bg-muted rounded-xl animate-pulse" />
             ))}
           </div>
-        ) : products.length === 0 ? (
-          <div className="text-center py-16 text-muted-foreground">
-            <Star className="h-12 w-12 mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium">No featured listings yet</p>
-            <p className="text-sm mt-1">Featured products are set from the admin dashboard</p>
-          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {products.map((product, index) => (
@@ -116,11 +117,11 @@ export function FeaturedProducts() {
                       onError={(e) => { e.currentTarget.src = '/placeholder-product.jpg' }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                    <div className="absolute top-4 left-4 flex flex-col gap-2">
-                      {product.isFeatured && (
+                    {product.isFeatured && (
+                      <div className="absolute top-4 left-4">
                         <Badge className="bg-accent text-white">Featured</Badge>
-                      )}
-                    </div>
+                      </div>
+                    )}
                     <div className="absolute top-4 right-4">
                       <Button
                         variant="secondary"
@@ -183,7 +184,6 @@ export function FeaturedProducts() {
         )}
       </div>
 
-      {/* Promo banner slots — sits directly above New Arrivals */}
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
         <PromoSlotBanners />
       </div>
