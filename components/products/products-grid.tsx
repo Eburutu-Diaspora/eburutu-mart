@@ -1,14 +1,13 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
-  Star,
   MapPin,
   Eye,
   MessageCircle,
@@ -44,28 +43,31 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [favorites, setFavorites] = useState<string[]>([])
 
-  useEffect(() => {
-    fetchProducts()
-  }, [searchParams])
+  // Stable string key — prevents re-fetching on every render due to new object reference
+  const searchKey = useMemo(() => JSON.stringify(searchParams), [searchParams])
 
-  const fetchProducts = async () => {
-    setIsLoading(true)
-    try {
-      const params = new URLSearchParams()
-      Object.entries(searchParams).forEach(([key, value]) => {
-        if (value) params.set(key, value)
-      })
-      const response = await fetch(`/api/products?${params.toString()}`)
-      if (response.ok) {
-        const data = await response.json()
-        setProductsData(data)
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true)
+      try {
+        const params = new URLSearchParams()
+        Object.entries(searchParams).forEach(([key, value]) => {
+          if (value) params.set(key, value)
+        })
+        const response = await fetch(`/api/products?${params.toString()}`)
+        if (response.ok) {
+          const data = await response.json()
+          setProductsData(data)
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error)
+      } finally {
+        setIsLoading(false)
       }
-    } catch (error) {
-      console.error('Error fetching products:', error)
-    } finally {
-      setIsLoading(false)
     }
-  }
+
+    fetchProducts()
+  }, [searchKey]) // stable string comparison — only re-fetches when values actually change
 
   const toggleFavorite = (productId: string) => {
     setFavorites(prev =>
@@ -83,6 +85,12 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
       if (value && key !== 'page') params.set(key, value)
     })
     if (page > 1) params.set('page', page.toString())
+
+    // If browsing a category, stay on the category page with pagination
+    if (searchParams.category && !searchParams.search) {
+      return `/categories/${searchParams.category}?${params.toString()}`
+    }
+
     return `/products?${params.toString()}`
   }
 
@@ -121,12 +129,12 @@ export function ProductsGrid({ searchParams }: ProductsGridProps) {
         {products.map((product) => (
           <Card key={product.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden h-full">
             <div className="relative aspect-video">
-         <img
-  src={product.images?.[0]?.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
-  alt={product.title}
-  onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
-  className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-/>
+              <img
+                src={product.images?.[0]?.imageUrl || 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image'}
+                alt={product.title}
+                onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x300/e2e8f0/94a3b8?text=No+Image' }}
+                className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
               {/* Badges */}
