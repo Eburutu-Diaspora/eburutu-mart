@@ -40,9 +40,10 @@ export function FeaturedProducts() {
         if (featured.length >= 3) {
           setProducts(featured.slice(0, 6))
         } else {
-          const fallbackRes  = await fetch('/api/products?limit=6')
+          // Fallback: page 1 — products 1–6
+          const fallbackRes  = await fetch('/api/products?limit=6&page=1')
           const fallbackData = await fallbackRes.json()
-          const all          = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
           setProducts(all.slice(0, 6))
         }
         setLoading(false)
