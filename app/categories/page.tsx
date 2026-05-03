@@ -116,13 +116,16 @@ export default function CategoriesPage() {
 
                 return (
                   <Link key={category.id} href={`/categories/${category.slug}`}>
-                    <Card className={`h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-100`}>
+                    {/* FIX: added `relative overflow-hidden` so the absolute gradient div
+                        stays contained within this card and cannot intercept clicks
+                        on neighbouring cards in the grid */}
+                    <Card className={`relative overflow-hidden h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer group border-2 ${config.borderColor} hover:border-opacity-100`}>
                       <div className={`absolute inset-0 bg-gradient-to-br ${config.gradientFrom} ${config.gradientTo} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}></div>
                       <CardHeader className="text-center relative">
                         <div className={`mx-auto mb-4 p-4 rounded-2xl w-20 h-20 flex items-center justify-center ${config.bgColor} ${config.hoverBg} transition-all duration-300`}>
                           <IconComponent className={`h-10 w-10 ${config.iconColor}`} />
                         </div>
-                        <CardTitle className={`text-xl font-bold group-hover:bg-gradient-to-r group-hover:${config.gradientFrom} group-hover:${config.gradientTo} group-hover:bg-clip-text group-hover:text-transparent transition`}>
+                        <CardTitle className="text-xl font-bold">
                           {category.name}
                         </CardTitle>
                         <CardDescription className="text-sm text-muted-foreground mt-2 leading-relaxed">
