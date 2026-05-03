@@ -28,7 +28,7 @@ export function RecommendedProducts() {
       .then(res => res.json())
       .then(async data => {
         const allocated = Array.isArray(data?.products) ? data.products : []
-        if (allocated.length >= 4) {
+        if (allocated.length > 0) {
           setProducts(allocated.slice(0, 4))
         } else {
           // Fallback: page 3 — products 13–16 (different from Featured and New Arrivals)
