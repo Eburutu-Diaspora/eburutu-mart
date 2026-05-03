@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -8,7 +7,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Eye, MessageCircle, Heart } from 'lucide-react'
+import { MapPin, Eye, MessageCircle, Heart, Star } from 'lucide-react'
 import PromoSlotBanners from './promo-slot-banners'
 
 interface Product {
@@ -36,18 +35,9 @@ export function FeaturedProducts() {
   useEffect(() => {
     fetch('/api/products?featured=true')
       .then(res => res.json())
-      .then(async data => {
+      .then(data => {
         const featured = Array.isArray(data?.products) ? data.products : []
-        if (featured.length >= 6) {
-          setProducts(featured.slice(0, 6))
-        } else {
-          const fallbackRes  = await fetch('/api/products?limit=12')
-          const fallbackData = await fallbackRes.json()
-          const all          = Array.isArray(fallbackData?.products) ? fallbackData.products : []
-          const featuredIds  = new Set(featured.map((p: any) => p.id))
-          const extras       = all.filter((p: any) => !featuredIds.has(p.id))
-          setProducts([...featured, ...extras].slice(0, 6))
-        }
+        setProducts(featured.slice(0, 6))
         setLoading(false)
       })
       .catch(() => { setProducts([]); setLoading(false) })
@@ -70,7 +60,7 @@ export function FeaturedProducts() {
   }
 
   return (
-   <section className="pt-20 pb-0 bg-muted/20 mt-8">
+    <section className="pt-20 pb-0 bg-muted/20 mt-8">
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <motion.h2
@@ -100,6 +90,12 @@ export function FeaturedProducts() {
             {[...Array(6)].map((_, i) => (
               <div key={i} className="h-80 bg-muted rounded-xl animate-pulse" />
             ))}
+          </div>
+        ) : products.length === 0 ? (
+          <div className="text-center py-16 text-muted-foreground">
+            <Star className="h-12 w-12 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium">No featured listings yet</p>
+            <p className="text-sm mt-1">Featured products are set from the admin dashboard</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -194,3 +190,5 @@ export function FeaturedProducts() {
     </section>
   )
 }
+
+
