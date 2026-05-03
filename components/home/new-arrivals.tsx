@@ -42,15 +42,22 @@ export function NewArrivals() {
   useEffect(() => {
     fetch('/api/products?newArrival=true')
       .then(res => res.json())
-      .then(data => {
+      .then(async data => {
         const allocated = Array.isArray(data?.products) ? data.products : []
-        setProducts(allocated.slice(0, 6))
+        if (allocated.length >= 6) {
+          setProducts(allocated.slice(0, 6))
+        } else {
+          const fallbackRes = await fetch('/api/products?limit=6')
+          const fallbackData = await fallbackRes.json()
+          const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
+          const allocatedIds = new Set(allocated.map((p: any) => p.id))
+          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
+          setProducts([...allocated, ...extras].slice(0, 6))
+        }
         setIsLoading(false)
       })
       .catch(() => { setProducts([]); setIsLoading(false) })
   }, [])
-
-  if (!isLoading && products.length === 0) return null
 
   return (
     <section className="py-16 bg-gradient-to-b from-white to-amber-50/40">
@@ -85,24 +92,15 @@ export function NewArrivals() {
               <Link key={product.id} href={`/products/${product.id}`}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100 mb-3">
-                    <ProductImage
-                      src={product.images?.[0]?.imageUrl}
-                      alt={product.title}
-                    />
-                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">
-                      New
-                    </Badge>
+                    <ProductImage src={product.images?.[0]?.imageUrl} alt={product.title} />
+                    <Badge className="absolute top-2 left-2 bg-amber-500 text-white text-xs border-0">New</Badge>
                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/50 text-white text-xs px-2 py-0.5 rounded-full">
                       <Eye className="h-3 w-3" />
                       {product.viewCount || 0}
                     </div>
                   </div>
-                  <p className="text-sm font-medium text-gray-900 truncate group-hover:text-emerald-700 transition-colors">
-                    {product.title}
-                  </p>
-                  <p className="text-sm font-bold text-emerald-700 mt-0.5">
-                    £{Number(product.price).toFixed(2)}
-                  </p>
+                  <p className="text-sm font-medium text-gray-900 truncate group-hover:text-emerald-700 transition-colors">{product.title}</p>
+                  <p className="text-sm font-bold text-emerald-700 mt-0.5">£{Number(product.price).toFixed(2)}</p>
                   {product.location && (
                     <div className="flex items-center gap-1 mt-1">
                       <MapPin className="h-3 w-3 text-gray-400" />
