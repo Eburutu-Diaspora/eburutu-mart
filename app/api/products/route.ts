@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const featured    = searchParams.get('featured') === 'true'
     const newArrival  = searchParams.get('newArrival') === 'true'
     const recommended = searchParams.get('recommended') === 'true'
-    const limit       = featured ? 3 : newArrival ? 6 : recommended ? 4 : parseInt(searchParams.get('limit') || '12')
+    const limit       = featured ? 6 : newArrival ? 6 : recommended ? 4 : parseInt(searchParams.get('limit') || '12')
 
     const where: any = { isActive: true }
 
@@ -69,7 +69,6 @@ export async function GET(request: NextRequest) {
       prisma.product.count({ where }),
     ])
 
-    // Convert Prisma Decimal price to plain number to prevent toFixed() crashes
     const safeProducts = products.map(p => ({
       ...p,
       price: Number(p.price)
@@ -120,7 +119,7 @@ export async function POST(request: NextRequest) {
       const filename = `products/${session.user.id}/${Date.now()}-${i}.${ext}`
 
       const { error: uploadError } = await supabase.storage
-        .from('avatars')
+        .from('listing-images')
         .upload(filename, buffer, { contentType: mimeType, upsert: true })
 
       if (uploadError) {
@@ -128,7 +127,7 @@ export async function POST(request: NextRequest) {
         continue
       }
 
-      const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(filename)
+      const { data: urlData } = supabase.storage.from('listing-images').getPublicUrl(filename)
       imageUrls.push(urlData.publicUrl)
     }
 
