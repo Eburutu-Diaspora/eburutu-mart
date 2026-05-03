@@ -31,12 +31,11 @@ export function RecommendedProducts() {
         if (allocated.length >= 4) {
           setProducts(allocated.slice(0, 4))
         } else {
-          const fallbackRes = await fetch('/api/products?limit=4')
+          // Fallback: page 3 — products 13–16 (different from Featured and New Arrivals)
+          const fallbackRes = await fetch('/api/products?limit=4&page=3')
           const fallbackData = await fallbackRes.json()
           const all = Array.isArray(fallbackData?.products) ? fallbackData.products : []
-          const allocatedIds = new Set(allocated.map((p: any) => p.id))
-          const extras = all.filter((p: any) => !allocatedIds.has(p.id))
-          setProducts([...allocated, ...extras].slice(0, 4))
+          setProducts(all.slice(0, 4))
         }
         setIsLoading(false)
       })
