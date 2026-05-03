@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import Link from 'next/link'
-import { Mail, Loader2, CheckCircle, ShoppingBag, Info } from 'lucide-react'
+import { Mail, Loader2, CheckCircle, ShoppingBag, Info, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function RegisterSuccessClient() {
@@ -85,21 +85,29 @@ export default function RegisterSuccessClient() {
 
           {/* Seller note */}
           {role === 'SELLER' && (
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-6">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
               <p className="text-amber-800 text-sm">
                 <strong>Seller Account:</strong> After verifying your email, you can
-                start listing products. 
+                start listing products.
               </p>
             </div>
           )}
 
-          {/* Important notice — replaces misleading "Go to Sign In" button */}
+          {/* Tab notice */}
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-6 flex items-start gap-2">
             <Info className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
             <p className="text-blue-800 text-sm">
-              Please verify your email before signing in. The link in your email expires in 24 hours.
+              The verification link may open in a new browser tab. Once verified,{' '}
+              <strong>you can close this page</strong> and sign in.
             </p>
           </div>
+
+          {/* Primary CTA — sign in */}
+          <Link href="/auth/login">
+            <Button className="w-full mb-4 bg-green-600 hover:bg-green-700 text-white">
+              Already verified? Sign In →
+            </Button>
+          </Link>
 
           {/* Resend section */}
           <div className="border-t pt-4">
@@ -131,15 +139,7 @@ export default function RegisterSuccessClient() {
             )}
           </div>
 
-          {/* Secondary sign-in link — demoted, not a primary CTA */}
           <p className="text-center text-xs text-gray-400 mt-4">
-            Already verified?{' '}
-            <Link href="/auth/login" className="text-green-600 hover:underline">
-              Sign in here
-            </Link>
-          </p>
-
-          <p className="text-center text-xs text-gray-400 mt-2">
             Need help?{' '}
             <Link href="/contact" className="text-green-600 hover:underline">
               Contact Support
