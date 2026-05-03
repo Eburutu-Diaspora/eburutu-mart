@@ -44,7 +44,7 @@ export function NewArrivals() {
       .then(res => res.json())
       .then(async data => {
         const allocated = Array.isArray(data?.products) ? data.products : []
-        if (allocated.length >= 6) {
+        if (allocated.length > 0) {
           setProducts(allocated.slice(0, 6))
         } else {
           // Fallback: page 2 — products 7–12 (different from Featured)
