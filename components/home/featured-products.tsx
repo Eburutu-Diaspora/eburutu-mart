@@ -37,7 +37,7 @@ export function FeaturedProducts() {
       .then(res => res.json())
       .then(async data => {
         const featured = Array.isArray(data?.products) ? data.products : []
-        if (featured.length >= 3) {
+        if (featured.length > 0) {
           setProducts(featured.slice(0, 6))
         } else {
           // Fallback: page 1 — products 1–6
